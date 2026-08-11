@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Design tokens.
+ *
+ * Each color is stored as space-separated RGB channels rather than a hex string
+ * so Tailwind's alpha modifiers (`bg-brand/10`, `border-critical/30`) resolve
+ * against them. Anywhere a raw value is needed, wrap it: `rgb(var(--series-1))`.
+ *
+ * Light is defined on bare :root so it is never the one hiding inside a media
+ * query. Dark is redefined twice: once for the OS setting (guarded so an
+ * explicit light stamp still wins) and once for the in-app theme toggle.
+ */
+:root {
+  color-scheme: light;
+
+  --plane: 249 249 247;
+  --surface-1: 252 252 251;
+  --surface-2: 242 241 237;
+  --text-primary: 11 11 11;
+  --text-secondary: 82 81 78;
+  --text-muted: 137 135 129;
+  --gridline: 225 224 217;
+  --border: 228 227 222;
+
+  /* Categorical palette — fixed slot order, assigned by entity, never by rank. */
+  --series-1: 42 120 214;
+  --series-2: 235 104 52;
+  --series-3: 27 175 122;
+  --series-4: 237 161 0;
+  --series-5: 232 123 164;
+  --series-6: 0 131 0;
+  --series-7: 74 58 167;
+  --series-8: 227 73 72;
+
+  /* Status — reserved, never reused as a series color. Always with icon + label. */
+  --good: 12 163 12;
+  --warning: 250 178 25;
+  --serious: 236 131 90;
+  --critical: 208 59 59;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --plane: 13 13 13;
+    --surface-1: 26 26 25;
+    --surface-2: 35 35 34;
+    --text-primary: 255 255 255;
+    --text-secondary: 195 194 183;
+    --text-muted: 137 135 129;
+    --gridline: 44 44 42;
+    --border: 56 56 53;
+
+    --series-1: 57 135 229;
+    --series-2: 217 89 38;
+    --series-3: 25 158 112;
+    --series-4: 201 133 0;
+    --series-5: 213 81 129;
+    --series-6: 0 131 0;
+    --series-7: 144 133 233;
+    --series-8: 230 103 103;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --plane: 13 13 13;
+  --surface-1: 26 26 25;
+  --surface-2: 35 35 34;
+  --text-primary: 255 255 255;
+  --text-secondary: 195 194 183;
+  --text-muted: 137 135 129;
+  --gridline: 44 44 42;
+  --border: 56 56 53;
+
+  --series-1: 57 135 229;
+  --series-2: 217 89 38;
+  --series-3: 25 158 112;
+  --series-4: 201 133 0;
+  --series-5: 213 81 129;
+  --series-6: 0 131 0;
+  --series-7: 144 133 233;
+  --series-8: 230 103 103;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: rgb(var(--plane));
+  color: rgb(var(--text-primary));
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+@layer components {
+  .card {
+    /* min-w-0 keeps a card that holds a wide table from stretching its grid
+       column — the table scrolls inside .scroll-x instead. */
+    @apply min-w-0 rounded-2xl border border-line bg-surface shadow-card;
+  }
+  .card-pad {
+    @apply p-4 sm:p-5;
+  }
+  .input {
+    @apply w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink
+           placeholder:text-ink-muted focus:border-brand focus:outline-none
+           focus:ring-2 focus:ring-brand/25;
+  }
+  .label {
+    @apply mb-1 block text-xs font-medium uppercase tracking-wide text-ink-muted;
+  }
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-lg px-3 py-2
+           text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2
+           focus-visible:ring-brand/40 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-brand text-white hover:opacity-90;
+  }
+  .btn-ghost {
+    @apply btn border border-line bg-surface text-ink-secondary hover:bg-raised;
+  }
+  .btn-quiet {
+    @apply btn text-ink-muted hover:bg-raised hover:text-ink;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-line px-2 py-0.5
+           text-[11px] font-medium text-ink-secondary;
+  }
+  .section-title {
+    @apply text-sm font-semibold text-ink;
+  }
+}
+
+/* Wide content scrolls inside its own container, never the page body. */
+.scroll-x {
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+@media print {
+  /* Printing is the PDF export path, so drop the app chrome. */
+  aside,
+  nav,
+  header button,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .card {
+    break-inside: avoid;
+  }
+}

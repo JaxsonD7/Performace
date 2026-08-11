@@ -1,0 +1,428 @@
+import { useMemo, useState } from 'react';
+import { PageBody, PageHeader } from '@/components/PageHeader';
+import {
+  AssignmentForm,
+  CourseForm,
+  MeetingForm,
+  TaskForm,
+} from '@/components/forms/entryForms';
+import {
+  Badge,
+  Card,
+  CardHeader,
+  Checkbox,
+  EmptyState,
+  IconButton,
+  PencilIcon,
+  Progress,
+  Segmented,
+  TrashIcon,
+  cx,
+} from '@/components/ui/primitives';
+import { StatTile } from '@/components/ui/charts';
+import { formatDuration, formatTime, relativeDay, today } from '@/lib/date';
+import { openAssignments, upcomingMeetings } from '@/lib/selectors';
+import { useStore } from '@/store/store';
+import type { Assignment, Course, Meeting, Task } from '@/types';
+
+type Tab = 'assignments' | 'tasks' | 'meetings' | 'courses';
+
+export function SchoolPage() {
+  const { state } = useStore();
+  const [tab, setTab] = useState<Tab>('assignments');
+
+  const open = useMemo(() => openAssignments(state), [state]);
+  const workloadMin = open.reduce((s, a) => s + Math.max(0, a.estimateMin - a.loggedMin), 0);
+  const openTasks = state.tasks.filter((t) => !t.completed);
+  const overdue = openTasks.filter((t) => t.date && t.date < today());
+
+  return (
+    <>
+      <PageHeader
+        title="School & tasks"
+        subtitle="Everything you owe, in the order it comes due."
+      >
+        <Segmented<Tab>
+          value={tab}
+          onChange={setTab}
+          options={[
+            { value: 'assignments', label: `Assignments (${open.length})` },
+            { value: 'tasks', label: `Tasks (${openTasks.length})` },
+            { value: 'meetings', label: 'Meetings' },
+            { value: 'courses', label: 'Courses' },
+          ]}
+        />
+      </PageHeader>
+
+      <PageBody>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <StatTile label="Open assignments" value={open.length} />
+          <StatTile label="Work remaining" value={formatDuration(workloadMin)} />
+          <StatTile label="Open tasks" value={openTasks.length} />
+          <StatTile
+            label="Overdue"
+            value={overdue.length}
+            tone={overdue.length ? 'critical' : 'default'}
+            hint={overdue.length ? 'Reschedule or drop these' : 'Nothing slipping'}
+          />
+        </div>
+
+        {tab === 'assignments' ? <AssignmentsTab /> : null}
+        {tab === 'tasks' ? <TasksTab /> : null}
+        {tab === 'meetings' ? <MeetingsTab /> : null}
+        {tab === 'courses' ? <CoursesTab /> : null}
+      </PageBody>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+
+function AssignmentsTab() {
+  const { state, update, remove } = useStore();
+  const [modal, setModal] = useState<{ open: boolean; item?: Assignment }>({ open: false });
+  const [showDone, setShowDone] = useState(false);
+
+  const rows = useMemo(() => {
+    const list = showDone
+      ? [...state.assignments].sort((a, b) => (a.dueDate < b.dueDate ? 1 : -1))
+      : openAssignments(state);
+    return list;
+  }, [state, showDone]);
+
+  return (
+    <Card>
+      <CardHeader
+        title={showDone ? 'All assignments' : 'Open assignments'}
+        icon="🎓"
+        action={
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="btn-quiet !px-2 !py-1 text-xs"
+              onClick={() => setShowDone((v) => !v)}
+            >
+              {showDone ? 'Hide finished' : 'Show finished'}
+            </button>
+            <button
+              type="button"
+              className="btn-primary !py-1 text-xs"
+              onClick={() => setModal({ open: true })}
+            >
+              + Assignment
+            </button>
+          </div>
+        }
+      />
+      {rows.length ? (
+        <div className="scroll-x">
+          <table className="w-full min-w-[640px] text-sm">
+            <thead>
+              <tr className="border-b border-line text-left text-[11px] uppercase tracking-wide text-ink-muted">
+                <th className="w-8 px-3 py-2" />
+                <th className="px-3 py-2 font-medium">Assignment</th>
+                <th className="px-3 py-2 font-medium">Course</th>
+                <th className="px-3 py-2 font-medium">Due</th>
+                <th className="px-3 py-2 font-medium">Progress</th>
+                <th className="w-20 px-3 py-2" />
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-line">
+              {rows.map((a) => {
+                const course = state.courses.find((c) => c.id === a.courseId);
+                const overdue = a.status !== 'done' && a.dueDate < today();
+                return (
+                  <tr key={a.id} className="group">
+                    <td className="px-3 py-2">
+                      <input
+                        type="checkbox"
+                        checked={a.status === 'done'}
+                        onChange={(e) =>
+                          update('assignments', a.id, {
+                            status: e.target.checked ? 'done' : 'in-progress',
+                          })
+                        }
+                        className="h-4 w-4 rounded border-line accent-[rgb(var(--series-1))]"
+                        aria-label={`Mark ${a.title} done`}
+                      />
+                    </td>
+                    <td className="px-3 py-2">
+                      <span
+                        className={cx(
+                          'block',
+                          a.status === 'done' ? 'text-ink-muted line-through' : 'text-ink',
+                        )}
+                      >
+                        {a.title}
+                      </span>
+                      <span className="text-[11px] capitalize text-ink-muted">{a.type}</span>
+                    </td>
+                    <td className="px-3 py-2">
+                      {course ? (
+                        <span className="inline-flex items-center gap-1.5 text-ink-secondary">
+                          <span
+                            className="h-2 w-2 rounded-full"
+                            style={{ background: `rgb(var(--series-${course.colorSlot}))` }}
+                            aria-hidden="true"
+                          />
+                          {course.name}
+                        </span>
+                      ) : (
+                        <span className="text-ink-muted">—</span>
+                      )}
+                    </td>
+                    <td className="px-3 py-2">
+                      {overdue ? (
+                        <Badge tone="critical">⚠ {relativeDay(a.dueDate)}</Badge>
+                      ) : (
+                        <span className="text-ink-secondary">{relativeDay(a.dueDate)}</span>
+                      )}
+                    </td>
+                    <td className="px-3 py-2">
+                      <div className="w-28">
+                        <Progress
+                          value={a.loggedMin}
+                          max={Math.max(a.estimateMin, 1)}
+                          hint={`${a.loggedMin}/${a.estimateMin}m`}
+                          label=""
+                        />
+                      </div>
+                    </td>
+                    <td className="px-3 py-2">
+                      <span className="flex opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+                        <IconButton onClick={() => setModal({ open: true, item: a })} label="Edit">
+                          <PencilIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => remove('assignments', a.id)}
+                          label="Delete"
+                          tone="danger"
+                        >
+                          <TrashIcon />
+                        </IconButton>
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <EmptyState message="Nothing due. Add an assignment to start tracking it." />
+      )}
+      <AssignmentForm
+        open={modal.open}
+        onClose={() => setModal({ open: false })}
+        initial={modal.item}
+      />
+    </Card>
+  );
+}
+
+// ---------------------------------------------------------------------------
+
+function TasksTab() {
+  const { state, update, remove } = useStore();
+  const [modal, setModal] = useState<{ open: boolean; item?: Task }>({ open: false });
+
+  const groups: [string, Task[]][] = [
+    ['Overdue', state.tasks.filter((t) => !t.completed && t.date && t.date < today())],
+    ['Today', state.tasks.filter((t) => !t.completed && t.date === today())],
+    [
+      'Upcoming',
+      state.tasks.filter((t) => !t.completed && t.date && t.date > today()),
+    ],
+    ['Backlog', state.tasks.filter((t) => !t.completed && !t.date)],
+    ['Done', state.tasks.filter((t) => t.completed)],
+  ];
+
+  return (
+    <Card>
+      <CardHeader
+        title="Tasks"
+        icon="✓"
+        action={
+          <button
+            type="button"
+            className="btn-primary !py-1 text-xs"
+            onClick={() => setModal({ open: true })}
+          >
+            + Task
+          </button>
+        }
+      />
+      <div className="divide-y divide-line">
+        {groups
+          .filter(([, items]) => items.length)
+          .map(([label, items]) => (
+            <div key={label}>
+              <p className="bg-raised px-4 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
+                {label} · {items.length}
+              </p>
+              <ul className="divide-y divide-line">
+                {items.map((t) => (
+                  <li key={t.id} className="group flex items-center gap-1 px-2">
+                    <div className="min-w-0 flex-1">
+                      <Checkbox
+                        checked={t.completed}
+                        onChange={(next) =>
+                          update('tasks', t.id, {
+                            completed: next,
+                            completedAt: next ? new Date().toISOString() : undefined,
+                          })
+                        }
+                        label={t.title}
+                        sublabel={
+                          <span className="capitalize">
+                            {t.area} · {formatDuration(t.estimateMin)}
+                            {t.date ? ` · ${relativeDay(t.date)}` : ' · no date'}
+                          </span>
+                        }
+                      />
+                    </div>
+                    {t.priority === 'high' && !t.completed ? (
+                      <Badge tone="serious">High</Badge>
+                    ) : null}
+                    <span className="flex shrink-0 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+                      <IconButton onClick={() => setModal({ open: true, item: t })} label="Edit task">
+                        <PencilIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => remove('tasks', t.id)}
+                        label="Delete task"
+                        tone="danger"
+                      >
+                        <TrashIcon />
+                      </IconButton>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        {state.tasks.length === 0 ? <EmptyState message="No tasks yet." /> : null}
+      </div>
+      <TaskForm open={modal.open} onClose={() => setModal({ open: false })} initial={modal.item} />
+    </Card>
+  );
+}
+
+// ---------------------------------------------------------------------------
+
+function MeetingsTab() {
+  const { state, remove } = useStore();
+  const [modal, setModal] = useState<{ open: boolean; item?: Meeting }>({ open: false });
+  const upcoming = useMemo(() => upcomingMeetings(state, today(), 14), [state]);
+
+  return (
+    <Card>
+      <CardHeader
+        title="Next two weeks"
+        icon="👥"
+        action={
+          <button
+            type="button"
+            className="btn-primary !py-1 text-xs"
+            onClick={() => setModal({ open: true })}
+          >
+            + Event
+          </button>
+        }
+      />
+      {upcoming.length ? (
+        <ul className="divide-y divide-line">
+          {upcoming.map((m, i) => (
+            <li key={`${m.id}-${m.date}-${i}`} className="group flex items-center gap-3 px-4 py-2.5">
+              <div className="w-28 shrink-0">
+                <p className="text-xs font-medium text-ink-secondary">{relativeDay(m.date)}</p>
+                <p className="text-[11px] tabular-nums text-ink-muted">
+                  {formatTime(m.startTime)}–{formatTime(m.endTime)}
+                </p>
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm text-ink">{m.title}</p>
+                <p className="truncate text-[11px] capitalize text-ink-muted">
+                  {m.kind}
+                  {m.location ? ` · ${m.location}` : ''}
+                  {m.repeat === 'weekly' ? ' · repeats weekly' : ''}
+                </p>
+              </div>
+              <span className="flex shrink-0 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+                <IconButton onClick={() => setModal({ open: true, item: m })} label="Edit event">
+                  <PencilIcon />
+                </IconButton>
+                <IconButton onClick={() => remove('meetings', m.id)} label="Delete event" tone="danger">
+                  <TrashIcon />
+                </IconButton>
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <EmptyState message="No meetings or club events coming up." />
+      )}
+      <MeetingForm open={modal.open} onClose={() => setModal({ open: false })} initial={modal.item} />
+    </Card>
+  );
+}
+
+// ---------------------------------------------------------------------------
+
+function CoursesTab() {
+  const { state, remove } = useStore();
+  const [modal, setModal] = useState<{ open: boolean; item?: Course }>({ open: false });
+
+  return (
+    <Card>
+      <CardHeader
+        title="Courses"
+        icon="📚"
+        action={
+          <button
+            type="button"
+            className="btn-primary !py-1 text-xs"
+            onClick={() => setModal({ open: true })}
+          >
+            + Course
+          </button>
+        }
+      />
+      {state.courses.length ? (
+        <ul className="divide-y divide-line">
+          {state.courses.map((c) => {
+            const items = state.assignments.filter((a) => a.courseId === c.id);
+            const done = items.filter((a) => a.status === 'done').length;
+            return (
+              <li key={c.id} className="group flex items-center gap-3 px-4 py-3">
+                <span
+                  className="h-8 w-1 shrink-0 rounded-full"
+                  style={{ background: `rgb(var(--series-${c.colorSlot}))` }}
+                  aria-hidden="true"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium text-ink">{c.name}</p>
+                  <p className="text-[11px] text-ink-muted">
+                    {c.code ? `${c.code} · ` : ''}
+                    {done}/{items.length} assignments done
+                  </p>
+                </div>
+                <span className="flex shrink-0 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+                  <IconButton onClick={() => setModal({ open: true, item: c })} label="Edit course">
+                    <PencilIcon />
+                  </IconButton>
+                  <IconButton onClick={() => remove('courses', c.id)} label="Delete course" tone="danger">
+                    <TrashIcon />
+                  </IconButton>
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <EmptyState message="Add your courses so assignments can be color-coded." />
+      )}
+      <CourseForm open={modal.open} onClose={() => setModal({ open: false })} initial={modal.item} />
+    </Card>
+  );
+}
