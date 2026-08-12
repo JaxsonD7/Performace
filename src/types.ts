@@ -481,6 +481,14 @@ export interface Settings {
    * server of this app's own.
    */
   anthropicApiKey?: string;
+  /**
+   * Stored only in this browser and sent only to GitHub's API, straight from
+   * your device, so a second device can pull the same data down. A gist
+   * scoped token is enough — this app never asks for repo access.
+   */
+  githubToken?: string;
+  /** The private gist this device mirrors its data to and pulls updates from. */
+  syncGistId?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -525,6 +533,13 @@ export interface QuickAction {
 export interface AppState {
   /** Bumped when the persisted shape changes; drives migrations on load. */
   version: number;
+  /**
+   * Wall-clock time of the last local edit, in ms since epoch. The only thing
+   * cloud sync uses to decide which of two copies is newer — there is no
+   * merge, just last-write-wins, which is enough for one person moving
+   * between their own two devices.
+   */
+  updatedAt: number;
   settings: Settings;
   tasks: Task[];
   habits: Habit[];

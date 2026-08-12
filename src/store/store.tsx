@@ -13,6 +13,7 @@ import { persistence } from '@/data/persistence';
 import { emptyState, STATE_VERSION } from '@/data/seed';
 import { DEFAULT_ROUTINES, DEFAULT_SETTINGS, defaultQuickActions } from '@/data/defaults';
 import { uid } from '@/lib/id';
+import { createSyncGist, fetchSyncGist, pushSyncGist, SyncError } from '@/integrations/sync/github';
 import type {
   AppState,
   Assignment,
@@ -44,7 +45,20 @@ type Action =
   | { type: 'setQuickActions'; actions: QuickAction[] }
   | { type: 'removeHabit'; id: string };
 
+/**
+ * `hydrate` and `replace` carry their own `updatedAt` (loaded from disk or
+ * pulled from the sync gist) — stamping over it would make every load look
+ * like a fresh edit and defeat last-write-wins. Every actual local mutation
+ * gets `Date.now()` so cloud sync knows this device has something newer to
+ * push.
+ */
 function reducer(state: AppState, action: Action): AppState {
+  const next = applyAction(state, action);
+  if (action.type === 'hydrate' || action.type === 'replace') return next;
+  return next === state ? state : { ...next, updatedAt: Date.now() };
+}
+
+function applyAction(state: AppState, action: Action): AppState {
   switch (action.type) {
     case 'hydrate':
     case 'replace':
@@ -206,6 +220,11 @@ function migrate(raw: AppState): AppState {
     ...base,
     ...raw,
     version: STATE_VERSION,
+    // Data with no recorded edit time is real, already-persisted data from
+    // before this field existed — treat it as "just edited" rather than
+    // ancient, so it isn't mistaken for the older copy the first time this
+    // device compares itself against a sync gist.
+    updatedAt: raw.updatedAt || Date.now(),
     settings: migrateSettings(rawSettings ?? {}),
   };
   if (rawSettings?.waterGoalCups && !rawSettings.waterGoalOz) {
@@ -246,12 +265,58 @@ function migrate(raw: AppState): AppState {
 }
 
 // ---------------------------------------------------------------------------
+// Cloud sync
+// ---------------------------------------------------------------------------
+
+/**
+ * The gist token and ID are this device's own credentials, not data to
+ * mirror — pushing them would leak one device's token into the shared file,
+ * and pulling them would make a second device silently start using the
+ * first device's token. Every payload that leaves this device has them
+ * stripped; every payload adopted from the gist gets this device's own
+ * values reattached instead of whatever (nothing) came back.
+ */
+function stripSyncCreds(s: AppState): AppState {
+  const { githubToken: _token, syncGistId: _gistId, ...rest } = s.settings;
+  return { ...s, settings: rest as Settings };
+}
+
+function attachSyncCreds(s: AppState, token: string, gistId: string): AppState {
+  return { ...s, settings: { ...s.settings, githubToken: token, syncGistId: gistId } };
+}
+
+async function pullRemote(token: string, gistId: string): Promise<AppState | null> {
+  const json = await fetchSyncGist(token, gistId);
+  if (!json) return null;
+  return migrate(JSON.parse(json) as AppState);
+}
+
+// ---------------------------------------------------------------------------
 // Context
 // ---------------------------------------------------------------------------
+
+export interface SyncStatus {
+  connected: boolean;
+  state: 'idle' | 'syncing' | 'error';
+  error?: string;
+  lastSyncedAt?: number;
+}
 
 interface StoreValue {
   state: AppState;
   ready: boolean;
+  sync: SyncStatus;
+  /**
+   * Turns on cloud sync. Pass an existing gist ID to join a device that
+   * already has one going (this is how a second device connects to the
+   * first); omit it to mint a brand new gist for this to be the first
+   * device on.
+   */
+  connectSync: (token: string, existingGistId?: string) => Promise<void>;
+  /** Stops syncing on this device. The gist itself is untouched. */
+  disconnectSync: () => void;
+  /** Pushes or pulls right now instead of waiting for the debounce. */
+  syncNow: () => Promise<void>;
   /** Create a record. `id` and any omitted defaults are filled in for you. */
   add: <K extends CollectionKey>(key: K, item: Omit<RecordOf<K>, 'id'> & { id?: string }) => string;
   update: <K extends CollectionKey>(key: K, id: string, patch: Partial<RecordOf<K>>) => void;
@@ -274,6 +339,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, null as unknown as AppState, emptyState);
   const [ready, setReady] = useState(false);
   const hydrated = useRef(false);
+  const stateRef = useRef(state);
+  stateRef.current = state;
+
+  const [sync, setSync] = useState<SyncStatus>({ connected: false, state: 'idle' });
+  // The `updatedAt` this device last confirmed matches the gist — pushing or
+  // pulling both move it forward. As long as it equals the live state's own
+  // `updatedAt`, there is nothing new to send.
+  const settledUpdatedAt = useRef<number | null>(null);
 
   // Load once on mount. Nothing is written back until this finishes, so a slow
   // read can never be overwritten by the empty initial state.
@@ -281,9 +354,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
     persistence.load().then((loaded) => {
       if (cancelled) return;
-      dispatch({ type: 'hydrate', state: loaded ? migrate(loaded) : emptyState() });
+      const initial = loaded ? migrate(loaded) : emptyState();
+      dispatch({ type: 'hydrate', state: initial });
       hydrated.current = true;
       setReady(true);
+      if (initial.settings.githubToken && initial.settings.syncGistId) {
+        setSync({ connected: true, state: 'idle' });
+        void reconcile(initial.settings.githubToken, initial.settings.syncGistId);
+      }
     });
     return () => {
       cancelled = true;
@@ -298,6 +376,118 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }, 200);
     return () => clearTimeout(handle);
   }, [state]);
+
+  // Mirror to the sync gist on every change, once things settle — a much
+  // longer debounce than the local save, since this one costs a real network
+  // request against GitHub's API rather than a write to this browser's disk.
+  useEffect(() => {
+    if (!hydrated.current) return;
+    const { githubToken, syncGistId } = state.settings;
+    if (!githubToken || !syncGistId) return;
+    if (settledUpdatedAt.current === state.updatedAt) return;
+    const handle = setTimeout(() => {
+      void pushLocal(githubToken, syncGistId, state);
+    }, 2500);
+    return () => clearTimeout(handle);
+  }, [state]);
+
+  /** Pushes this device's current copy up, marking it settled on success. */
+  const pushLocal = useCallback(async (token: string, gistId: string, toPush: AppState) => {
+    setSync((s) => ({ ...s, state: 'syncing' }));
+    try {
+      await pushSyncGist(token, gistId, JSON.stringify(stripSyncCreds(toPush)));
+      settledUpdatedAt.current = toPush.updatedAt;
+      setSync({ connected: true, state: 'idle', lastSyncedAt: Date.now() });
+    } catch (err) {
+      setSync({
+        connected: true,
+        state: 'error',
+        error: err instanceof SyncError ? err.message : 'Sync failed.',
+      });
+    }
+  }, []);
+
+  /**
+   * Pulls the remote copy and keeps whichever side has the later edit —
+   * last-write-wins, which is enough for one person moving between their own
+   * two devices rather than two people editing at once. The token and gist ID
+   * are this device's own credentials, never part of what gets compared or
+   * adopted — only content ever flows through the gist.
+   */
+  const reconcile = useCallback(
+    async (token: string, gistId: string) => {
+      setSync((s) => ({ ...s, state: 'syncing' }));
+      try {
+        const remote = await pullRemote(token, gistId);
+        const local = stateRef.current;
+        if (remote && remote.updatedAt > local.updatedAt) {
+          const merged = attachSyncCreds(remote, token, gistId);
+          settledUpdatedAt.current = merged.updatedAt;
+          dispatch({ type: 'replace', state: merged });
+          setSync({ connected: true, state: 'idle', lastSyncedAt: Date.now() });
+        } else {
+          await pushLocal(token, gistId, local);
+        }
+      } catch (err) {
+        setSync({
+          connected: true,
+          state: 'error',
+          error: err instanceof SyncError ? err.message : 'Sync failed.',
+        });
+      }
+    },
+    [pushLocal],
+  );
+
+  const connectSync = useCallback<StoreValue['connectSync']>(
+    async (token, existingGistId) => {
+      setSync({ connected: false, state: 'syncing' });
+      try {
+        const local = stateRef.current;
+        let gistId = existingGistId;
+        let final: AppState;
+        if (gistId) {
+          // Joining a device that already has sync going — pull first so
+          // connecting never silently overwrites what is already up there.
+          const remote = await pullRemote(token, gistId);
+          if (remote && remote.updatedAt > local.updatedAt) {
+            final = attachSyncCreds(remote, token, gistId);
+            settledUpdatedAt.current = final.updatedAt;
+          } else {
+            final = attachSyncCreds(local, token, gistId);
+            await pushSyncGist(token, gistId, JSON.stringify(stripSyncCreds(final)));
+            settledUpdatedAt.current = final.updatedAt;
+          }
+        } else {
+          // First device — mint a new gist seeded with what is already here.
+          gistId = await createSyncGist(token, JSON.stringify(stripSyncCreds(local)));
+          final = attachSyncCreds(local, token, gistId);
+          settledUpdatedAt.current = final.updatedAt;
+        }
+        dispatch({ type: 'replace', state: final });
+        setSync({ connected: true, state: 'idle', lastSyncedAt: Date.now() });
+      } catch (err) {
+        setSync({
+          connected: false,
+          state: 'error',
+          error: err instanceof SyncError ? err.message : 'Could not connect sync.',
+        });
+      }
+    },
+    [],
+  );
+
+  const disconnectSync = useCallback<StoreValue['disconnectSync']>(() => {
+    dispatch({ type: 'settings', patch: { githubToken: undefined, syncGistId: undefined } });
+    settledUpdatedAt.current = null;
+    setSync({ connected: false, state: 'idle' });
+  }, []);
+
+  const syncNow = useCallback<StoreValue['syncNow']>(async () => {
+    const { githubToken, syncGistId } = stateRef.current.settings;
+    if (!githubToken || !syncGistId) return;
+    await reconcile(githubToken, syncGistId);
+  }, [reconcile]);
 
   const add = useCallback<StoreValue['add']>((key, item) => {
     // Every "new record" form seeds its draft with id: '' as a sentinel, so
@@ -320,6 +510,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     () => ({
       state,
       ready,
+      sync,
+      connectSync,
+      disconnectSync,
+      syncNow,
       add,
       update,
       remove,
@@ -332,7 +526,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       replaceAll: (next) => dispatch({ type: 'replace', state: migrate(next) }),
       resetToDefaults: () => dispatch({ type: 'replace', state: emptyState() }),
     }),
-    [state, ready, add, update, remove],
+    [state, ready, sync, connectSync, disconnectSync, syncNow, add, update, remove],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

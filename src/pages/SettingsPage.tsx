@@ -131,6 +131,7 @@ export function SettingsPage() {
           </Card>
 
           <AppCard />
+          <CloudSyncCard />
 
           <OrthodoxCalendarCard />
           <ClaudeVisionCard />
@@ -523,6 +524,114 @@ function ClaudeVisionCard() {
           a few cents per photo on your own account; without a key, meals still work — you just log
           calories and macros by hand.
         </p>
+      </div>
+    </Card>
+  );
+}
+
+function CloudSyncCard() {
+  const { state, sync, connectSync, disconnectSync, syncNow } = useStore();
+  const gistId = state.settings.syncGistId;
+  const [token, setToken] = useState('');
+  const [joinId, setJoinId] = useState('');
+  const [mode, setMode] = useState<'create' | 'join'>('create');
+  const [showId, setShowId] = useState(false);
+
+  const connected = !!gistId;
+
+  const statusLabel = () => {
+    if (sync.state === 'syncing') return 'Syncing…';
+    if (sync.state === 'error') return sync.error ?? 'Sync error';
+    if (sync.lastSyncedAt) return `Last synced ${new Date(sync.lastSyncedAt).toLocaleTimeString()}`;
+    return 'Connected';
+  };
+
+  return (
+    <Card>
+      <CardHeader
+        title="Sync between devices"
+        icon="🔗"
+        action={
+          connected ? (
+            <Badge tone={sync.state === 'error' ? 'critical' : 'good'}>
+              {sync.state === 'error' ? '⚠ Error' : '✓ Connected'}
+            </Badge>
+          ) : null
+        }
+      />
+      <div className="card-pad space-y-3">
+        {connected ? (
+          <>
+            <p className="text-xs text-ink-muted">{statusLabel()}</p>
+            <Field label="Gist ID" hint="Paste this into your other device's Settings to connect it too">
+              <div className="flex gap-2">
+                <TextInput readOnly value={showId ? (gistId ?? '') : '••••••••••••••••'} />
+                <button type="button" className="btn-ghost shrink-0" onClick={() => setShowId((v) => !v)}>
+                  {showId ? 'Hide' : 'Show'}
+                </button>
+              </div>
+            </Field>
+            <div className="flex gap-2">
+              <button type="button" className="btn-ghost" onClick={() => void syncNow()}>
+                Sync now
+              </button>
+              <button type="button" className="btn-ghost" onClick={disconnectSync}>
+                Disconnect
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <Field
+              label="GitHub token"
+              hint="A classic personal access token with only the gist scope — fine-grained tokens don't support gists. Create one at github.com/settings/tokens."
+            >
+              <TextInput
+                type="password"
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+                placeholder="ghp_…"
+                autoComplete="off"
+              />
+            </Field>
+            <div>
+              <span className="label">This device is</span>
+              <Segmented<'create' | 'join'>
+                value={mode}
+                onChange={setMode}
+                options={[
+                  { value: 'create', label: 'The first one' },
+                  { value: 'join', label: 'Joining another' },
+                ]}
+              />
+            </div>
+            {mode === 'join' ? (
+              <Field label="Gist ID" hint="From the other device's Settings → Sync between devices">
+                <TextInput
+                  value={joinId}
+                  onChange={(e) => setJoinId(e.target.value)}
+                  placeholder="Paste the Gist ID here"
+                  autoComplete="off"
+                />
+              </Field>
+            ) : null}
+            {sync.state === 'error' ? <p className="text-xs text-critical">{sync.error}</p> : null}
+            <button
+              type="button"
+              className="btn-primary"
+              disabled={!token.trim() || (mode === 'join' && !joinId.trim()) || sync.state === 'syncing'}
+              onClick={() => void connectSync(token.trim(), mode === 'join' ? joinId.trim() : undefined)}
+            >
+              {sync.state === 'syncing' ? 'Connecting…' : 'Connect'}
+            </button>
+            <p className="text-xs text-ink-muted">
+              Stored only in this browser and sent only to GitHub's API, straight from your device —
+              this app has no server of its own to see it. Your data mirrors into one private gist on
+              your own account; add the same token (or your own, on the same account) and this gist's
+              ID to a second device to keep them in sync.
+            </p>
+          </>
+        )}
       </div>
     </Card>
   );
