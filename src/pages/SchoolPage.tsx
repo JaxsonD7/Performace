@@ -24,9 +24,10 @@ import {
 } from '@/components/ui/primitives';
 import { StatTile } from '@/components/ui/charts';
 import { CalendarImportModal } from '@/components/school/CalendarImportModal';
+import { SyllabusImportModal } from '@/components/school/SyllabusImportModal';
 import { downloadIcs } from '@/integrations/calendar/export';
 import { formatDuration, formatTime, relativeDay, today } from '@/lib/date';
-import { courseGrade, letterGrade } from '@/lib/grades';
+import { courseGrade, letterGrade, neededAverage } from '@/lib/grades';
 import { WEEKDAY_SHORT } from '@/lib/routine';
 import { openAssignments, upcomingMeetings } from '@/lib/selectors';
 import { useStore } from '@/store/store';
@@ -391,6 +392,7 @@ function MeetingsTab() {
 function CoursesTab() {
   const { state, remove } = useStore();
   const [courseModal, setCourseModal] = useState<{ open: boolean; item?: Course }>({ open: false });
+  const [syllabusOpen, setSyllabusOpen] = useState(false);
   const [meetingModal, setMeetingModal] = useState<{
     open: boolean;
     item?: CourseMeeting;
@@ -406,6 +408,9 @@ function CoursesTab() {
           subtitle="Class times only ever appear on your schedule once you add them here."
           action={
             <div className="flex items-center gap-2">
+              <button type="button" className="btn-ghost !py-1 text-xs" onClick={() => setSyllabusOpen(true)}>
+                📄 Scan syllabus
+              </button>
               <button
                 type="button"
                 className="btn-ghost !py-1 text-xs"
@@ -500,6 +505,7 @@ function CoursesTab() {
           initial={meetingModal.item}
           defaultCourseId={meetingModal.defaultCourseId}
         />
+        <SyllabusImportModal open={syllabusOpen} onClose={() => setSyllabusOpen(false)} />
       </Card>
     </div>
   );
@@ -514,6 +520,7 @@ function GradesTab() {
   const [entryModal, setEntryModal] = useState<{ open: boolean; item?: GradeEntry; categoryId?: string }>({
     open: false,
   });
+  const [targetGrade, setTargetGrade] = useState('90');
 
   if (!state.courses.length) {
     return (
@@ -526,6 +533,8 @@ function GradesTab() {
 
   const course = state.courses.find((c) => c.id === selectedCourseId) ?? state.courses[0];
   const grade = courseGrade(state, course.id);
+  const target = Number(targetGrade);
+  const needed = Number.isFinite(target) ? neededAverage(grade, target) : null;
 
   return (
     <Card>
@@ -565,6 +574,35 @@ function GradesTab() {
             </p>
           ) : null}
         </div>
+
+        {grade.byCategory.length ? (
+          <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-line p-3">
+            <label className="flex items-center gap-2 text-xs text-ink-secondary">
+              Target grade
+              <input
+                type="number"
+                min={0}
+                max={100}
+                value={targetGrade}
+                onChange={(e) => setTargetGrade(e.target.value)}
+                className="input w-16 !py-1 text-center"
+              />
+              %
+            </label>
+            <p className="hud-mono text-xs text-ink-secondary">
+              {needed === null ? (
+                <span className="text-ink-muted">Every category is already graded.</span>
+              ) : !needed.achievable ? (
+                <span className="text-critical">Not reachable — even 100% on the rest falls short.</span>
+              ) : (
+                <>
+                  Need <span className="font-semibold text-ink">{Math.max(0, needed.value).toFixed(1)}%</span> average
+                  on the remaining {(grade.totalWeight - grade.weightCounted).toFixed(0)}% of the grade.
+                </>
+              )}
+            </p>
+          </div>
+        ) : null}
 
         <button
           type="button"

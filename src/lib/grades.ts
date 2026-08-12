@@ -16,6 +16,8 @@ export interface CourseGrade {
   }[];
   /** Weight actually counted toward `pct` — categories with no entries are excluded, not scored as zero. */
   weightCounted: number;
+  /** Weight across every category, entered or not — the denominator a final course grade settles against. */
+  totalWeight: number;
 }
 
 export function courseGrade(state: AppState, courseId: string): CourseGrade {
@@ -30,11 +32,37 @@ export function courseGrade(state: AppState, courseId: string): CourseGrade {
 
   const scored = byCategory.filter((c) => c.avgPct != null);
   const weightCounted = scored.reduce((s, c) => s + c.category.weightPct, 0);
+  const totalWeight = byCategory.reduce((s, c) => s + c.category.weightPct, 0);
   const pct = weightCounted > 0
     ? scored.reduce((sum, c) => sum + (c.avgPct as number) * c.category.weightPct, 0) / weightCounted
     : null;
 
-  return { pct, byCategory, weightCounted };
+  return { pct, byCategory, weightCounted, totalWeight };
+}
+
+export interface NeededAverage {
+  /** Average score (0-100) needed across every not-yet-graded category to land on `targetPct` overall. */
+  value: number;
+  /** False once the math asks for more than 100% — the target is out of reach no matter what comes next. */
+  achievable: boolean;
+}
+
+/**
+ * What you'd need to average on everything not graded yet to land on
+ * `targetPct` overall — the weight of ungraded categories is assumed to
+ * eventually count in full, since a real final grade always settles against
+ * the whole syllabus, not just the part graded so far.
+ */
+export function neededAverage(grade: CourseGrade, targetPct: number): NeededAverage | null {
+  const remainingWeight = grade.totalWeight - grade.weightCounted;
+  if (remainingWeight <= 0) return null;
+
+  const earned = grade.byCategory.reduce(
+    (sum, c) => sum + (c.avgPct ?? 0) * c.category.weightPct,
+    0,
+  );
+  const value = (targetPct * grade.totalWeight - earned) / remainingWeight;
+  return { value, achievable: value <= 100 };
 }
 
 /** A rough US letter grade, only for display — the percentage is the real number. */

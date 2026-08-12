@@ -110,6 +110,106 @@ export async function analyzeFoodPhoto(photoDataUrl: string, apiKey: string): Pr
   };
 }
 
+export interface SyllabusCategory {
+  name: string;
+  weightPct: number;
+}
+
+export interface SyllabusAnalysis {
+  courseName: string;
+  courseCode?: string;
+  instructor?: string;
+  categories: SyllabusCategory[];
+  /** Claude's own hedge — illegible sections, weights that don't sum to 100, ambiguous category names. */
+  note?: string;
+}
+
+const SYLLABUS_PROMPT = `You are looking at a photo of a page from a college course syllabus.
+Find the course name/code, the instructor if listed, and the grading breakdown
+(how the final grade is weighted across categories like homework, exams,
+participation, etc). Reply with ONLY a JSON object, no other text, in exactly
+this shape:
+{"courseName": "string", "courseCode": "string or null", "instructor": "string or null", "categories": [{"name": "string", "weightPct": number}], "note": "one short sentence flagging anything you're unsure about, or null"}
+Weights are the percentage each category counts toward the final grade — read
+them exactly as printed rather than estimating, and if this page has no
+grading table at all, return an empty categories array rather than guessing one.`;
+
+export async function analyzeSyllabusPhoto(photoDataUrl: string, apiKey: string): Promise<SyllabusAnalysis> {
+  if (!apiKey.trim()) throw new VisionError('No API key set — add one in Settings first.');
+
+  let res: Response;
+  try {
+    res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': apiKey.trim(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: 800,
+        messages: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'image',
+                source: {
+                  type: 'base64',
+                  media_type: mimeFromDataUrl(photoDataUrl),
+                  data: base64FromDataUrl(photoDataUrl),
+                },
+              },
+              { type: 'text', text: SYLLABUS_PROMPT },
+            ],
+          },
+        ],
+      }),
+    });
+  } catch {
+    throw new VisionError('Could not reach Anthropic — check your connection.');
+  }
+
+  if (!res.ok) {
+    if (res.status === 401) throw new VisionError('That API key was rejected. Check it in Settings.');
+    if (res.status === 429) throw new VisionError('Rate limited — wait a moment and try again.');
+    const body = await res.text().catch(() => '');
+    throw new VisionError(`Anthropic returned an error (${res.status}). ${body.slice(0, 200)}`);
+  }
+
+  const data = await res.json();
+  const text: string = data?.content?.[0]?.text ?? '';
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) throw new VisionError('Could not parse a response — try again.');
+
+  let parsed: Record<string, unknown>;
+  try {
+    parsed = JSON.parse(jsonMatch[0]);
+  } catch {
+    throw new VisionError('Could not parse a response — try again.');
+  }
+
+  const categories: SyllabusCategory[] = Array.isArray(parsed.categories)
+    ? (parsed.categories as unknown[])
+        .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
+        .map((c) => ({
+          name: typeof c.name === 'string' && c.name.trim() ? c.name.trim() : 'Category',
+          weightPct: typeof c.weightPct === 'number' && Number.isFinite(c.weightPct) ? c.weightPct : 0,
+        }))
+        .filter((c) => c.weightPct > 0)
+    : [];
+
+  return {
+    courseName: typeof parsed.courseName === 'string' && parsed.courseName.trim() ? parsed.courseName.trim() : 'New course',
+    courseCode: typeof parsed.courseCode === 'string' && parsed.courseCode.trim() ? parsed.courseCode.trim() : undefined,
+    instructor: typeof parsed.instructor === 'string' && parsed.instructor.trim() ? parsed.instructor.trim() : undefined,
+    categories,
+    note: typeof parsed.note === 'string' && parsed.note.trim() ? parsed.note.trim() : undefined,
+  };
+}
+
 /**
  * Downscales and compresses an image file to a small JPEG data URL before it
  * ever touches localStorage or the network — a phone photo can be 5-10MB, and
