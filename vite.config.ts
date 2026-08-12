@@ -46,8 +46,8 @@ export default defineConfig({
         start_url: base,
         scope: base,
         display: 'standalone',
-        background_color: '#f9f9f7',
-        theme_color: '#f9f9f7',
+        background_color: '#050a0d',
+        theme_color: '#050a0d',
         lang: 'en',
         categories: ['productivity', 'health', 'lifestyle'],
         icons: [

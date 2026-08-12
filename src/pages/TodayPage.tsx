@@ -17,7 +17,7 @@ import {
   WorkoutCard,
 } from '@/components/today/cards';
 import { HabitForm } from '@/components/forms/entryForms';
-import { Card, CardHeader, Progress } from '@/components/ui/primitives';
+import { Card, CardHeader, RadialGauge } from '@/components/ui/primitives';
 import { addDays, formatDate, nowClock, today } from '@/lib/date';
 import { dayScore } from '@/lib/metrics';
 import { generateSchedule, nextBlock, protectedBlocks } from '@/lib/schedule';
@@ -75,9 +75,12 @@ export function TodayPage() {
           </>
         }
       >
-        <div className="max-w-md">
-          <Progress value={score.pct} label="Day completion" hint={`${score.pct}%`} />
-        </div>
+        <RadialGauge
+          value={score.pct}
+          label="Day completion"
+          hint={`${score.done} / ${score.total}`}
+          size={76}
+        />
       </PageHeader>
 
       <PageBody>

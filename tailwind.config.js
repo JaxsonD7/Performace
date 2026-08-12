@@ -39,11 +39,17 @@ export default {
         s8: token('--series-8'),
       },
       fontFamily: {
-        sans: ['system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['Rajdhani', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['"Share Tech Mono"', 'ui-monospace', 'monospace'],
       },
-      borderRadius: { xl: '0.875rem', '2xl': '1.125rem' },
+      borderRadius: { xl: '0.75rem', '2xl': '1rem' },
       boxShadow: {
-        card: '0 1px 2px rgba(11,11,11,0.04), 0 1px 1px rgba(11,11,11,0.03)',
+        // Mirrors the raw box-shadow on `.card` in index.css: a hairline cyan
+        // ring plus a soft glow that only shows up once --glow-strength turns
+        // on in dark mode.
+        card:
+          '0 0 0 1px rgb(var(--series-1) / calc(0.05 + var(--glow-strength) * 0.05)), ' +
+          '0 0 calc(16px * var(--glow-strength)) rgb(var(--series-1) / calc(var(--glow-strength) * 0.12))',
       },
     },
   },

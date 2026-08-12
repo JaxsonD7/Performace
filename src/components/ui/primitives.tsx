@@ -195,6 +195,90 @@ export function Progress({
   );
 }
 
+const GAUGE_TONE: Record<string, string> = {
+  brand: 'rgb(var(--series-1))',
+  good: 'rgb(var(--good))',
+  warning: 'rgb(var(--warning))',
+  critical: 'rgb(var(--critical))',
+  s2: 'rgb(var(--series-2))',
+  s3: 'rgb(var(--series-3))',
+  s7: 'rgb(var(--series-7))',
+};
+
+/**
+ * The instrument-panel version of `Progress` — an arc instead of a bar, for
+ * the handful of hero stats that earn the extra visual weight (day
+ * completion, a big weekly number). Most progress in the app stays a bar;
+ * this is reserved for the one or two things per screen that should read
+ * first.
+ */
+export function RadialGauge({
+  value,
+  max = 100,
+  label,
+  hint,
+  tone = 'brand',
+  size = 96,
+}: {
+  value: number;
+  max?: number;
+  label?: ReactNode;
+  hint?: ReactNode;
+  tone?: 'brand' | 'good' | 'warning' | 'critical' | 's2' | 's3' | 's7';
+  size?: number;
+}) {
+  const pct = max > 0 ? Math.min(100, Math.max(0, (value / max) * 100)) : 0;
+  const stroke = Math.max(4, size * 0.08);
+  const r = size / 2 - stroke;
+  const c = 2 * Math.PI * r;
+  const offset = c * (1 - pct / 100);
+  const color = GAUGE_TONE[tone] ?? GAUGE_TONE.brand;
+
+  return (
+    <div className="inline-flex flex-col items-center gap-1.5">
+      <div className="relative" style={{ width: size, height: size }}>
+        <svg
+          width={size}
+          height={size}
+          viewBox={`0 0 ${size} ${size}`}
+          className="-rotate-90"
+          role="progressbar"
+          aria-valuenow={Math.round(pct)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={typeof label === 'string' ? label : undefined}
+        >
+          <circle cx={size / 2} cy={size / 2} r={r} stroke="rgb(var(--gridline))" strokeWidth={stroke} fill="none" />
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={r}
+            stroke={color}
+            strokeWidth={stroke}
+            strokeLinecap="round"
+            fill="none"
+            strokeDasharray={c}
+            strokeDashoffset={offset}
+            style={{
+              transition: 'stroke-dashoffset 600ms ease',
+              filter: `drop-shadow(0 0 calc(6px * var(--glow-strength)) ${color})`,
+            }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="hud-mono hud-glow text-lg font-semibold text-ink">{Math.round(pct)}%</span>
+        </div>
+      </div>
+      {label || hint ? (
+        <div className="text-center">
+          {label ? <p className="text-xs font-medium text-ink-secondary">{label}</p> : null}
+          {hint ? <p className="hud-mono text-[11px] text-ink-muted">{hint}</p> : null}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export function Field({
   label,
   children,

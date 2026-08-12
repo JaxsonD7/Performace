@@ -12,80 +12,102 @@
  * Light is defined on bare :root so it is never the one hiding inside a media
  * query. Dark is redefined twice: once for the OS setting (guarded so an
  * explicit light stamp still wins) and once for the in-app theme toggle.
+ *
+ * Both palettes read as the same HUD identity — cyan on a cool near-neutral
+ * ground, brand color doubling as the glow color everywhere in this file. The
+ * light variant ("day HUD") is the same instrument panel in bright daylight:
+ * flatter, less glow, but built from the same cyan/amber vocabulary rather
+ * than being a different theme wearing the same layout.
  */
 :root {
   color-scheme: light;
 
-  --plane: 249 249 247;
-  --surface-1: 252 252 251;
-  --surface-2: 242 241 237;
-  --text-primary: 11 11 11;
-  --text-secondary: 82 81 78;
-  --text-muted: 137 135 129;
-  --gridline: 225 224 217;
-  --border: 228 227 222;
+  --plane: 238 246 249;
+  --surface-1: 255 255 255;
+  --surface-2: 226 240 245;
+  --text-primary: 7 26 34;
+  --text-secondary: 47 84 98;
+  --text-muted: 108 140 152;
+  --gridline: 202 224 232;
+  --border: 145 195 212;
 
   /* Categorical palette — fixed slot order, assigned by entity, never by rank. */
-  --series-1: 42 120 214;
-  --series-2: 235 104 52;
-  --series-3: 27 175 122;
-  --series-4: 237 161 0;
-  --series-5: 232 123 164;
-  --series-6: 0 131 0;
-  --series-7: 74 58 167;
-  --series-8: 227 73 72;
+  --series-1: 0 141 189;
+  --series-2: 214 106 0;
+  --series-3: 0 148 108;
+  --series-4: 178 122 0;
+  --series-5: 187 47 116;
+  --series-6: 0 128 74;
+  --series-7: 90 68 196;
+  --series-8: 197 45 58;
 
   /* Status — reserved, never reused as a series color. Always with icon + label. */
-  --good: 12 163 12;
-  --warning: 250 178 25;
-  --serious: 236 131 90;
-  --critical: 208 59 59;
+  --good: 0 138 92;
+  --warning: 178 122 0;
+  --serious: 191 89 34;
+  --critical: 191 40 51;
+
+  --glow-strength: 0;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     color-scheme: dark;
 
-    --plane: 13 13 13;
-    --surface-1: 26 26 25;
-    --surface-2: 35 35 34;
-    --text-primary: 255 255 255;
-    --text-secondary: 195 194 183;
-    --text-muted: 137 135 129;
-    --gridline: 44 44 42;
-    --border: 56 56 53;
+    --plane: 4 8 11;
+    --surface-1: 8 15 19;
+    --surface-2: 13 24 30;
+    --text-primary: 205 244 255;
+    --text-secondary: 135 190 208;
+    --text-muted: 79 116 130;
+    --gridline: 17 42 52;
+    --border: 27 84 104;
 
-    --series-1: 57 135 229;
-    --series-2: 217 89 38;
-    --series-3: 25 158 112;
-    --series-4: 201 133 0;
-    --series-5: 213 81 129;
-    --series-6: 0 131 0;
-    --series-7: 144 133 233;
-    --series-8: 230 103 103;
+    --series-1: 0 212 255;
+    --series-2: 255 150 40;
+    --series-3: 0 232 168;
+    --series-4: 255 200 40;
+    --series-5: 255 105 170;
+    --series-6: 70 224 120;
+    --series-7: 150 120 255;
+    --series-8: 255 90 100;
+
+    --good: 40 224 150;
+    --warning: 255 176 40;
+    --serious: 255 130 70;
+    --critical: 255 78 90;
+
+    --glow-strength: 1;
   }
 }
 
 :root[data-theme='dark'] {
   color-scheme: dark;
 
-  --plane: 13 13 13;
-  --surface-1: 26 26 25;
-  --surface-2: 35 35 34;
-  --text-primary: 255 255 255;
-  --text-secondary: 195 194 183;
-  --text-muted: 137 135 129;
-  --gridline: 44 44 42;
-  --border: 56 56 53;
+  --plane: 4 8 11;
+  --surface-1: 8 15 19;
+  --surface-2: 13 24 30;
+  --text-primary: 205 244 255;
+  --text-secondary: 135 190 208;
+  --text-muted: 79 116 130;
+  --gridline: 17 42 52;
+  --border: 27 84 104;
 
-  --series-1: 57 135 229;
-  --series-2: 217 89 38;
-  --series-3: 25 158 112;
-  --series-4: 201 133 0;
-  --series-5: 213 81 129;
-  --series-6: 0 131 0;
-  --series-7: 144 133 233;
-  --series-8: 230 103 103;
+  --series-1: 0 212 255;
+  --series-2: 255 150 40;
+  --series-3: 0 232 168;
+  --series-4: 255 200 40;
+  --series-5: 255 105 170;
+  --series-6: 70 224 120;
+  --series-7: 150 120 255;
+  --series-8: 255 90 100;
+
+  --good: 40 224 150;
+  --warning: 255 176 40;
+  --serious: 255 130 70;
+  --critical: 255 78 90;
+
+  --glow-strength: 1;
 }
 
 html,
@@ -97,47 +119,153 @@ body,
 body {
   background: rgb(var(--plane));
   color: rgb(var(--text-primary));
+  font-family: 'Rajdhani', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   overscroll-behavior-y: none;
+  position: relative;
+}
+
+/* A faint drifting grid behind everything — the one "moving" element the app
+   has, kept slow and low-contrast enough to read as ambient texture rather
+   than motion that competes with the data. Disabled outright for anyone who
+   asked their OS to reduce motion. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(var(--gridline) / 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--gridline) / 0.5) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: calc(0.25 + var(--glow-strength) * 0.15);
+  animation: grid-drift 90s linear infinite;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes grid-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 480px 480px;
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+  }
 }
 
 @layer components {
   .card {
     /* min-w-0 keeps a card that holds a wide table from stretching its grid
        column — the table scrolls inside .scroll-x instead. */
-    @apply min-w-0 rounded-2xl border border-line bg-surface shadow-card;
+    @apply relative min-w-0 rounded-xl border bg-surface;
+    border-color: rgb(var(--border) / 0.5);
+    box-shadow:
+      0 0 0 1px rgb(var(--series-1) / calc(0.05 + var(--glow-strength) * 0.05)),
+      0 0 calc(16px * var(--glow-strength)) rgb(var(--series-1) / calc(var(--glow-strength) * 0.12));
+  }
+  /* A hairline corner bracket on two opposite corners — the one purely
+     decorative HUD-panel touch, kept small enough it never competes with the
+     card's own border or header rule. */
+  .card::before,
+  .card::after {
+    content: '';
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    pointer-events: none;
+    opacity: calc(0.5 + var(--glow-strength) * 0.5);
+  }
+  .card::before {
+    top: -1px;
+    left: -1px;
+    border-top: 2px solid rgb(var(--series-1));
+    border-left: 2px solid rgb(var(--series-1));
+    border-top-left-radius: 3px;
+  }
+  .card::after {
+    bottom: -1px;
+    right: -1px;
+    border-bottom: 2px solid rgb(var(--series-1));
+    border-right: 2px solid rgb(var(--series-1));
+    border-bottom-right-radius: 3px;
   }
   .card-pad {
     @apply p-4 sm:p-5;
   }
   .input {
-    @apply w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink
-           placeholder:text-ink-muted focus:border-brand focus:outline-none
-           focus:ring-2 focus:ring-brand/25;
+    @apply w-full rounded-md border bg-surface px-3 py-2 text-sm text-ink
+           placeholder:text-ink-muted focus:outline-none;
+    border-color: rgb(var(--border) / 0.6);
+    transition: border-color 150ms, box-shadow 150ms;
+  }
+  .input:focus {
+    border-color: rgb(var(--series-1));
+    box-shadow: 0 0 0 3px rgb(var(--series-1) / 0.18), 0 0 calc(10px * var(--glow-strength)) rgb(var(--series-1) / calc(var(--glow-strength) * 0.5));
   }
   .label {
-    @apply mb-1 block text-xs font-medium uppercase tracking-wide text-ink-muted;
+    @apply mb-1 block text-xs font-semibold uppercase tracking-widest text-ink-muted;
   }
   .btn {
-    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-lg px-3 py-2
-           text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2
-           focus-visible:ring-brand/40 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-md px-3 py-2
+           text-sm font-semibold uppercase tracking-wide transition-all focus:outline-none
+           disabled:cursor-not-allowed disabled:opacity-50;
+    letter-spacing: 0.03em;
+  }
+  .btn:focus-visible {
+    box-shadow: 0 0 0 2px rgb(var(--plane)), 0 0 0 4px rgb(var(--series-1) / 0.6);
   }
   .btn-primary {
-    @apply btn bg-brand text-white hover:opacity-90;
+    @apply btn;
+    background: rgb(var(--series-1));
+    color: rgb(var(--plane));
+    box-shadow: 0 0 calc(14px * var(--glow-strength)) rgb(var(--series-1) / calc(var(--glow-strength) * 0.65));
+  }
+  .btn-primary:hover {
+    filter: brightness(1.1);
   }
   .btn-ghost {
-    @apply btn border border-line bg-surface text-ink-secondary hover:bg-raised;
+    @apply btn border bg-surface text-ink-secondary;
+    border-color: rgb(var(--border) / 0.6);
+  }
+  .btn-ghost:hover {
+    border-color: rgb(var(--series-1) / 0.6);
+    color: rgb(var(--series-1));
+    background: rgb(var(--series-1) / 0.06);
   }
   .btn-quiet {
-    @apply btn text-ink-muted hover:bg-raised hover:text-ink;
+    @apply btn text-ink-muted normal-case tracking-normal;
+  }
+  .btn-quiet:hover {
+    @apply text-ink;
+    background: rgb(var(--series-1) / 0.08);
   }
   .chip {
-    @apply inline-flex items-center gap-1 rounded-full border border-line px-2 py-0.5
+    @apply inline-flex items-center gap-1 rounded-full border px-2 py-0.5
            text-[11px] font-medium text-ink-secondary;
+    border-color: rgb(var(--border) / 0.6);
   }
   .section-title {
-    @apply text-sm font-semibold text-ink;
+    @apply text-sm font-semibold uppercase tracking-wide text-ink;
   }
 }
 
@@ -146,6 +274,16 @@ body {
   min-width: 0;
   overflow-x: auto;
   scrollbar-width: thin;
+}
+
+/* Small glowing readout text — tabular numbers, HUD-style. */
+.hud-mono {
+  font-family: 'Share Tech Mono', ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-glow {
+  text-shadow: 0 0 calc(10px * var(--glow-strength)) rgb(var(--series-1) / calc(var(--glow-strength) * 0.7));
 }
 
 @media print {
@@ -159,7 +297,11 @@ body {
   body {
     background: #fff;
   }
+  body::before {
+    display: none;
+  }
   .card {
+    box-shadow: none;
     break-inside: avoid;
   }
 }

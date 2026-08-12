@@ -13,7 +13,8 @@ import sharp from 'sharp';
 
 const OUT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../public/icons');
 
-const BRAND = '#2a78d6';
+const BRAND = '#050a0d';
+const MARK = '#00d4ff';
 
 /**
  * @param inset how far the mark sits from the edge, as a fraction of the canvas.
@@ -30,8 +31,10 @@ function svg(size, { inset = 0.24, radius = 0.22 } = {}) {
   return Buffer.from(`
 <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
   <rect width="${size}" height="${size}" rx="${r}" ry="${r}" fill="${BRAND}"/>
+  <circle cx="${size / 2}" cy="${size / 2}" r="${size * 0.36}" fill="none" stroke="${MARK}"
+          stroke-width="${Math.max(1, size * 0.018)}" opacity="0.5"/>
   <g transform="translate(${pad} ${pad}) scale(${scale})">
-    <path d="M8 55 L37 84 L92 16" fill="none" stroke="#ffffff" stroke-width="${stroke / scale}"
+    <path d="M8 55 L37 84 L92 16" fill="none" stroke="${MARK}" stroke-width="${stroke / scale}"
           stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>`);
