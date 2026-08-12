@@ -4,14 +4,53 @@ A local-first personal performance tracker: diet, sleep, gym, reading, school,
 meetings, the Orthodox rule of life, Apple Watch metrics, and a day planner that
 turns all of it into an actual schedule.
 
-Everything lives in your browser. No account, no server, no network calls.
+It installs as a real app on your phone and your computer, works with no signal,
+and updates itself whenever this repo changes. Your data lives in your browser —
+no account, no server, nothing to sign into.
+
+**Live app:** https://jaxsond7.github.io/Performace/
+
+## Install it
+
+| Device | How |
+|---|---|
+| **iPhone / iPad** | Open the link in **Safari** (not Chrome), tap Share → **Add to Home Screen** |
+| **Mac / Windows** | Open in Chrome or Edge, click the **install icon** in the address bar — or use the Install button in Settings → App & updates |
+| **Android** | Chrome will offer to install; or Settings → App & updates → Install |
+
+Installed, it opens full screen with no browser bar and works completely
+offline. iOS only allows this from Safari — installing from Chrome on iPhone
+will not work.
+
+## How updates reach you
+
+Push a change to this repo → GitHub Actions builds and deploys it → the next
+time you open the app it notices the new build, downloads it in the background,
+and shows **"A new version is ready"** with an Update button.
+
+It waits for you to tap it rather than reloading on its own, so an update never
+interrupts something you are half-way through typing. Updates replace the app
+only — everything you have tracked stays exactly where it is. You can force a
+check any time from **Settings → App & updates**, which also shows which build
+you are running.
+
+## Local development
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173
+npm run dev      # http://localhost:5173/Performace/
 ```
 
-`npm run build` produces a static `dist/` you can open anywhere.
+The dev URL includes `/Performace/` because that is the path GitHub Pages serves
+from, and the app's install scope has to match it. Building for a domain root
+instead:
+
+```bash
+BASE_PATH=/ npm run build
+```
+
+Other scripts: `npm run build`, `npm run preview`, `npm run typecheck`, and
+`npm run icons` (regenerates the app icons from `scripts/generate-icons.mjs`).
 
 The app ships with two weeks of sample data so every card, streak, and chart has
 something to show on the first launch. Replace it from **Settings → Your data**
@@ -64,6 +103,19 @@ priority order:
 
 Ticking off a block flows back to the record it came from — completing a task
 block completes the task.
+
+## Deployment
+
+`.github/workflows/deploy.yml` builds and publishes to GitHub Pages on every
+push to the default branch. It type-checks first, so a build that would not
+compile never reaches your phone.
+
+Requirements, both one-time: the repository must be **public** (GitHub Pages on
+a private repo needs a paid plan), and **Settings → Pages → Source** must be set
+to **GitHub Actions**.
+
+The `BASE_PATH` environment variable in the workflow is derived from the repo
+name, so renaming the repo does not break the deploy.
 
 ## Data
 
@@ -127,12 +179,15 @@ src/
     schedule/              the shared block list
   pages/                   one file per route
   integrations/            health, calendar, notifications, AI, export
+  pwa/                     install prompt, update banner, service worker hooks
+scripts/generate-icons.mjs the app icon set, from one SVG source
+.github/workflows/         build and deploy to GitHub Pages
 ```
 
 ## Stack
 
-React 18, TypeScript, Vite, Tailwind, React Router. No UI kit, no chart library,
-no state library, no backend.
+React 18, TypeScript, Vite, Tailwind, React Router, and vite-plugin-pwa for the
+service worker. No UI kit, no chart library, no state library, no backend.
 
 Colors are RGB-channel CSS custom properties in `src/index.css`, so light and
 dark are each defined once and Tailwind's alpha modifiers work against them. The

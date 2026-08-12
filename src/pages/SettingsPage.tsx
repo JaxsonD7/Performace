@@ -15,6 +15,7 @@ import {
   exportJSON,
   importJSONFile,
 } from '@/integrations/export/exporters';
+import { AppCard } from '@/pwa/AppCard';
 import { useStore } from '@/store/store';
 import type { CollectionKey, DataSource, Settings, ThemePreference } from '@/types';
 
@@ -104,6 +105,8 @@ export function SettingsPage() {
               </Field>
             </div>
           </Card>
+
+          <AppCard />
 
           <Card>
             <CardHeader

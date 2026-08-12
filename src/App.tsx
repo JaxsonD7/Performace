@@ -9,6 +9,7 @@ import { SchedulePage } from '@/pages/SchedulePage';
 import { SchoolPage } from '@/pages/SchoolPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { TodayPage } from '@/pages/TodayPage';
+import { UpdateBanner } from '@/pwa/UpdateBanner';
 import { useStore } from '@/store/store';
 
 export function App() {
@@ -33,18 +34,21 @@ export function App() {
   }
 
   return (
-    <Routes>
-      <Route element={<AppLayout />}>
-        <Route index element={<TodayPage />} />
-        <Route path="schedule" element={<SchedulePage />} />
-        <Route path="school" element={<SchoolPage />} />
-        <Route path="health" element={<HealthPage />} />
-        <Route path="reading" element={<ReadingPage />} />
-        <Route path="goals" element={<GoalsPage />} />
-        <Route path="metrics" element={<MetricsPage />} />
-        <Route path="settings" element={<SettingsPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Route>
-    </Routes>
+    <>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route index element={<TodayPage />} />
+          <Route path="schedule" element={<SchedulePage />} />
+          <Route path="school" element={<SchoolPage />} />
+          <Route path="health" element={<HealthPage />} />
+          <Route path="reading" element={<ReadingPage />} />
+          <Route path="goals" element={<GoalsPage />} />
+          <Route path="metrics" element={<MetricsPage />} />
+          <Route path="settings" element={<SettingsPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+      <UpdateBanner />
+    </>
   );
 }
