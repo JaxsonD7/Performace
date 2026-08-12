@@ -145,7 +145,7 @@ export function HabitForm({
   initial,
   group = 'improvement',
 }: FormProps<Habit> & { group?: Habit['group'] }) {
-  const { add, update, state } = useStore();
+  const { add, update, removeHabit, state } = useStore();
   const { draft, set } = useFormDraft<Habit>(open, () =>
     initial
       ? { ...initial }
@@ -175,7 +175,24 @@ export function HabitForm({
       open={open}
       onClose={onClose}
       title={initial ? `Edit ${label}` : `New ${label}`}
-      footer={<ModalActions onCancel={onClose} onConfirm={save} disabled={!draft.name.trim()} />}
+      footer={
+        <>
+          {initial ? (
+            <button
+              type="button"
+              className="btn text-critical hover:bg-critical/10"
+              onClick={() => {
+                removeHabit(initial.id);
+                onClose();
+              }}
+            >
+              Delete
+            </button>
+          ) : null}
+          <span className="flex-1" />
+          <ModalActions onCancel={onClose} onConfirm={save} disabled={!draft.name.trim()} />
+        </>
+      }
     >
       <div className="space-y-4">
         <div className="grid grid-cols-[5rem_1fr] gap-3">

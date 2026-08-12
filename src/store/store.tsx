@@ -41,7 +41,8 @@ type Action =
   | { type: 'routine'; weekday: Weekday; patch: Partial<DayRoutine> }
   | { type: 'day'; date: ISODate; patch: Partial<DayLog> }
   | { type: 'setBlocks'; date: ISODate; blocks: ScheduleBlock[] }
-  | { type: 'setQuickActions'; actions: QuickAction[] };
+  | { type: 'setQuickActions'; actions: QuickAction[] }
+  | { type: 'removeHabit'; id: string };
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
@@ -102,6 +103,24 @@ function reducer(state: AppState, action: Action): AppState {
 
     case 'setQuickActions':
       return { ...state, quickActions: action.actions };
+
+    case 'removeHabit':
+      return {
+        ...state,
+        habits: state.habits.filter((h) => h.id !== action.id),
+        // A deleted habit can't leave dangling references — a log for a habit
+        // that no longer exists, a dock button that toggles nothing, or a
+        // goal silently tracking a habit that vanished.
+        habitLogs: state.habitLogs.filter((l) => l.habitId !== action.id),
+        quickActions: state.quickActions.map((qa) =>
+          qa.type === 'habit-toggle' && qa.habitId === action.id
+            ? { ...qa, type: 'none', habitId: undefined, label: 'Empty', icon: '·' }
+            : qa,
+        ),
+        goals: state.goals.map((g) =>
+          g.linkedHabitId === action.id ? { ...g, linkedHabitId: undefined } : g,
+        ),
+      };
 
     default:
       return state;
@@ -215,6 +234,8 @@ interface StoreValue {
   add: <K extends CollectionKey>(key: K, item: Omit<RecordOf<K>, 'id'> & { id?: string }) => string;
   update: <K extends CollectionKey>(key: K, id: string, patch: Partial<RecordOf<K>>) => void;
   remove: (key: CollectionKey, id: string) => void;
+  /** Removing a habit also clears its logs and unlinks it from quick actions and goals. */
+  removeHabit: (id: string) => void;
   updateSettings: (patch: Partial<Settings>) => void;
   updateRoutine: (weekday: Weekday, patch: Partial<DayRoutine>) => void;
   updateDay: (date: ISODate, patch: Partial<DayLog>) => void;
@@ -280,6 +301,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       add,
       update,
       remove,
+      removeHabit: (id) => dispatch({ type: 'removeHabit', id }),
       updateSettings: (patch) => dispatch({ type: 'settings', patch }),
       updateRoutine: (weekday, patch) => dispatch({ type: 'routine', weekday, patch }),
       updateDay: (date, patch) => dispatch({ type: 'day', date, patch }),

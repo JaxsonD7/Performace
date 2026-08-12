@@ -212,7 +212,7 @@ function GoalsTab() {
 // ---------------------------------------------------------------------------
 
 function HabitsTab({ group }: { group?: Habit['group'] }) {
-  const { state, update, remove } = useStore();
+  const { state, update, removeHabit } = useStore();
   const toggle = useHabitToggle();
   const [modal, setModal] = useState<{ open: boolean; item?: Habit }>({ open: false });
 
@@ -321,7 +321,7 @@ function HabitsTab({ group }: { group?: Habit['group'] }) {
                         >
                           <span className="text-xs">{h.archived ? '↺' : '⌁'}</span>
                         </IconButton>
-                        <IconButton onClick={() => remove('habits', h.id)} label="Delete" tone="danger">
+                        <IconButton onClick={() => removeHabit(h.id)} label="Delete" tone="danger">
                           <TrashIcon />
                         </IconButton>
                       </span>
