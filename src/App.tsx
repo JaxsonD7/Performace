@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLayout } from '@/components/AppLayout';
 import { GoalsPage } from '@/pages/GoalsPage';
 import { HealthPage } from '@/pages/HealthPage';
+import { HomePage } from '@/pages/HomePage';
 import { MetricsPage } from '@/pages/MetricsPage';
 import { ReadingPage } from '@/pages/ReadingPage';
 import { SchedulePage } from '@/pages/SchedulePage';
@@ -40,6 +41,7 @@ export function App() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route index element={<TodayPage />} />
+          <Route path="home" element={<HomePage />} />
           <Route path="schedule" element={<SchedulePage />} />
           <Route path="school" element={<SchoolPage />} />
           <Route path="health" element={<HealthPage />} />

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { PageBody, PageHeader } from '@/components/PageHeader';
-import { GoalForm, HabitForm } from '@/components/forms/entryForms';
+import { BodyGoalForm, GoalForm, HabitForm, LiftGoalForm } from '@/components/forms/entryForms';
 import {
   Badge,
   Card,
@@ -14,13 +14,14 @@ import {
   cx,
 } from '@/components/ui/primitives';
 import { StatTile, WeekDots } from '@/components/ui/charts';
-import { relativeDay, shortDay, startOfWeek, today, weekDates } from '@/lib/date';
+import { formatDate, relativeDay, shortDay, startOfWeek, today, weekDates } from '@/lib/date';
+import { bodyGoalProgress, liftGoalProgress } from '@/lib/goals';
 import { goalProgress, habitStreak } from '@/lib/metrics';
 import { useHabitToggle } from '@/store/actions';
 import { useStore } from '@/store/store';
-import type { Goal, Habit, LifeArea } from '@/types';
+import type { BodyGoal, Goal, Habit, LifeArea, LiftGoal } from '@/types';
 
-type Tab = 'goals' | 'orthodox' | 'habits';
+type Tab = 'goals' | 'body' | 'orthodox' | 'habits';
 
 const AREA_SLOT: Record<LifeArea, number> = {
   faith: 7,
@@ -57,6 +58,7 @@ export function GoalsPage() {
           onChange={setTab}
           options={[
             { value: 'goals', label: `Goals (${active.length})` },
+            { value: 'body', label: 'Body & lifts' },
             { value: 'orthodox', label: 'Orthodox rule' },
             { value: 'habits', label: 'All habits' },
           ]}
@@ -72,6 +74,7 @@ export function GoalsPage() {
         </div>
 
         {tab === 'goals' ? <GoalsTab /> : null}
+        {tab === 'body' ? <BodyLiftsTab /> : null}
         {tab === 'orthodox' ? <HabitsTab group="orthodox" /> : null}
         {tab === 'habits' ? <HabitsTab /> : null}
       </PageBody>
@@ -206,6 +209,137 @@ function GoalsTab() {
       )}
       <GoalForm open={modal.open} onClose={() => setModal({ open: false })} initial={modal.item} />
     </Card>
+  );
+}
+
+// ---------------------------------------------------------------------------
+
+function BodyLiftsTab() {
+  const { state } = useStore();
+  const [bodyModal, setBodyModal] = useState<{ open: boolean; item?: BodyGoal }>({ open: false });
+  const [liftModal, setLiftModal] = useState<{ open: boolean; item?: LiftGoal }>({ open: false });
+  const unit = state.settings.weightUnit;
+
+  const bodyGoals = [...state.bodyGoals].sort((a, b) => Number(b.active) - Number(a.active));
+  const liftGoals = [...state.liftGoals].sort((a, b) => Number(b.active) - Number(a.active));
+
+  return (
+    <div className="space-y-4">
+      <Card>
+        <CardHeader
+          title="Body weight goals"
+          icon="⚖️"
+          action={
+            <button
+              type="button"
+              className="btn-primary !py-1 text-xs"
+              onClick={() => setBodyModal({ open: true })}
+            >
+              + Goal
+            </button>
+          }
+        />
+        {bodyGoals.length ? (
+          <ul className="divide-y divide-line">
+            {bodyGoals.map((g) => {
+              const p = bodyGoalProgress(state, g);
+              return (
+                <li key={g.id} className="group px-4 py-3">
+                  <div className="flex items-start gap-2">
+                    <div className="min-w-0 flex-1">
+                      <p className={cx('truncate text-sm font-medium', !g.active && 'text-ink-muted')}>
+                        {g.label}
+                        <span className="ml-1.5 text-[11px] font-normal capitalize text-ink-muted">
+                          ({g.kind})
+                        </span>
+                      </p>
+                      <p className="truncate text-[11px] text-ink-muted">
+                        {g.startWeight} → {g.targetWeight} {unit}
+                        {g.targetDate ? ` by ${formatDate(g.targetDate, { month: 'short', day: 'numeric' })}` : ''}
+                      </p>
+                    </div>
+                    {!g.active ? <Badge>Paused</Badge> : null}
+                    {p.onTrack === false ? <Badge tone="warning">Behind pace</Badge> : null}
+                    <span className="flex shrink-0 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+                      <IconButton onClick={() => setBodyModal({ open: true, item: g })} label="Edit goal">
+                        <PencilIcon />
+                      </IconButton>
+                    </span>
+                  </div>
+                  <div className="mt-2 pl-0">
+                    <Progress
+                      value={p.pct}
+                      max={100}
+                      hint={`${p.current.toFixed(1)} ${unit} · ${Math.round(p.pct)}%`}
+                      tone={p.pct >= 100 ? 'good' : 'brand'}
+                    />
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <EmptyState message="No body goals yet — set a target weight and date." />
+        )}
+        <BodyGoalForm open={bodyModal.open} onClose={() => setBodyModal({ open: false })} initial={bodyModal.item} />
+      </Card>
+
+      <Card>
+        <CardHeader
+          title="Lift goals"
+          icon="🏋️"
+          action={
+            <button
+              type="button"
+              className="btn-primary !py-1 text-xs"
+              onClick={() => setLiftModal({ open: true })}
+            >
+              + Goal
+            </button>
+          }
+        />
+        {liftGoals.length ? (
+          <ul className="divide-y divide-line">
+            {liftGoals.map((g) => {
+              const p = liftGoalProgress(state, g);
+              return (
+                <li key={g.id} className="group px-4 py-3">
+                  <div className="flex items-start gap-2">
+                    <div className="min-w-0 flex-1">
+                      <p className={cx('truncate text-sm font-medium', !g.active && 'text-ink-muted')}>
+                        {g.label ?? g.exerciseName}
+                      </p>
+                      <p className="truncate text-[11px] text-ink-muted">
+                        {g.exerciseName} · est. 1RM {g.startWeight} → {g.targetWeight} {unit}
+                        {g.targetDate ? ` by ${formatDate(g.targetDate, { month: 'short', day: 'numeric' })}` : ''}
+                      </p>
+                    </div>
+                    {!g.active ? <Badge>Paused</Badge> : null}
+                    {p.onTrack === false ? <Badge tone="warning">Behind pace</Badge> : null}
+                    <span className="flex shrink-0 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+                      <IconButton onClick={() => setLiftModal({ open: true, item: g })} label="Edit goal">
+                        <PencilIcon />
+                      </IconButton>
+                    </span>
+                  </div>
+                  <div className="mt-2">
+                    <Progress
+                      value={p.pct}
+                      max={100}
+                      hint={`${Math.round(p.current)} ${unit} · ${Math.round(p.pct)}%`}
+                      tone={p.pct >= 100 ? 'good' : 'brand'}
+                    />
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <EmptyState message="No lift goals yet — pick a lift and a target." />
+        )}
+        <LiftGoalForm open={liftModal.open} onClose={() => setLiftModal({ open: false })} initial={liftModal.item} />
+      </Card>
+    </div>
   );
 }
 

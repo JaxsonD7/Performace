@@ -13,6 +13,7 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
+  { to: '/home', label: 'Home', icon: '⌂' },
   { to: '/', label: 'Today', icon: '◎', end: true },
   { to: '/schedule', label: 'Schedule', icon: '▤' },
   { to: '/school', label: 'School & Tasks', icon: '✎' },
@@ -24,7 +25,8 @@ const NAV: NavItem[] = [
 ];
 
 /** The five that matter on a phone; the rest live behind "More". */
-const MOBILE_NAV = NAV.slice(0, 4).concat(NAV[5]);
+const MOBILE_NAV_LABELS = ['Home', 'Today', 'Schedule', 'School & Tasks', 'Goals & Rule'];
+const MOBILE_NAV = MOBILE_NAV_LABELS.map((label) => NAV.find((n) => n.label === label)!);
 
 export function AppLayout() {
   const { state } = useStore();

@@ -4,6 +4,8 @@ import {
   AssignmentForm,
   CourseForm,
   CourseMeetingForm,
+  GradeCategoryForm,
+  GradeEntryForm,
   MeetingForm,
   TaskForm,
 } from '@/components/forms/entryForms';
@@ -22,12 +24,13 @@ import {
 } from '@/components/ui/primitives';
 import { StatTile } from '@/components/ui/charts';
 import { formatDuration, formatTime, relativeDay, today } from '@/lib/date';
+import { courseGrade, letterGrade } from '@/lib/grades';
 import { WEEKDAY_SHORT } from '@/lib/routine';
 import { openAssignments, upcomingMeetings } from '@/lib/selectors';
 import { useStore } from '@/store/store';
-import type { Assignment, Course, CourseMeeting, Meeting, Task } from '@/types';
+import type { Assignment, Course, CourseMeeting, GradeCategory, GradeEntry, Meeting, Task } from '@/types';
 
-type Tab = 'assignments' | 'tasks' | 'meetings' | 'courses';
+type Tab = 'assignments' | 'tasks' | 'meetings' | 'courses' | 'grades';
 
 export function SchoolPage() {
   const { state } = useStore();
@@ -52,6 +55,7 @@ export function SchoolPage() {
             { value: 'tasks', label: `Tasks (${openTasks.length})` },
             { value: 'meetings', label: 'Meetings' },
             { value: 'courses', label: 'Courses' },
+            { value: 'grades', label: 'Grades' },
           ]}
         />
       </PageHeader>
@@ -73,6 +77,7 @@ export function SchoolPage() {
         {tab === 'tasks' ? <TasksTab /> : null}
         {tab === 'meetings' ? <MeetingsTab /> : null}
         {tab === 'courses' ? <CoursesTab /> : null}
+        {tab === 'grades' ? <GradesTab /> : null}
       </PageBody>
     </>
   );
@@ -485,5 +490,143 @@ function CoursesTab() {
         />
       </Card>
     </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+
+function GradesTab() {
+  const { state } = useStore();
+  const [selectedCourseId, setSelectedCourseId] = useState<string | undefined>(state.courses[0]?.id);
+  const [catModal, setCatModal] = useState<{ open: boolean; item?: GradeCategory }>({ open: false });
+  const [entryModal, setEntryModal] = useState<{ open: boolean; item?: GradeEntry; categoryId?: string }>({
+    open: false,
+  });
+
+  if (!state.courses.length) {
+    return (
+      <Card>
+        <CardHeader title="Grades" icon="🎓" />
+        <EmptyState message="Add a course under Courses first — grades attach to a course." />
+      </Card>
+    );
+  }
+
+  const course = state.courses.find((c) => c.id === selectedCourseId) ?? state.courses[0];
+  const grade = courseGrade(state, course.id);
+
+  return (
+    <Card>
+      <CardHeader title="Grades" icon="🎓" subtitle="Weighted by category, straight from the syllabus." />
+      <div className="card-pad">
+        <div className="scroll-x mb-4">
+          <div className="flex gap-1.5">
+            {state.courses.map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => setSelectedCourseId(c.id)}
+                className={cx(
+                  'chip whitespace-nowrap',
+                  c.id === course.id ? 'border-brand bg-brand/10 text-brand' : 'hover:bg-raised',
+                )}
+              >
+                {c.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-lg bg-raised px-4 py-3">
+          <div>
+            <p className="text-xs text-ink-muted">Current grade</p>
+            <p className="hud-mono text-2xl font-semibold text-ink">
+              {grade.pct != null ? `${grade.pct.toFixed(1)}%` : '—'}
+              {grade.pct != null ? (
+                <span className="ml-2 text-base text-ink-secondary">{letterGrade(grade.pct)}</span>
+              ) : null}
+            </p>
+          </div>
+          {grade.byCategory.length ? (
+            <p className="max-w-[16rem] text-right text-xs text-ink-muted">
+              {grade.weightCounted}% of the syllabus weight has grades in it so far.
+            </p>
+          ) : null}
+        </div>
+
+        <button
+          type="button"
+          className="btn-ghost mb-3 !py-1 text-xs"
+          onClick={() => setCatModal({ open: true })}
+        >
+          + Category
+        </button>
+
+        {grade.byCategory.length ? (
+          <div className="space-y-3">
+            {grade.byCategory.map(({ category, entries, avgPct }) => (
+              <div key={category.id} className="rounded-lg border border-line p-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium text-ink">{category.name}</p>
+                    <p className="text-[11px] text-ink-muted">{category.weightPct}% of grade</p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-1">
+                    <span className="hud-mono text-sm text-ink-secondary">
+                      {avgPct != null ? `${avgPct.toFixed(1)}%` : 'no grades yet'}
+                    </span>
+                    <IconButton onClick={() => setCatModal({ open: true, item: category })} label="Edit category">
+                      <PencilIcon />
+                    </IconButton>
+                  </div>
+                </div>
+                {entries.length ? (
+                  <ul className="mt-2 divide-y divide-line border-t border-line">
+                    {entries.map((e) => (
+                      <li key={e.id} className="flex items-center justify-between py-1.5 text-xs">
+                        <button
+                          type="button"
+                          className="text-ink-secondary hover:text-ink"
+                          onClick={() => setEntryModal({ open: true, item: e, categoryId: category.id })}
+                        >
+                          {e.label}
+                        </button>
+                        <span className="hud-mono text-ink-muted">
+                          {e.score}/{e.maxScore}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                <button
+                  type="button"
+                  className="btn-quiet mt-2 !px-2 !py-1 text-xs"
+                  onClick={() => setEntryModal({ open: true, categoryId: category.id })}
+                >
+                  + Grade
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState message="Add categories from the syllabus — Homework, Midterm, Final — and their weights." />
+        )}
+      </div>
+
+      <GradeCategoryForm
+        open={catModal.open}
+        onClose={() => setCatModal({ open: false })}
+        initial={catModal.item}
+        courseId={course.id}
+      />
+      {entryModal.categoryId ? (
+        <GradeEntryForm
+          open={entryModal.open}
+          onClose={() => setEntryModal({ open: false })}
+          initial={entryModal.item}
+          categoryId={entryModal.categoryId}
+        />
+      ) : null}
+    </Card>
   );
 }

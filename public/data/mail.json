@@ -1,0 +1,26 @@
+{
+  "generatedAt": "2026-08-12T06:42:00Z",
+  "accounts": ["personal"],
+  "emails": [
+    {
+      "id": "19ff32b2283fea95",
+      "account": "personal",
+      "subject": "Important: your data is at risk and will be deleted in 30 days.",
+      "from": "support@mega.nz",
+      "receivedAt": "2026-08-11T23:31:57Z",
+      "snippet": "Your MEGA account is still locked as it has been over its storage limit for more than 40 days. A locked account means you are unable to download, upload or delete data.",
+      "importance": "medium",
+      "reason": "Storage limit has been exceeded for 40+ days; MEGA says the account's data gets deleted in 30 days if untouched."
+    },
+    {
+      "id": "19fdddfcd7c697e4",
+      "account": "personal",
+      "subject": "Action required: Need help?",
+      "from": "customerservice@bodyhealth.com",
+      "receivedAt": "2026-08-07T20:17:39Z",
+      "snippet": "We've noticed we are still unable to process your next order. Here's a link to update your billing information so we can get your order processed right away.",
+      "importance": "medium",
+      "reason": "A recurring order's billing failed and hasn't reprocessed since Aug 7 — worth a look if this subscription still matters."
+    }
+  ]
+}

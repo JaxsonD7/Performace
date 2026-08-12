@@ -527,6 +527,104 @@ export interface QuickAction {
 }
 
 // ---------------------------------------------------------------------------
+// Mail digest — generated outside the app (Claude scans Gmail on a schedule
+// and commits this as a static file); the app only ever reads it.
+// ---------------------------------------------------------------------------
+
+export type MailAccount = 'personal' | 'school';
+export type MailImportance = 'high' | 'medium';
+
+export interface MailItem {
+  id: string;
+  account: MailAccount;
+  subject: string;
+  from: string;
+  receivedAt: string;
+  snippet: string;
+  importance: MailImportance;
+  /** One line on why this made the cut — the whole point of triage is not re-reading your inbox to find out. */
+  reason: string;
+}
+
+export interface MailDigest {
+  generatedAt: string;
+  accounts: MailAccount[];
+  emails: MailItem[];
+}
+
+// ---------------------------------------------------------------------------
+// Meal prep
+// ---------------------------------------------------------------------------
+
+export interface MealPrepBatch {
+  id: string;
+  name: string;
+  caloriesPerServing: number;
+  proteinPerServing?: number;
+  carbsPerServing?: number;
+  fatPerServing?: number;
+  totalServings: number;
+  servingsLeft: number;
+  madeOn: ISODate;
+  notes?: string;
+}
+
+// ---------------------------------------------------------------------------
+// Body & lifting goals — dated targets, tracked against data already logged
+// elsewhere (HealthMetric.bodyWeight, workout sets) rather than a separate log.
+// ---------------------------------------------------------------------------
+
+export type BodyGoalKind = 'bulk' | 'cut' | 'maintain' | 'recomp' | 'other';
+
+export interface BodyGoal {
+  id: string;
+  kind: BodyGoalKind;
+  label: string;
+  startDate: ISODate;
+  targetDate?: ISODate;
+  startWeight: number;
+  targetWeight: number;
+  calorieTarget?: number;
+  proteinTarget?: number;
+  active: boolean;
+  createdAt: string;
+}
+
+export interface LiftGoal {
+  id: string;
+  exerciseName: string;
+  label?: string;
+  startDate: ISODate;
+  targetDate?: ISODate;
+  startWeight: number;
+  targetWeight: number;
+  active: boolean;
+  createdAt: string;
+}
+
+// ---------------------------------------------------------------------------
+// Grades — a course's syllabus grading breakdown, and what you've scored in
+// each category so far.
+// ---------------------------------------------------------------------------
+
+export interface GradeCategory {
+  id: string;
+  courseId: string;
+  name: string;
+  /** Out of 100 across a course's categories — not enforced to sum exactly, so a partial syllabus still works. */
+  weightPct: number;
+}
+
+export interface GradeEntry {
+  id: string;
+  categoryId: string;
+  label: string;
+  score: number;
+  maxScore: number;
+  date?: ISODate;
+}
+
+// ---------------------------------------------------------------------------
 // Root state
 // ---------------------------------------------------------------------------
 
@@ -561,6 +659,13 @@ export interface AppState {
   days: DayLog[];
   /** Always exactly six, in display order. */
   quickActions: QuickAction[];
+  mealPrepBatches: MealPrepBatch[];
+  bodyGoals: BodyGoal[];
+  liftGoals: LiftGoal[];
+  gradeCategories: GradeCategory[];
+  gradeEntries: GradeEntry[];
+  /** Mail digest items you've cleared — the digest file regenerates daily, this is what keeps a dismissal from coming back. */
+  dismissedMailIds: string[];
 }
 
 /** Keys of AppState that hold arrays of records with an `id`. */
@@ -581,6 +686,11 @@ export type CollectionKey =
   | 'meetings'
   | 'goals'
   | 'health'
-  | 'blocks';
+  | 'blocks'
+  | 'mealPrepBatches'
+  | 'bodyGoals'
+  | 'liftGoals'
+  | 'gradeCategories'
+  | 'gradeEntries';
 
 export type RecordOf<K extends CollectionKey> = AppState[K][number];

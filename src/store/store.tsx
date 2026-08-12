@@ -43,7 +43,9 @@ type Action =
   | { type: 'day'; date: ISODate; patch: Partial<DayLog> }
   | { type: 'setBlocks'; date: ISODate; blocks: ScheduleBlock[] }
   | { type: 'setQuickActions'; actions: QuickAction[] }
-  | { type: 'removeHabit'; id: string };
+  | { type: 'removeHabit'; id: string }
+  | { type: 'dismissMail'; id: string }
+  | { type: 'logMealPrep'; batchId: string; meal: RecordOf<'meals'> };
 
 /**
  * `hydrate` and `replace` carry their own `updatedAt` (loaded from disk or
@@ -133,6 +135,20 @@ function applyAction(state: AppState, action: Action): AppState {
         ),
         goals: state.goals.map((g) =>
           g.linkedHabitId === action.id ? { ...g, linkedHabitId: undefined } : g,
+        ),
+      };
+
+    case 'dismissMail':
+      return state.dismissedMailIds.includes(action.id)
+        ? state
+        : { ...state, dismissedMailIds: [...state.dismissedMailIds, action.id] };
+
+    case 'logMealPrep':
+      return {
+        ...state,
+        meals: [...state.meals, action.meal],
+        mealPrepBatches: state.mealPrepBatches.map((b) =>
+          b.id === action.batchId ? { ...b, servingsLeft: Math.max(0, b.servingsLeft - 1) } : b,
         ),
       };
 
@@ -323,6 +339,10 @@ interface StoreValue {
   remove: (key: CollectionKey, id: string) => void;
   /** Removing a habit also clears its logs and unlinks it from quick actions and goals. */
   removeHabit: (id: string) => void;
+  /** Clears one mail-digest item; it won't reappear even once the digest file regenerates. */
+  dismissMail: (id: string) => void;
+  /** Logs a meal from a prepped batch and decrements its remaining-servings count, atomically. */
+  logMealPrep: (batchId: string, meal: Omit<RecordOf<'meals'>, 'id'> & { id?: string }) => void;
   updateSettings: (patch: Partial<Settings>) => void;
   updateRoutine: (weekday: Weekday, patch: Partial<DayRoutine>) => void;
   updateDay: (date: ISODate, patch: Partial<DayLog>) => void;
@@ -506,6 +526,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'remove', key, id });
   }, []);
 
+  const logMealPrep = useCallback<StoreValue['logMealPrep']>((batchId, meal) => {
+    const id = meal.id || uid('meal');
+    dispatch({ type: 'logMealPrep', batchId, meal: { ...meal, id } as RecordOf<'meals'> });
+  }, []);
+
   const value = useMemo<StoreValue>(
     () => ({
       state,
@@ -518,6 +543,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       update,
       remove,
       removeHabit: (id) => dispatch({ type: 'removeHabit', id }),
+      dismissMail: (id) => dispatch({ type: 'dismissMail', id }),
+      logMealPrep,
       updateSettings: (patch) => dispatch({ type: 'settings', patch }),
       updateRoutine: (weekday, patch) => dispatch({ type: 'routine', weekday, patch }),
       updateDay: (date, patch) => dispatch({ type: 'day', date, patch }),
@@ -526,7 +553,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       replaceAll: (next) => dispatch({ type: 'replace', state: migrate(next) }),
       resetToDefaults: () => dispatch({ type: 'replace', state: emptyState() }),
     }),
-    [state, ready, sync, connectSync, disconnectSync, syncNow, add, update, remove],
+    [state, ready, sync, connectSync, disconnectSync, syncNow, add, update, remove, logMealPrep],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

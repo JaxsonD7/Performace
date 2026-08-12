@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { PageBody, PageHeader } from '@/components/PageHeader';
 import { HealthForm, MealForm, SleepForm, WorkoutForm } from '@/components/forms/logForms';
+import { MealPrepForm } from '@/components/forms/mealPrepForms';
 import { HealthImportModal } from '@/components/health/HealthImportModal';
 import {
   Badge,
@@ -23,7 +24,7 @@ import { exerciseProgress, loggedExerciseNames, platesFor } from '@/lib/lifting'
 import { weekSummary } from '@/lib/metrics';
 import { sumMacros } from '@/lib/selectors';
 import { useStore } from '@/store/store';
-import type { HealthMetric, Meal, SleepEntry, Workout } from '@/types';
+import type { HealthMetric, Meal, MealPrepBatch, SleepEntry, Workout } from '@/types';
 
 type Tab = 'workouts' | 'sleep' | 'diet' | 'watch';
 
@@ -428,70 +429,148 @@ function DietTab() {
   }, [state.meals]);
 
   return (
+    <>
+      <MealPrepCard />
+
+      <Card>
+        <CardHeader
+          title="Meal log"
+          icon="🥗"
+          action={
+            <button
+              type="button"
+              className="btn-primary !py-1 text-xs"
+              onClick={() => setModal({ open: true })}
+            >
+              + Meal
+            </button>
+          }
+        />
+        {byDate.length ? (
+          <div className="divide-y divide-line">
+            {byDate.map(([date, meals]) => {
+              const macros = sumMacros(meals);
+              return (
+                <div key={date}>
+                  <div className="flex items-baseline justify-between bg-raised px-4 py-1.5">
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
+                      {relativeDay(date)}
+                    </p>
+                    <p className="text-[11px] tabular-nums text-ink-muted">
+                      {macros.calories} kcal · {macros.protein}g protein
+                    </p>
+                  </div>
+                  <ul className="divide-y divide-line">
+                    {meals.map((m) => (
+                      <li key={m.id} className="group flex items-center gap-3 px-4 py-2">
+                        <span className="w-20 shrink-0 text-xs capitalize text-ink-muted">
+                          {m.type}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm text-ink">{m.name}</p>
+                          <p className="text-[11px] text-ink-muted">
+                            {m.calories ? `${m.calories} kcal` : 'no calories logged'}
+                            {m.protein ? ` · ${m.protein}g protein` : ''}
+                          </p>
+                        </div>
+                        {m.fasting ? <Badge tone="brand">Fast</Badge> : null}
+                        {m.clean ? <Badge tone="good">✓ Clean</Badge> : <Badge tone="warning">⚠ Off plan</Badge>}
+                        <span className="flex shrink-0 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+                          <IconButton onClick={() => setModal({ open: true, item: m })} label="Edit meal">
+                            <PencilIcon />
+                          </IconButton>
+                          <IconButton onClick={() => remove('meals', m.id)} label="Delete" tone="danger">
+                            <TrashIcon />
+                          </IconButton>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <EmptyState message="No meals logged yet." />
+        )}
+        <MealForm open={modal.open} onClose={() => setModal({ open: false })} initial={modal.item} />
+      </Card>
+    </>
+  );
+}
+
+function MealPrepCard() {
+  const { state, logMealPrep } = useStore();
+  const [modal, setModal] = useState<{ open: boolean; item?: MealPrepBatch }>({ open: false });
+  const batches = [...state.mealPrepBatches].sort((a, b) => (a.madeOn < b.madeOn ? 1 : -1));
+
+  const logServing = (b: MealPrepBatch) => {
+    logMealPrep(b.id, {
+      date: today(),
+      type: mealTypeNow(),
+      name: b.name,
+      time: new Date().toTimeString().slice(0, 5),
+      clean: true,
+      calories: b.caloriesPerServing,
+      protein: b.proteinPerServing,
+      carbs: b.carbsPerServing,
+      fat: b.fatPerServing,
+    });
+  };
+
+  return (
     <Card>
       <CardHeader
-        title="Meal log"
-        icon="🥗"
+        title="Meal prep"
+        icon="🍱"
+        subtitle="Cooked once, logged in one tap all week"
         action={
-          <button
-            type="button"
-            className="btn-primary !py-1 text-xs"
-            onClick={() => setModal({ open: true })}
-          >
-            + Meal
+          <button type="button" className="btn-primary !py-1 text-xs" onClick={() => setModal({ open: true })}>
+            + Batch
           </button>
         }
       />
-      {byDate.length ? (
-        <div className="divide-y divide-line">
-          {byDate.map(([date, meals]) => {
-            const macros = sumMacros(meals);
-            return (
-              <div key={date}>
-                <div className="flex items-baseline justify-between bg-raised px-4 py-1.5">
-                  <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
-                    {relativeDay(date)}
-                  </p>
-                  <p className="text-[11px] tabular-nums text-ink-muted">
-                    {macros.calories} kcal · {macros.protein}g protein
-                  </p>
-                </div>
-                <ul className="divide-y divide-line">
-                  {meals.map((m) => (
-                    <li key={m.id} className="group flex items-center gap-3 px-4 py-2">
-                      <span className="w-20 shrink-0 text-xs capitalize text-ink-muted">
-                        {m.type}
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm text-ink">{m.name}</p>
-                        <p className="text-[11px] text-ink-muted">
-                          {m.calories ? `${m.calories} kcal` : 'no calories logged'}
-                          {m.protein ? ` · ${m.protein}g protein` : ''}
-                        </p>
-                      </div>
-                      {m.fasting ? <Badge tone="brand">Fast</Badge> : null}
-                      {m.clean ? <Badge tone="good">✓ Clean</Badge> : <Badge tone="warning">⚠ Off plan</Badge>}
-                      <span className="flex shrink-0 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
-                        <IconButton onClick={() => setModal({ open: true, item: m })} label="Edit meal">
-                          <PencilIcon />
-                        </IconButton>
-                        <IconButton onClick={() => remove('meals', m.id)} label="Delete" tone="danger">
-                          <TrashIcon />
-                        </IconButton>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+      {batches.length ? (
+        <ul className="divide-y divide-line">
+          {batches.map((b) => (
+            <li key={b.id} className="group flex items-center gap-3 px-4 py-2.5">
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm text-ink">{b.name}</p>
+                <p className="text-[11px] text-ink-muted">
+                  {b.caloriesPerServing} kcal{b.proteinPerServing ? ` · ${b.proteinPerServing}g protein` : ''} ·{' '}
+                  {b.servingsLeft} of {b.totalServings} left
+                </p>
               </div>
-            );
-          })}
-        </div>
+              <button
+                type="button"
+                className="btn-ghost !px-2.5 !py-1 text-xs"
+                disabled={b.servingsLeft <= 0}
+                onClick={() => logServing(b)}
+              >
+                {b.servingsLeft > 0 ? 'Log a serving' : 'Empty'}
+              </button>
+              <span className="flex shrink-0 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+                <IconButton onClick={() => setModal({ open: true, item: b })} label="Edit batch">
+                  <PencilIcon />
+                </IconButton>
+              </span>
+            </li>
+          ))}
+        </ul>
       ) : (
-        <EmptyState message="No meals logged yet." />
+        <EmptyState message="No batches yet — log one after your next cook day." />
       )}
-      <MealForm open={modal.open} onClose={() => setModal({ open: false })} initial={modal.item} />
+      <MealPrepForm open={modal.open} onClose={() => setModal({ open: false })} initial={modal.item} />
     </Card>
   );
+}
+
+function mealTypeNow(): 'breakfast' | 'lunch' | 'dinner' | 'snack' {
+  const h = new Date().getHours();
+  if (h < 11) return 'breakfast';
+  if (h < 15) return 'lunch';
+  if (h < 21) return 'dinner';
+  return 'snack';
 }
 
 // ---------------------------------------------------------------------------

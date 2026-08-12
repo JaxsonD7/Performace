@@ -4,14 +4,20 @@ import { num, numOr, useFormDraft } from '@/components/forms/useFormDraft';
 import { today } from '@/lib/date';
 import { WEEKDAYS, WEEKDAY_NAMES } from '@/lib/routine';
 import { useStore } from '@/store/store';
+import { ExerciseInput } from '@/components/lifting/ExerciseInput';
 import type {
   Assignment,
+  BodyGoal,
+  BodyGoalKind,
   Course,
   CourseMeeting,
   Goal,
+  GradeCategory,
+  GradeEntry,
   Habit,
   ISODate,
   LifeArea,
+  LiftGoal,
   Meeting,
   Task,
 } from '@/types';
@@ -834,6 +840,390 @@ export function CourseMeetingForm({
             placeholder="Building, room number"
           />
         </Field>
+      </div>
+    </Modal>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Body weight goal — a dated target tracked against logged weight, not its
+// own running total.
+// ---------------------------------------------------------------------------
+
+export function BodyGoalForm({ open, onClose, initial }: FormProps<BodyGoal>) {
+  const { add, update, remove, state } = useStore();
+  const latestWeight = [...state.health]
+    .filter((h) => h.bodyWeight != null)
+    .sort((a, b) => (a.date < b.date ? 1 : -1))[0]?.bodyWeight;
+
+  const { draft, set } = useFormDraft<BodyGoal>(open, () =>
+    initial
+      ? { ...initial }
+      : {
+          id: '',
+          kind: 'maintain',
+          label: '',
+          startDate: today(),
+          startWeight: latestWeight ?? 0,
+          targetWeight: latestWeight ?? 0,
+          active: true,
+          createdAt: new Date().toISOString(),
+        },
+  );
+
+  const save = () => {
+    if (!draft.label.trim()) return;
+    if (initial) update('bodyGoals', initial.id, draft);
+    else add('bodyGoals', draft);
+    onClose();
+  };
+
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={initial ? 'Edit body goal' : 'New body goal'}
+      footer={
+        <>
+          {initial ? (
+            <button
+              type="button"
+              className="btn text-critical hover:bg-critical/10"
+              onClick={() => {
+                remove('bodyGoals', initial.id);
+                onClose();
+              }}
+            >
+              Delete
+            </button>
+          ) : null}
+          <span className="flex-1" />
+          <ModalActions onCancel={onClose} onConfirm={save} disabled={!draft.label.trim()} />
+        </>
+      }
+    >
+      <div className="space-y-4">
+        <Field label="Label">
+          <TextInput
+            autoFocus
+            value={draft.label}
+            onChange={(e) => set('label', e.target.value)}
+            placeholder="Fall bulk"
+          />
+        </Field>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Kind">
+            <Select value={draft.kind} onChange={(e) => set('kind', e.target.value as BodyGoalKind)}>
+              <option value="bulk">Bulk</option>
+              <option value="cut">Cut</option>
+              <option value="maintain">Maintain</option>
+              <option value="recomp">Recomp</option>
+              <option value="other">Other</option>
+            </Select>
+          </Field>
+          <Field label="Status">
+            <Select value={draft.active ? '1' : '0'} onChange={(e) => set('active', e.target.value === '1')}>
+              <option value="1">Active</option>
+              <option value="0">Paused</option>
+            </Select>
+          </Field>
+          <Field label="Start date">
+            <TextInput type="date" value={draft.startDate} onChange={(e) => set('startDate', e.target.value)} />
+          </Field>
+          <Field label="Target date" hint="Optional">
+            <TextInput
+              type="date"
+              value={draft.targetDate ?? ''}
+              onChange={(e) => set('targetDate', e.target.value || undefined)}
+            />
+          </Field>
+          <Field label={`Start weight (${state.settings.weightUnit})`}>
+            <TextInput
+              type="number"
+              value={draft.startWeight}
+              onChange={(e) => set('startWeight', numOr(e.target.value, 0))}
+            />
+          </Field>
+          <Field label={`Target weight (${state.settings.weightUnit})`}>
+            <TextInput
+              type="number"
+              value={draft.targetWeight}
+              onChange={(e) => set('targetWeight', numOr(e.target.value, 0))}
+            />
+          </Field>
+          <Field label="Calorie target" hint="Optional — doesn't change Settings">
+            <TextInput
+              type="number"
+              value={draft.calorieTarget ?? ''}
+              onChange={(e) => set('calorieTarget', num(e.target.value))}
+            />
+          </Field>
+          <Field label="Protein target (g)" hint="Optional">
+            <TextInput
+              type="number"
+              value={draft.proteinTarget ?? ''}
+              onChange={(e) => set('proteinTarget', num(e.target.value))}
+            />
+          </Field>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Lift goal — a dated target tracked against estimated 1RM from logged sets.
+// ---------------------------------------------------------------------------
+
+export function LiftGoalForm({ open, onClose, initial }: FormProps<LiftGoal>) {
+  const { add, update, remove, state } = useStore();
+
+  const { draft, set } = useFormDraft<LiftGoal>(open, () =>
+    initial
+      ? { ...initial }
+      : {
+          id: '',
+          exerciseName: '',
+          label: '',
+          startDate: today(),
+          startWeight: 0,
+          targetWeight: 0,
+          active: true,
+          createdAt: new Date().toISOString(),
+        },
+  );
+
+  const save = () => {
+    if (!draft.exerciseName.trim() || draft.targetWeight <= 0) return;
+    if (initial) update('liftGoals', initial.id, draft);
+    else add('liftGoals', draft);
+    onClose();
+  };
+
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={initial ? 'Edit lift goal' : 'New lift goal'}
+      footer={
+        <>
+          {initial ? (
+            <button
+              type="button"
+              className="btn text-critical hover:bg-critical/10"
+              onClick={() => {
+                remove('liftGoals', initial.id);
+                onClose();
+              }}
+            >
+              Delete
+            </button>
+          ) : null}
+          <span className="flex-1" />
+          <ModalActions
+            onCancel={onClose}
+            onConfirm={save}
+            disabled={!draft.exerciseName.trim() || draft.targetWeight <= 0}
+          />
+        </>
+      }
+    >
+      <div className="space-y-4">
+        <Field label="Exercise">
+          <ExerciseInput value={draft.exerciseName} onChange={(name) => set('exerciseName', name)} />
+        </Field>
+        <Field label="Label" hint="Optional — shown instead of the exercise name">
+          <TextInput value={draft.label ?? ''} onChange={(e) => set('label', e.target.value || undefined)} />
+        </Field>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Status">
+            <Select value={draft.active ? '1' : '0'} onChange={(e) => set('active', e.target.value === '1')}>
+              <option value="1">Active</option>
+              <option value="0">Paused</option>
+            </Select>
+          </Field>
+          <Field label="Start date">
+            <TextInput type="date" value={draft.startDate} onChange={(e) => set('startDate', e.target.value)} />
+          </Field>
+          <Field label="Target date" hint="Optional">
+            <TextInput
+              type="date"
+              value={draft.targetDate ?? ''}
+              onChange={(e) => set('targetDate', e.target.value || undefined)}
+            />
+          </Field>
+          <Field label={`Start est. 1RM (${state.settings.weightUnit})`}>
+            <TextInput
+              type="number"
+              value={draft.startWeight}
+              onChange={(e) => set('startWeight', numOr(e.target.value, 0))}
+            />
+          </Field>
+          <Field label={`Target est. 1RM (${state.settings.weightUnit})`}>
+            <TextInput
+              type="number"
+              value={draft.targetWeight}
+              onChange={(e) => set('targetWeight', numOr(e.target.value, 0))}
+            />
+          </Field>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Grades — a syllabus grading category, and one score within it.
+// ---------------------------------------------------------------------------
+
+export function GradeCategoryForm({
+  open,
+  onClose,
+  initial,
+  courseId,
+}: FormProps<GradeCategory> & { courseId: string }) {
+  const { add, update, remove } = useStore();
+  const { draft, set } = useFormDraft<GradeCategory>(open, () =>
+    initial ? { ...initial } : { id: '', courseId, name: '', weightPct: 20 },
+  );
+
+  const save = () => {
+    if (!draft.name.trim() || draft.weightPct <= 0) return;
+    if (initial) update('gradeCategories', initial.id, draft);
+    else add('gradeCategories', draft);
+    onClose();
+  };
+
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={initial ? 'Edit category' : 'Add grading category'}
+      footer={
+        <>
+          {initial ? (
+            <button
+              type="button"
+              className="btn text-critical hover:bg-critical/10"
+              onClick={() => {
+                remove('gradeCategories', initial.id);
+                onClose();
+              }}
+            >
+              Delete
+            </button>
+          ) : null}
+          <span className="flex-1" />
+          <ModalActions
+            onCancel={onClose}
+            onConfirm={save}
+            disabled={!draft.name.trim() || draft.weightPct <= 0}
+          />
+        </>
+      }
+    >
+      <div className="space-y-4">
+        <Field label="Category" hint="From the syllabus — e.g. Homework, Midterm, Final">
+          <TextInput
+            autoFocus
+            value={draft.name}
+            onChange={(e) => set('name', e.target.value)}
+            placeholder="Homework"
+          />
+        </Field>
+        <Field label="Weight (%)" hint="Out of 100 across this course's categories">
+          <TextInput
+            type="number"
+            min={1}
+            max={100}
+            value={draft.weightPct}
+            onChange={(e) => set('weightPct', numOr(e.target.value, 20))}
+          />
+        </Field>
+      </div>
+    </Modal>
+  );
+}
+
+export function GradeEntryForm({
+  open,
+  onClose,
+  initial,
+  categoryId,
+}: FormProps<GradeEntry> & { categoryId: string }) {
+  const { add, update, remove } = useStore();
+  const { draft, set } = useFormDraft<GradeEntry>(open, () =>
+    initial ? { ...initial } : { id: '', categoryId, label: '', score: 0, maxScore: 100, date: today() },
+  );
+
+  const save = () => {
+    if (!draft.label.trim() || draft.maxScore <= 0) return;
+    if (initial) update('gradeEntries', initial.id, draft);
+    else add('gradeEntries', draft);
+    onClose();
+  };
+
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={initial ? 'Edit grade' : 'Add a grade'}
+      footer={
+        <>
+          {initial ? (
+            <button
+              type="button"
+              className="btn text-critical hover:bg-critical/10"
+              onClick={() => {
+                remove('gradeEntries', initial.id);
+                onClose();
+              }}
+            >
+              Delete
+            </button>
+          ) : null}
+          <span className="flex-1" />
+          <ModalActions
+            onCancel={onClose}
+            onConfirm={save}
+            disabled={!draft.label.trim() || draft.maxScore <= 0}
+          />
+        </>
+      }
+    >
+      <div className="space-y-4">
+        <Field label="Label">
+          <TextInput
+            autoFocus
+            value={draft.label}
+            onChange={(e) => set('label', e.target.value)}
+            placeholder="Midterm 1"
+          />
+        </Field>
+        <div className="grid grid-cols-3 gap-3">
+          <Field label="Score">
+            <TextInput
+              type="number"
+              value={draft.score}
+              onChange={(e) => set('score', numOr(e.target.value, 0))}
+            />
+          </Field>
+          <Field label="Out of">
+            <TextInput
+              type="number"
+              min={1}
+              value={draft.maxScore}
+              onChange={(e) => set('maxScore', numOr(e.target.value, 100))}
+            />
+          </Field>
+          <Field label="Date">
+            <TextInput
+              type="date"
+              value={draft.date ?? ''}
+              onChange={(e) => set('date', e.target.value || undefined)}
+            />
+          </Field>
+        </div>
       </div>
     </Modal>
   );
