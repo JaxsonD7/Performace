@@ -220,7 +220,7 @@ export function MealsCard({ day }: { day: DayData }) {
   };
 
   const setWater = (next: number) =>
-    updateDay(day.date, { waterCups: Math.max(0, Math.min(20, next)) });
+    updateDay(day.date, { waterOz: Math.max(0, Math.min(200, next)) });
 
   return (
     <Card>
@@ -292,30 +292,30 @@ export function MealsCard({ day }: { day: DayData }) {
             <div className="min-w-0">
               <p className="text-xs font-medium text-ink-secondary">💧 Water</p>
               <p className="text-xs text-ink-muted">
-                {day.day.waterCups} of {s.waterGoalCups} cups
+                {day.day.waterOz} of {s.waterGoalOz} oz
               </p>
             </div>
             <div className="flex items-center gap-1">
               <button
                 type="button"
                 className="btn-ghost !px-2.5 !py-1"
-                onClick={() => setWater(day.day.waterCups - 1)}
-                aria-label="One cup less"
+                onClick={() => setWater(day.day.waterOz - 8)}
+                aria-label="8 oz less"
               >
                 −
               </button>
               <button
                 type="button"
                 className="btn-primary !px-2.5 !py-1"
-                onClick={() => setWater(day.day.waterCups + 1)}
-                aria-label="One cup more"
+                onClick={() => setWater(day.day.waterOz + 8)}
+                aria-label="8 oz more"
               >
                 +
               </button>
             </div>
           </div>
           <div className="mt-2">
-            <Progress value={day.day.waterCups} max={s.waterGoalCups} tone="s3" />
+            <Progress value={day.day.waterOz} max={s.waterGoalOz} tone="s3" />
           </div>
         </div>
       </div>

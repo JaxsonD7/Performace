@@ -56,7 +56,7 @@ export function QuickActionEditModal({ open, onClose }: { open: boolean; onClose
       type,
       label: TYPE_LABEL[type] === 'Empty' ? 'Empty' : draft[i].label,
       icon: TYPE_ICON[type],
-      waterDelta: type === 'water' ? (draft[i].waterDelta ?? 1) : undefined,
+      waterDelta: type === 'water' ? (draft[i].waterDelta ?? 8) : undefined,
       templateId: type === 'workout-template' ? draft[i].templateId : undefined,
       habitId: type === 'habit-toggle' ? draft[i].habitId : undefined,
       formTarget: type === 'quick-form' ? (draft[i].formTarget ?? 'task') : undefined,
@@ -102,12 +102,12 @@ export function QuickActionEditModal({ open, onClose }: { open: boolean; onClose
 
             {a.type === 'water' ? (
               <div className="mt-2 max-w-[10rem]">
-                <Field label="Cups per tap">
+                <Field label="Ounces per tap">
                   <TextInput
                     type="number"
                     min={1}
-                    value={a.waterDelta ?? 1}
-                    onChange={(e) => patch(i, { waterDelta: Math.max(1, Number(e.target.value) || 1) })}
+                    value={a.waterDelta ?? 8}
+                    onChange={(e) => patch(i, { waterDelta: Math.max(1, Number(e.target.value) || 8) })}
                   />
                 </Field>
               </div>

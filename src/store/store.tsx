@@ -86,7 +86,7 @@ function reducer(state: AppState, action: Action): AppState {
       const existing = state.days.find((d) => d.date === action.date);
       const next: DayLog = existing
         ? { ...existing, ...action.patch }
-        : { date: action.date, waterCups: 0, ...action.patch };
+        : { date: action.date, waterOz: 0, ...action.patch };
       return {
         ...state,
         days: existing
@@ -187,22 +187,30 @@ function stripGuessedBlocks(blocks: ScheduleBlock[]): ScheduleBlock[] {
   });
 }
 
+/** Old records tracked water in cups; one cup converts to 8 fluid ounces. */
+const CUP_TO_OZ = 8;
+
 /**
  * Brings a persisted blob up to the current shape. Version-specific transforms
  * get their own branch as the schema evolves; today that's the settings
  * restructure, backfilling any collection that did not exist yet, giving
  * older assignments their new `schedule` opt-in (off, matching the same
- * "nothing is guessed" default new ones get), and clearing out blocks the app
- * placed on its own before that rule existed.
+ * "nothing is guessed" default new ones get), clearing out blocks the app
+ * placed on its own before that rule existed, and converting water tracking
+ * from cups to ounces.
  */
 function migrate(raw: AppState): AppState {
   const base = emptyState();
+  const rawSettings = raw.settings as (Partial<Settings> & { waterGoalCups?: number }) | undefined;
   const merged: AppState = {
     ...base,
     ...raw,
     version: STATE_VERSION,
-    settings: migrateSettings(raw.settings ?? {}),
+    settings: migrateSettings(rawSettings ?? {}),
   };
+  if (rawSettings?.waterGoalCups && !rawSettings.waterGoalOz) {
+    merged.settings.waterGoalOz = rawSettings.waterGoalCups * CUP_TO_OZ;
+  }
   // Never let a missing array crash a `.map` deep in a card.
   (Object.keys(base) as (keyof AppState)[]).forEach((k) => {
     if (Array.isArray(base[k]) && !Array.isArray(merged[k])) {
@@ -215,6 +223,20 @@ function migrate(raw: AppState): AppState {
   merged.assignments = merged.assignments.map((a) => {
     const loose = a as Partial<Assignment>;
     return { ...a, schedule: loose.schedule ?? false };
+  });
+  merged.days = merged.days.map((d) => {
+    const loose = d as DayLog & { waterCups?: number };
+    if (loose.waterCups != null && loose.waterOz == null) {
+      return { ...d, waterOz: loose.waterCups * CUP_TO_OZ };
+    }
+    return d;
+  });
+  merged.health = merged.health.map((h) => {
+    const loose = h as typeof h & { waterCups?: number };
+    if (loose.waterCups != null && loose.waterOz == null) {
+      return { ...h, waterOz: loose.waterCups * CUP_TO_OZ };
+    }
+    return h;
   });
   merged.blocks = stripGuessedBlocks(merged.blocks);
   if (!merged.quickActions?.length) {

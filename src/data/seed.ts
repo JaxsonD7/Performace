@@ -6,7 +6,7 @@ import {
 } from '@/data/defaults';
 import type { AppState } from '@/types';
 
-export const STATE_VERSION = 3;
+export const STATE_VERSION = 4;
 
 /**
  * The real starting state. The only defaults are the ones the brief asks for

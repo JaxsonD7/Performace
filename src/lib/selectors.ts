@@ -73,7 +73,7 @@ export function selectDay(state: AppState, date: ISODate): DayData {
     blocks: state.blocks
       .filter((b) => b.date === date)
       .sort((a, b) => toMinutes(a.start) - toMinutes(b.start)),
-    day: state.days.find((d) => d.date === date) ?? { date, waterCups: 0 },
+    day: state.days.find((d) => d.date === date) ?? { date, waterOz: 0 },
     improvementHabits: habits.filter((h) => h.group === 'improvement'),
     orthodoxHabits: habits.filter((h) => h.group === 'orthodox'),
     habitLogs: logs,

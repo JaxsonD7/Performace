@@ -287,11 +287,11 @@ export function MetricsPage() {
             <CardHeader title="Water" icon="💧" />
             <div className="card-pad">
               <BarChart
-                data={week.waterCups.map(label)}
-                target={state.settings.waterGoalCups}
+                data={week.waterOz.map(label)}
+                target={state.settings.waterGoalOz}
                 tone="s3"
                 height={72}
-                format={(v) => `${Math.round(v)} cups`}
+                format={(v) => `${Math.round(v)} oz`}
                 emptyMessage="No water logged this week"
               />
             </div>
@@ -351,7 +351,7 @@ export function MetricsPage() {
                       {week.steps[i].value ? week.steps[i].value.toLocaleString() : '—'}
                     </td>
                     <td className="px-4 py-2 tabular-nums text-ink-secondary">
-                      {week.waterCups[i].value || '—'}
+                      {week.waterOz[i].value || '—'}
                     </td>
                     <td className="px-4 py-2 tabular-nums text-ink-secondary">
                       {d > today() ? '—' : `${week.habitCompletion[i].value}%`}

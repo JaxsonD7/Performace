@@ -67,7 +67,7 @@ export interface WeekSummary {
   pagesRead: number;
   steps: DayPoint[];
   activeCalories: DayPoint[];
-  waterCups: DayPoint[];
+  waterOz: DayPoint[];
   /** Percent of all non-archived habits completed, per day. */
   habitCompletion: DayPoint[];
   orthodoxCompletion: DayPoint[];
@@ -140,9 +140,9 @@ export function weekSummary(state: AppState, weekStart: ISODate): WeekSummary {
       date,
       value: state.health.find((h) => h.date === date)?.activeCalories ?? 0,
     })),
-    waterCups: dates.map((date) => ({
+    waterOz: dates.map((date) => ({
       date,
-      value: state.days.find((d) => d.date === date)?.waterCups ?? 0,
+      value: state.days.find((d) => d.date === date)?.waterOz ?? 0,
     })),
     habitCompletion: dates.map((date) => ({
       date,

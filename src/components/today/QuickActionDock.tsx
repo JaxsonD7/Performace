@@ -100,9 +100,9 @@ export function QuickActionDock() {
   const run = (a: QuickAction) => {
     switch (a.type) {
       case 'water': {
-        const next = (todayLog?.waterCups ?? 0) + (a.waterDelta ?? 1);
-        updateDay(date, { waterCups: next });
-        showToast(`💧 Water ${next} cups`);
+        const next = (todayLog?.waterOz ?? 0) + (a.waterDelta ?? 8);
+        updateDay(date, { waterOz: next });
+        showToast(`💧 Water ${next} oz`);
         return;
       }
       case 'photo-meal':

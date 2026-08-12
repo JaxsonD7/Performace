@@ -363,7 +363,7 @@ export interface HealthMetric {
   respiratoryRate?: number;
   wristTempDelta?: number;
   bodyWeight?: number;
-  waterCups?: number;
+  waterOz?: number;
   source: DataSource;
 }
 
@@ -418,7 +418,7 @@ export interface ScheduleBlock {
 
 export interface DayLog {
   date: ISODate;
-  waterCups: number;
+  waterOz: number;
   mood?: 1 | 2 | 3 | 4 | 5;
   energy?: 1 | 2 | 3 | 4 | 5;
   reflection?: string;
@@ -462,7 +462,7 @@ export interface Settings {
   /** Longest stretch of focused work the scheduler will place at once. */
   focusBlockMin: number;
   breakMin: number;
-  waterGoalCups: number;
+  waterGoalOz: number;
   readingGoalMin: number;
   sleepGoalMin: number;
   proteinGoal: number;
@@ -508,7 +508,7 @@ export interface QuickAction {
   type: QuickActionType;
   label: string;
   icon: string;
-  /** water: cups added per tap. */
+  /** water: ounces added per tap. */
   waterDelta?: number;
   /** workout-template: which template to start; unset shows a picker. */
   templateId?: string;

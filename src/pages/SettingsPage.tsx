@@ -157,11 +157,11 @@ export function SettingsPage() {
                   onChange={(e) => setNumber('readingGoalMin', 30)(e.target.value)}
                 />
               </Field>
-              <Field label="Water (cups/day)">
+              <Field label="Water (oz/day)">
                 <TextInput
                   type="number"
-                  value={s.waterGoalCups}
-                  onChange={(e) => setNumber('waterGoalCups', 8)(e.target.value)}
+                  value={s.waterGoalOz}
+                  onChange={(e) => setNumber('waterGoalOz', 64)(e.target.value)}
                 />
               </Field>
               <Field label="Steps/day">

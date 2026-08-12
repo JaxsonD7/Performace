@@ -45,7 +45,7 @@ export const DEFAULT_SETTINGS: Settings = {
   routines: DEFAULT_ROUTINES,
   focusBlockMin: 50,
   breakMin: 10,
-  waterGoalCups: 8,
+  waterGoalOz: 64,
   readingGoalMin: 30,
   sleepGoalMin: 480,
   proteinGoal: 150,
@@ -66,7 +66,7 @@ export const DEFAULT_SETTINGS: Settings = {
 export function defaultQuickActions(habits: Habit[]): QuickAction[] {
   const readHabit = habits.find((h) => h.name === 'Read');
   return [
-    { id: uid('qa'), type: 'water', label: 'Water', icon: '💧', waterDelta: 1 },
+    { id: uid('qa'), type: 'water', label: 'Water', icon: '💧', waterDelta: 8 },
     { id: uid('qa'), type: 'photo-meal', label: 'Food photo', icon: '📷' },
     { id: uid('qa'), type: 'workout-template', label: 'Workout', icon: '🏋️' },
     { id: uid('qa'), type: 'body-weight', label: 'Weight', icon: '⚖️' },
