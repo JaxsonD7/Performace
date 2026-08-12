@@ -4,6 +4,7 @@ import { PageBody, PageHeader } from '@/components/PageHeader';
 import { NextUp, ScheduleList } from '@/components/schedule/ScheduleList';
 import { HabitChecklist } from '@/components/today/HabitChecklist';
 import { ChurchCard } from '@/components/today/ChurchCard';
+import { QuickActionDock } from '@/components/today/QuickActionDock';
 import {
   HealthCard,
   MealsCard,
@@ -80,6 +81,8 @@ export function TodayPage() {
       </PageHeader>
 
       <PageBody>
+        <QuickActionDock />
+
         <NextUp block={next} />
 
         <div className="grid gap-4 xl:grid-cols-3">

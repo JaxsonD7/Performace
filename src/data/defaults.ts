@@ -1,5 +1,5 @@
 import { uid } from '@/lib/id';
-import type { DayRoutine, Habit, Settings, Weekday } from '@/types';
+import type { DayRoutine, Habit, QuickAction, Settings, Weekday } from '@/types';
 
 const now = () => new Date().toISOString();
 
@@ -57,6 +57,29 @@ export const DEFAULT_SETTINGS: Settings = {
   restTimerSec: 90,
   orthodoxCalendar: 'new',
 };
+
+/**
+ * Six slots, matching the exact set asked for — water, a food photo, a
+ * workout, body weight, and two open slots standing in for "whatever else".
+ * Every slot is reconfigurable afterward from the dock's edit screen.
+ */
+export function defaultQuickActions(habits: Habit[]): QuickAction[] {
+  const readHabit = habits.find((h) => h.name === 'Read');
+  return [
+    { id: uid('qa'), type: 'water', label: 'Water', icon: '💧', waterDelta: 1 },
+    { id: uid('qa'), type: 'photo-meal', label: 'Food photo', icon: '📷' },
+    { id: uid('qa'), type: 'workout-template', label: 'Workout', icon: '🏋️' },
+    { id: uid('qa'), type: 'body-weight', label: 'Weight', icon: '⚖️' },
+    { id: uid('qa'), type: 'quick-form', label: 'Task', icon: '✓', formTarget: 'task' },
+    {
+      id: uid('qa'),
+      type: readHabit ? 'habit-toggle' : 'none',
+      label: 'Read',
+      icon: '📖',
+      habitId: readHabit?.id,
+    },
+  ];
+}
 
 function habit(
   name: string,

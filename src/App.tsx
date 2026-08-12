@@ -11,6 +11,7 @@ import { SettingsPage } from '@/pages/SettingsPage';
 import { TodayPage } from '@/pages/TodayPage';
 import { UpdateBanner } from '@/pwa/UpdateBanner';
 import { RestTimerHost } from '@/components/lifting/RestTimer';
+import { ToastHost } from '@/components/ui/Toast';
 import { useStore } from '@/store/store';
 
 export function App() {
@@ -51,6 +52,7 @@ export function App() {
       </Routes>
       <UpdateBanner />
       <RestTimerHost />
+      <ToastHost />
     </>
   );
 }

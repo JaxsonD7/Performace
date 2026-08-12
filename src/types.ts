@@ -295,6 +295,9 @@ export interface Assignment {
   grade?: string;
   notes?: string;
   createdAt: string;
+  /** When true the scheduler will place this into a free block. Off by
+   * default — nothing about when you'll do homework is ever guessed. */
+  schedule: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -481,6 +484,41 @@ export interface Settings {
 }
 
 // ---------------------------------------------------------------------------
+// Quick actions
+// ---------------------------------------------------------------------------
+
+/**
+ * One tap, one log. Each of the six is independently reconfigurable — the
+ * `type` picks what happens, and the rest of the fields are that type's own
+ * config (a specific template, a specific habit, which form to jump to).
+ */
+export type QuickActionType =
+  | 'water'
+  | 'photo-meal'
+  | 'workout-template'
+  | 'body-weight'
+  | 'habit-toggle'
+  | 'quick-form'
+  | 'none';
+
+export type QuickFormTarget = 'task' | 'meal' | 'workout' | 'reading' | 'meeting' | 'assignment';
+
+export interface QuickAction {
+  id: string;
+  type: QuickActionType;
+  label: string;
+  icon: string;
+  /** water: cups added per tap. */
+  waterDelta?: number;
+  /** workout-template: which template to start; unset shows a picker. */
+  templateId?: string;
+  /** habit-toggle: which habit a tap marks done for today. */
+  habitId?: string;
+  /** quick-form: which "add" dialog a tap jumps straight to. */
+  formTarget?: QuickFormTarget;
+}
+
+// ---------------------------------------------------------------------------
 // Root state
 // ---------------------------------------------------------------------------
 
@@ -506,6 +544,8 @@ export interface AppState {
   health: HealthMetric[];
   blocks: ScheduleBlock[];
   days: DayLog[];
+  /** Always exactly six, in display order. */
+  quickActions: QuickAction[];
 }
 
 /** Keys of AppState that hold arrays of records with an `id`. */

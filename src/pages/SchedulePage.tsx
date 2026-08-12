@@ -187,13 +187,23 @@ export function SchedulePage() {
                 />
                 <Line label="School due soon" value={`${state.assignments.filter((a) => a.status !== 'done').length} open`} />
                 <Line
+                  label="Homework to place"
+                  value={`${state.assignments.filter((a) => a.status !== 'done' && a.schedule).length} opted in`}
+                />
+                <Line
                   label="Tasks to place"
                   value={`${state.tasks.filter((t) => !t.completed && t.schedule).length} waiting`}
                 />
+                <Line
+                  label="Class times"
+                  value={`${state.courseMeetings.length} set`}
+                />
                 <Line label="Reading goal" value={`${state.settings.readingGoalMin} min`} />
                 <p className="pt-2 text-xs text-ink-muted">
-                  Blocks you add or edit by hand are marked manual and survive a rebuild. Everything
-                  else is regenerated from scratch.
+                  Nothing here is guessed: classes only show up once you add them under Courses,
+                  and homework only gets placed on an assignment where you've turned it on. Blocks
+                  you add or edit by hand are marked manual and survive a rebuild — everything else
+                  is regenerated from scratch.
                 </p>
               </div>
             </Card>

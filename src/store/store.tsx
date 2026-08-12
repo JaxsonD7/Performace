@@ -11,14 +11,16 @@ import {
 } from 'react';
 import { persistence } from '@/data/persistence';
 import { emptyState, STATE_VERSION } from '@/data/seed';
-import { DEFAULT_ROUTINES, DEFAULT_SETTINGS } from '@/data/defaults';
+import { DEFAULT_ROUTINES, DEFAULT_SETTINGS, defaultQuickActions } from '@/data/defaults';
 import { uid } from '@/lib/id';
 import type {
   AppState,
+  Assignment,
   CollectionKey,
   DayLog,
   DayRoutine,
   ISODate,
+  QuickAction,
   RecordOf,
   ScheduleBlock,
   Settings,
@@ -38,7 +40,8 @@ type Action =
   | { type: 'settings'; patch: Partial<Settings> }
   | { type: 'routine'; weekday: Weekday; patch: Partial<DayRoutine> }
   | { type: 'day'; date: ISODate; patch: Partial<DayLog> }
-  | { type: 'setBlocks'; date: ISODate; blocks: ScheduleBlock[] };
+  | { type: 'setBlocks'; date: ISODate; blocks: ScheduleBlock[] }
+  | { type: 'setQuickActions'; actions: QuickAction[] };
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
@@ -97,6 +100,9 @@ function reducer(state: AppState, action: Action): AppState {
         blocks: [...state.blocks.filter((b) => b.date !== action.date), ...action.blocks],
       };
 
+    case 'setQuickActions':
+      return { ...state, quickActions: action.actions };
+
     default:
       return state;
   }
@@ -142,9 +148,33 @@ function migrateSettings(raw: Partial<Settings> & LegacySettings): Settings {
 }
 
 /**
+ * Schedule blocks the app used to place on its own before "never guess
+ * anything" became a hard rule: the old blanket weekday class block, and
+ * homework pulled into gaps with no per-assignment opt-in. Both are safe to
+ * drop unconditionally — a block only ever survives a regenerate by being
+ * `manual` or `completed` (see `protectedBlocks`), so anything matching these
+ * shapes was, by definition, a guess nobody asked for and is disposable.
+ */
+function stripGuessedBlocks(blocks: ScheduleBlock[]): ScheduleBlock[] {
+  return blocks.filter((b) => {
+    if (b.manual || b.completed) return true;
+    // The old auto-fill signature: kind 'school', source type still 'manual'
+    // because the pre-fix code never attached a real course. Current code
+    // only ever produces school blocks with source type 'course'.
+    if (b.kind === 'school' && b.source.type === 'manual') return false;
+    // Homework auto-placed before assignments had a per-item opt-in.
+    if (b.source.type === 'assignment') return false;
+    return true;
+  });
+}
+
+/**
  * Brings a persisted blob up to the current shape. Version-specific transforms
  * get their own branch as the schema evolves; today that's the settings
- * restructure above and backfilling any collection that did not exist yet.
+ * restructure, backfilling any collection that did not exist yet, giving
+ * older assignments their new `schedule` opt-in (off, matching the same
+ * "nothing is guessed" default new ones get), and clearing out blocks the app
+ * placed on its own before that rule existed.
  */
 function migrate(raw: AppState): AppState {
   const base = emptyState();
@@ -160,6 +190,17 @@ function migrate(raw: AppState): AppState {
       (merged as unknown as Record<string, unknown>)[k] = [];
     }
   });
+  // Older persisted assignments predate the `schedule` field entirely, even
+  // though the current type claims it is always present — this is exactly
+  // that boundary, so the incoming value is treated as possibly missing it.
+  merged.assignments = merged.assignments.map((a) => {
+    const loose = a as Partial<Assignment>;
+    return { ...a, schedule: loose.schedule ?? false };
+  });
+  merged.blocks = stripGuessedBlocks(merged.blocks);
+  if (!merged.quickActions?.length) {
+    merged.quickActions = defaultQuickActions(merged.habits);
+  }
   return merged;
 }
 
@@ -178,6 +219,7 @@ interface StoreValue {
   updateRoutine: (weekday: Weekday, patch: Partial<DayRoutine>) => void;
   updateDay: (date: ISODate, patch: Partial<DayLog>) => void;
   setBlocks: (date: ISODate, blocks: ScheduleBlock[]) => void;
+  setQuickActions: (actions: QuickAction[]) => void;
   replaceAll: (state: AppState) => void;
   /** Erases every tracked record but keeps the default checklist and Orthodox rule. */
   resetToDefaults: () => void;
@@ -242,6 +284,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       updateRoutine: (weekday, patch) => dispatch({ type: 'routine', weekday, patch }),
       updateDay: (date, patch) => dispatch({ type: 'day', date, patch }),
       setBlocks: (date, blocks) => dispatch({ type: 'setBlocks', date, blocks }),
+      setQuickActions: (actions) => dispatch({ type: 'setQuickActions', actions }),
       replaceAll: (next) => dispatch({ type: 'replace', state: migrate(next) }),
       resetToDefaults: () => dispatch({ type: 'replace', state: emptyState() }),
     }),

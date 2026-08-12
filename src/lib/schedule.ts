@@ -261,8 +261,10 @@ export function generateSchedule(
 
   const queue: QueueItem[] = [];
 
+  // Homework is never auto-placed unless you have opted a specific assignment
+  // in — same rule as tasks, and the same reason classes are never guessed.
   state.assignments
-    .filter((a) => a.status !== 'done' && a.dueDate >= date)
+    .filter((a) => a.status !== 'done' && a.schedule && a.dueDate >= date)
     .sort((a, b) =>
       a.dueDate === b.dueDate
         ? priorityWeight[a.priority] - priorityWeight[b.priority]

@@ -2,10 +2,11 @@ import {
   DEFAULT_SETTINGS,
   defaultImprovementHabits,
   defaultOrthodoxHabits,
+  defaultQuickActions,
 } from '@/data/defaults';
 import type { AppState } from '@/types';
 
-export const STATE_VERSION = 2;
+export const STATE_VERSION = 3;
 
 /**
  * The real starting state. The only defaults are the ones the brief asks for
@@ -15,11 +16,13 @@ export const STATE_VERSION = 2;
  * is no fake two-week history to click through or delete.
  */
 export function emptyState(): AppState {
+  const habits = [...defaultImprovementHabits(), ...defaultOrthodoxHabits()];
   return {
     version: STATE_VERSION,
     settings: { ...DEFAULT_SETTINGS },
     tasks: [],
-    habits: [...defaultImprovementHabits(), ...defaultOrthodoxHabits()],
+    habits,
+    quickActions: defaultQuickActions(habits),
     habitLogs: [],
     meals: [],
     sleep: [],

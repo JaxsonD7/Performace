@@ -399,6 +399,7 @@ export function AssignmentForm({ open, onClose, initial }: FormProps<Assignment>
           priority: 'medium',
           loggedMin: 0,
           createdAt: new Date().toISOString(),
+          schedule: false,
         },
   );
 
@@ -505,6 +506,16 @@ export function AssignmentForm({ open, onClose, initial }: FormProps<Assignment>
             />
           </Field>
         </div>
+
+        <label className="flex items-center gap-2 text-sm text-ink-secondary">
+          <input
+            type="checkbox"
+            checked={draft.schedule}
+            onChange={(e) => set('schedule', e.target.checked)}
+            className="h-4 w-4 rounded border-line accent-[rgb(var(--series-1))]"
+          />
+          Let the planner find time for this
+        </label>
 
         <Field label="Notes">
           <TextArea
