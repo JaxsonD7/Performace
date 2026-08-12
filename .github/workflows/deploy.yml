@@ -43,7 +43,12 @@ jobs:
           BASE_PATH: /${{ github.event.repository.name }}/
 
       - name: Configure Pages
+        # enablement turns Pages on via the API using this workflow's own
+        # `pages: write` token, so a fresh clone of this repo deploys without
+        # anyone visiting the settings screen first.
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
