@@ -3,6 +3,7 @@ import { PageBody, PageHeader } from '@/components/PageHeader';
 import {
   AssignmentForm,
   CourseForm,
+  CourseMeetingForm,
   MeetingForm,
   TaskForm,
 } from '@/components/forms/entryForms';
@@ -21,9 +22,10 @@ import {
 } from '@/components/ui/primitives';
 import { StatTile } from '@/components/ui/charts';
 import { formatDuration, formatTime, relativeDay, today } from '@/lib/date';
+import { WEEKDAY_SHORT } from '@/lib/routine';
 import { openAssignments, upcomingMeetings } from '@/lib/selectors';
 import { useStore } from '@/store/store';
-import type { Assignment, Course, Meeting, Task } from '@/types';
+import type { Assignment, Course, CourseMeeting, Meeting, Task } from '@/types';
 
 type Tab = 'assignments' | 'tasks' | 'meetings' | 'courses';
 
@@ -371,58 +373,117 @@ function MeetingsTab() {
 
 function CoursesTab() {
   const { state, remove } = useStore();
-  const [modal, setModal] = useState<{ open: boolean; item?: Course }>({ open: false });
+  const [courseModal, setCourseModal] = useState<{ open: boolean; item?: Course }>({ open: false });
+  const [meetingModal, setMeetingModal] = useState<{
+    open: boolean;
+    item?: CourseMeeting;
+    defaultCourseId?: string;
+  }>({ open: false });
 
   return (
-    <Card>
-      <CardHeader
-        title="Courses"
-        icon="📚"
-        action={
-          <button
-            type="button"
-            className="btn-primary !py-1 text-xs"
-            onClick={() => setModal({ open: true })}
-          >
-            + Course
-          </button>
-        }
-      />
-      {state.courses.length ? (
-        <ul className="divide-y divide-line">
-          {state.courses.map((c) => {
-            const items = state.assignments.filter((a) => a.courseId === c.id);
-            const done = items.filter((a) => a.status === 'done').length;
-            return (
-              <li key={c.id} className="group flex items-center gap-3 px-4 py-3">
-                <span
-                  className="h-8 w-1 shrink-0 rounded-full"
-                  style={{ background: `rgb(var(--series-${c.colorSlot}))` }}
-                  aria-hidden="true"
-                />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-ink">{c.name}</p>
-                  <p className="text-[11px] text-ink-muted">
-                    {c.code ? `${c.code} · ` : ''}
-                    {done}/{items.length} assignments done
-                  </p>
-                </div>
-                <span className="flex shrink-0 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
-                  <IconButton onClick={() => setModal({ open: true, item: c })} label="Edit course">
-                    <PencilIcon />
-                  </IconButton>
-                  <IconButton onClick={() => remove('courses', c.id)} label="Delete course" tone="danger">
-                    <TrashIcon />
-                  </IconButton>
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        <EmptyState message="Add your courses so assignments can be color-coded." />
-      )}
-      <CourseForm open={modal.open} onClose={() => setModal({ open: false })} initial={modal.item} />
-    </Card>
+    <div className="space-y-4">
+      <Card>
+        <CardHeader
+          title="Courses"
+          icon="📚"
+          subtitle="Class times only ever appear on your schedule once you add them here."
+          action={
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                className="btn-ghost !py-1 text-xs"
+                onClick={() => setMeetingModal({ open: true })}
+                disabled={!state.courses.length}
+              >
+                + Class time
+              </button>
+              <button
+                type="button"
+                className="btn-primary !py-1 text-xs"
+                onClick={() => setCourseModal({ open: true })}
+              >
+                + Course
+              </button>
+            </div>
+          }
+        />
+        {state.courses.length ? (
+          <ul className="divide-y divide-line">
+            {state.courses.map((c) => {
+              const items = state.assignments.filter((a) => a.courseId === c.id);
+              const done = items.filter((a) => a.status === 'done').length;
+              const times = state.courseMeetings
+                .filter((m) => m.courseId === c.id)
+                .sort((a, b) => a.weekday - b.weekday || (a.startTime < b.startTime ? -1 : 1));
+
+              return (
+                <li key={c.id} className="group px-4 py-3">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="h-8 w-1 shrink-0 rounded-full"
+                      style={{ background: `rgb(var(--series-${c.colorSlot}))` }}
+                      aria-hidden="true"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-ink">{c.name}</p>
+                      <p className="text-[11px] text-ink-muted">
+                        {c.code ? `${c.code} · ` : ''}
+                        {c.instructor ? `${c.instructor} · ` : ''}
+                        {done}/{items.length} assignments done
+                      </p>
+                    </div>
+                    <span className="flex shrink-0 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+                      <IconButton
+                        onClick={() => setCourseModal({ open: true, item: c })}
+                        label="Edit course"
+                      >
+                        <PencilIcon />
+                      </IconButton>
+                      <IconButton onClick={() => remove('courses', c.id)} label="Delete course" tone="danger">
+                        <TrashIcon />
+                      </IconButton>
+                    </span>
+                  </div>
+
+                  <div className="mt-2 flex flex-wrap items-center gap-1.5 pl-4">
+                    {times.map((m) => (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={() => setMeetingModal({ open: true, item: m })}
+                        className="chip hover:bg-raised"
+                      >
+                        {WEEKDAY_SHORT[m.weekday]} {formatTime(m.startTime)}–{formatTime(m.endTime)}
+                        {m.location ? ` · ${m.location}` : ''}
+                      </button>
+                    ))}
+                    <button
+                      type="button"
+                      className="chip border-dashed text-ink-muted hover:bg-raised hover:text-ink"
+                      onClick={() => setMeetingModal({ open: true, defaultCourseId: c.id })}
+                    >
+                      + time
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <EmptyState message="Add your courses so assignments can be color-coded and class times can be scheduled." />
+        )}
+        <CourseForm
+          open={courseModal.open}
+          onClose={() => setCourseModal({ open: false })}
+          initial={courseModal.item}
+        />
+        <CourseMeetingForm
+          open={meetingModal.open}
+          onClose={() => setMeetingModal({ open: false })}
+          initial={meetingModal.item}
+          defaultCourseId={meetingModal.defaultCourseId}
+        />
+      </Card>
+    </div>
   );
 }

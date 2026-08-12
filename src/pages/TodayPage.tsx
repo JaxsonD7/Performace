@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PageBody, PageHeader } from '@/components/PageHeader';
 import { NextUp, ScheduleList } from '@/components/schedule/ScheduleList';
 import { HabitChecklist } from '@/components/today/HabitChecklist';
+import { ChurchCard } from '@/components/today/ChurchCard';
 import {
   HealthCard,
   MealsCard,
@@ -16,7 +17,7 @@ import {
 } from '@/components/today/cards';
 import { HabitForm } from '@/components/forms/entryForms';
 import { Card, CardHeader, Progress } from '@/components/ui/primitives';
-import { formatDate, nowClock, today } from '@/lib/date';
+import { addDays, formatDate, nowClock, today } from '@/lib/date';
 import { dayScore } from '@/lib/metrics';
 import { generateSchedule, nextBlock, protectedBlocks } from '@/lib/schedule';
 import { openAssignments, overdueTasks, selectDay } from '@/lib/selectors';
@@ -25,7 +26,9 @@ import type { Habit } from '@/types';
 
 export function TodayPage() {
   const { state, setBlocks } = useStore();
+  const navigate = useNavigate();
   const date = today();
+  const tomorrow = addDays(date, 1);
   const day = useMemo(() => selectDay(state, date), [state, date]);
   const score = dayScore(state, date);
   const upcoming = useMemo(() => openAssignments(state), [state]);
@@ -38,6 +41,12 @@ export function TodayPage() {
 
   const buildDay = () =>
     setBlocks(date, generateSchedule(state, date, { keep: protectedBlocks(day.blocks) }));
+
+  const planTomorrow = () => {
+    const existing = state.blocks.filter((b) => b.date === tomorrow);
+    setBlocks(tomorrow, generateSchedule(state, tomorrow, { keep: protectedBlocks(existing) }));
+    navigate(`/schedule?date=${tomorrow}`);
+  };
 
   const orthodoxDone = day.orthodoxHabits.filter((h) => day.habitLogs.get(h.id)?.done).length;
   const checklistDone = day.improvementHabits.filter((h) => day.habitLogs.get(h.id)?.done).length;
@@ -56,6 +65,9 @@ export function TodayPage() {
             <Link to="/schedule" className="btn-ghost">
               Full schedule
             </Link>
+            <button type="button" className="btn-ghost" onClick={planTomorrow}>
+              Plan tomorrow
+            </button>
             <button type="button" className="btn-primary" onClick={buildDay}>
               Build my day
             </button>
@@ -129,6 +141,8 @@ export function TodayPage() {
 
           {/* Column 3 — soul, school, and the rest */}
           <div className="min-w-0 space-y-4">
+            <ChurchCard date={date} />
+
             <Card>
               <CardHeader
                 title="Orthodox rule"

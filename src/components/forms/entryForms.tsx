@@ -2,10 +2,12 @@ import { Modal, ModalActions } from '@/components/ui/Modal';
 import { Field, Select, TextArea, TextInput } from '@/components/ui/primitives';
 import { num, numOr, useFormDraft } from '@/components/forms/useFormDraft';
 import { today } from '@/lib/date';
+import { WEEKDAYS, WEEKDAY_NAMES } from '@/lib/routine';
 import { useStore } from '@/store/store';
 import type {
   Assignment,
   Course,
+  CourseMeeting,
   Goal,
   Habit,
   ISODate,
@@ -669,6 +671,13 @@ export function CourseForm({ open, onClose, initial }: FormProps<Course>) {
             placeholder="MATH 152"
           />
         </Field>
+        <Field label="Instructor">
+          <TextInput
+            value={draft.instructor ?? ''}
+            onChange={(e) => set('instructor', e.target.value || undefined)}
+            placeholder="Dr. Papadopoulos"
+          />
+        </Field>
         <Field label="Color">
           <Select
             value={String(draft.colorSlot)}
@@ -682,6 +691,120 @@ export function CourseForm({ open, onClose, initial }: FormProps<Course>) {
               ),
             )}
           </Select>
+        </Field>
+      </div>
+    </Modal>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Class meeting time — the ONLY thing that puts a "Classes" block on the
+// schedule. Nothing about school hours is ever guessed; this is you telling
+// the app exactly when and where a course meets, once, and it recurs weekly.
+// ---------------------------------------------------------------------------
+
+export function CourseMeetingForm({
+  open,
+  onClose,
+  initial,
+  defaultCourseId,
+}: FormProps<CourseMeeting> & { defaultCourseId?: string }) {
+  const { add, update, remove, state } = useStore();
+  const { draft, set } = useFormDraft<CourseMeeting>(open, () =>
+    initial
+      ? { ...initial }
+      : {
+          id: '',
+          courseId: defaultCourseId ?? state.courses[0]?.id ?? '',
+          weekday: 1,
+          startTime: '09:00',
+          endTime: '09:50',
+        },
+  );
+
+  const save = () => {
+    if (!draft.courseId) return;
+    if (initial) update('courseMeetings', initial.id, draft);
+    else add('courseMeetings', draft);
+    onClose();
+  };
+
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={initial ? 'Edit class time' : 'Add a class time'}
+      footer={
+        <>
+          {initial ? (
+            <button
+              type="button"
+              className="btn text-critical hover:bg-critical/10"
+              onClick={() => {
+                remove('courseMeetings', initial.id);
+                onClose();
+              }}
+            >
+              Remove
+            </button>
+          ) : null}
+          <span className="flex-1" />
+          <ModalActions onCancel={onClose} onConfirm={save} disabled={!draft.courseId} />
+        </>
+      }
+    >
+      <div className="space-y-4">
+        {state.courses.length ? (
+          <Field label="Course">
+            <Select value={draft.courseId} onChange={(e) => set('courseId', e.target.value)}>
+              {state.courses.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </Select>
+          </Field>
+        ) : (
+          <p className="rounded-lg bg-raised px-3 py-2 text-sm text-ink-secondary">
+            Add a course first — class times attach to a course.
+          </p>
+        )}
+
+        <div className="grid grid-cols-3 gap-3">
+          <Field label="Day">
+            <Select
+              value={String(draft.weekday)}
+              onChange={(e) => set('weekday', Number(e.target.value) as CourseMeeting['weekday'])}
+            >
+              {WEEKDAYS.map((d) => (
+                <option key={d} value={d}>
+                  {WEEKDAY_NAMES[d]}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field label="Starts">
+            <TextInput
+              type="time"
+              value={draft.startTime}
+              onChange={(e) => set('startTime', e.target.value)}
+            />
+          </Field>
+          <Field label="Ends">
+            <TextInput
+              type="time"
+              value={draft.endTime}
+              onChange={(e) => set('endTime', e.target.value)}
+            />
+          </Field>
+        </div>
+
+        <Field label="Location">
+          <TextInput
+            value={draft.location ?? ''}
+            onChange={(e) => set('location', e.target.value || undefined)}
+            placeholder="Building, room number"
+          />
         </Field>
       </div>
     </Modal>

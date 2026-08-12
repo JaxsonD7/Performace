@@ -10,6 +10,7 @@ import { SchoolPage } from '@/pages/SchoolPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { TodayPage } from '@/pages/TodayPage';
 import { UpdateBanner } from '@/pwa/UpdateBanner';
+import { RestTimerHost } from '@/components/lifting/RestTimer';
 import { useStore } from '@/store/store';
 
 export function App() {
@@ -49,6 +50,7 @@ export function App() {
         </Route>
       </Routes>
       <UpdateBanner />
+      <RestTimerHost />
     </>
   );
 }

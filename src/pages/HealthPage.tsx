@@ -1,19 +1,25 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { PageBody, PageHeader } from '@/components/PageHeader';
 import { HealthForm, MealForm, SleepForm, WorkoutForm } from '@/components/forms/logForms';
+import { HealthImportModal } from '@/components/health/HealthImportModal';
 import {
   Badge,
   Card,
   CardHeader,
   EmptyState,
+  Field,
   IconButton,
   PencilIcon,
   Progress,
   Segmented,
+  Select,
+  TextInput,
   TrashIcon,
 } from '@/components/ui/primitives';
 import { BarChart, StatTile } from '@/components/ui/charts';
 import { formatDuration, formatTime, hours, relativeDay, shortDay, startOfWeek, today } from '@/lib/date';
+import { exerciseProgress, loggedExerciseNames, platesFor } from '@/lib/lifting';
 import { weekSummary } from '@/lib/metrics';
 import { sumMacros } from '@/lib/selectors';
 import { useStore } from '@/store/store';
@@ -24,10 +30,31 @@ type Tab = 'workouts' | 'sleep' | 'diet' | 'watch';
 export function HealthPage() {
   const { state } = useStore();
   const [tab, setTab] = useState<Tab>('workouts');
+  const [searchParams, setSearchParams] = useSearchParams();
+  // Captured once into local state, independent of the URL param that carried
+  // it — clearing the param (below) must not also erase the data before the
+  // import modal has had a chance to show it.
+  const [shortcutData, setShortcutData] = useState<string | undefined>();
   const week = useMemo(
     () => weekSummary(state, startOfWeek(today(), state.settings.weekStartsOn)),
     [state],
   );
+
+  // A Shortcut's "Open URL" step lands here as ?data=<json> — jump straight to
+  // the watch tab with the import already parsed and waiting to confirm.
+  useEffect(() => {
+    const data = searchParams.get('data');
+    if (!data) return;
+    setShortcutData(data);
+    setTab('watch');
+    // Consumed once; clearing it means reloading the page later doesn't
+    // silently re-offer a stale import.
+    setSearchParams((p) => {
+      p.delete('data');
+      return p;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -69,7 +96,7 @@ export function HealthPage() {
         {tab === 'workouts' ? <WorkoutsTab /> : null}
         {tab === 'sleep' ? <SleepTab /> : null}
         {tab === 'diet' ? <DietTab /> : null}
-        {tab === 'watch' ? <WatchTab /> : null}
+        {tab === 'watch' ? <WatchTab shortcutData={shortcutData} /> : null}
       </PageBody>
     </>
   );
@@ -113,6 +140,11 @@ function WorkoutsTab() {
           />
         </div>
       </Card>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <ExerciseProgressCard />
+        <PlateCalculatorCard />
+      </div>
 
       <Card>
         <CardHeader
@@ -176,6 +208,108 @@ function WorkoutsTab() {
         <WorkoutForm open={modal.open} onClose={() => setModal({ open: false })} initial={modal.item} />
       </Card>
     </div>
+  );
+}
+
+function ExerciseProgressCard() {
+  const { state } = useStore();
+  const names = useMemo(() => loggedExerciseNames(state), [state]);
+  const [name, setName] = useState(names[0] ?? '');
+  const active = names.includes(name) ? name : names[0];
+  const points = active ? exerciseProgress(state, active) : [];
+  const unit = state.settings.weightUnit;
+
+  return (
+    <Card>
+      <CardHeader
+        title="Exercise progress"
+        icon="📈"
+        subtitle="Best estimated 1-rep max, session by session."
+        action={
+          names.length ? (
+            <Select
+              value={active}
+              onChange={(e) => setName(e.target.value)}
+              className="!w-auto !py-1 text-xs"
+            >
+              {names.map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </Select>
+          ) : null
+        }
+      />
+      <div className="card-pad">
+        {points.length ? (
+          <BarChart
+            data={points.slice(-10).map((p) => ({
+              label: shortDay(p.date),
+              value: Math.round(p.est1RM),
+              caption: `${relativeDay(p.date)} — ${p.weight}${unit}×${p.reps}`,
+            }))}
+            tone="brand"
+            format={(v) => `${Math.round(v)} ${unit}`}
+            emptyMessage="Log a few sessions to see progress"
+          />
+        ) : (
+          <EmptyState message="Log a workout with weights to see progress here." />
+        )}
+      </div>
+    </Card>
+  );
+}
+
+function PlateCalculatorCard() {
+  const { state } = useStore();
+  const unit = state.settings.weightUnit;
+  const [target, setTarget] = useState(135);
+  const [bar, setBar] = useState(unit === 'kg' ? 20 : 45);
+  const result = platesFor(target, bar, unit);
+
+  return (
+    <Card>
+      <CardHeader title="Plate calculator" icon="➕" />
+      <div className="card-pad space-y-3">
+        <div className="grid grid-cols-2 gap-3">
+          <Field label={`Target weight (${unit})`}>
+            <TextInput
+              type="number"
+              min={0}
+              step={unit === 'kg' ? 2.5 : 5}
+              value={target}
+              onChange={(e) => setTarget(Number(e.target.value) || 0)}
+            />
+          </Field>
+          <Field label={`Bar weight (${unit})`}>
+            <TextInput
+              type="number"
+              min={0}
+              value={bar}
+              onChange={(e) => setBar(Number(e.target.value) || 0)}
+            />
+          </Field>
+        </div>
+        <div className="rounded-lg bg-raised px-3 py-2.5">
+          {result.perSide.length ? (
+            <>
+              <p className="text-xs text-ink-muted">Per side</p>
+              <p className="mt-0.5 text-lg font-semibold tabular-nums text-ink">
+                {result.perSide.join(' + ')} {unit}
+              </p>
+            </>
+          ) : (
+            <p className="text-sm text-ink-secondary">Just the bar.</p>
+          )}
+          {result.approximate ? (
+            <p className="mt-1 text-xs text-warning">
+              Closest with these plates: {result.reachable} {unit}
+            </p>
+          ) : null}
+        </div>
+      </div>
+    </Card>
   );
 }
 
@@ -362,9 +496,10 @@ function DietTab() {
 
 // ---------------------------------------------------------------------------
 
-function WatchTab() {
+function WatchTab({ shortcutData }: { shortcutData?: string }) {
   const { state, remove } = useStore();
   const [modal, setModal] = useState<{ open: boolean; item?: HealthMetric }>({ open: false });
+  const [importOpen, setImportOpen] = useState(!!shortcutData);
   const week = useMemo(
     () => weekSummary(state, startOfWeek(today(), state.settings.weekStartsOn)),
     [state],
@@ -408,15 +543,24 @@ function WatchTab() {
         <CardHeader
           title="Daily metrics"
           icon="⌚"
-          subtitle="Manual for now — the importer drops straight into this table."
+          subtitle="From Apple Health, a Shortcut, or by hand."
           action={
-            <button
-              type="button"
-              className="btn-primary !py-1 text-xs"
-              onClick={() => setModal({ open: true })}
-            >
-              + Entry
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                className="btn-ghost !py-1 text-xs"
+                onClick={() => setImportOpen(true)}
+              >
+                Import
+              </button>
+              <button
+                type="button"
+                className="btn-primary !py-1 text-xs"
+                onClick={() => setModal({ open: true })}
+              >
+                + Entry
+              </button>
+            </div>
           }
         />
         {recent.length ? (
@@ -470,14 +614,12 @@ function WatchTab() {
       </Card>
 
       <Card>
-        <CardHeader title="Apple Watch Ultra import" icon="🔌" />
+        <CardHeader title="Apple Watch Ultra" icon="⌚" />
         <div className="card-pad space-y-2 text-sm text-ink-secondary">
           <p>
-            Nothing syncs automatically yet — this version is fully local and asks nothing of the
-            network. The adapter seam is already in place at{' '}
-            <code className="rounded bg-raised px-1 py-0.5 text-xs">src/integrations/health</code>:
-            drop an Apple Health export (or a Garmin/Fitbit CSV) through the parser there and each
-            day lands in this table as a normal record.
+            Two ways to bring in real data: a daily iOS Shortcut for today's numbers in one tap, or
+            an Apple Health export for a full history backfill. Both are covered by the Import
+            button above — details and the exact Shortcut recipe are in there.
           </p>
           <Progress
             value={recent.length}
@@ -487,6 +629,12 @@ function WatchTab() {
           />
         </div>
       </Card>
+
+      <HealthImportModal
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        initialData={shortcutData}
+      />
     </div>
   );
 }

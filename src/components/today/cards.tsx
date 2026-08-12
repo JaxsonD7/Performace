@@ -20,7 +20,9 @@ import {
   cx,
 } from '@/components/ui/primitives';
 import { StatTile } from '@/components/ui/charts';
+import { startRestTimer } from '@/components/lifting/RestTimer';
 import { formatDuration, formatTime, hours, relativeDay } from '@/lib/date';
+import { isNewPR, lastPerformance, summarizeSets } from '@/lib/lifting';
 import { readingMinutes, sumMacros } from '@/lib/selectors';
 import type { DayData } from '@/lib/selectors';
 import { useStore } from '@/store/store';
@@ -252,6 +254,13 @@ export function MealsCard({ day }: { day: DayData }) {
           <ul className="divide-y divide-line">
             {day.meals.map((m) => (
               <li key={m.id} className="group flex items-center gap-2 py-2">
+                {m.photo ? (
+                  <img
+                    src={m.photo}
+                    alt=""
+                    className="h-10 w-10 shrink-0 rounded-lg border border-line object-cover"
+                  />
+                ) : null}
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm text-ink">{m.name}</p>
                   <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-[11px] text-ink-muted">
@@ -320,7 +329,7 @@ export function MealsCard({ day }: { day: DayData }) {
 // ---------------------------------------------------------------------------
 
 export function WorkoutCard({ day }: { day: DayData }) {
-  const { update, remove } = useStore();
+  const { state, update, remove } = useStore();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Workout | undefined>();
 
@@ -329,13 +338,20 @@ export function WorkoutCard({ day }: { day: DayData }) {
     setOpen(true);
   };
 
-  const toggleSet = (w: Workout, exerciseId: string, index: number) => {
+  const patchSet = (w: Workout, exerciseId: string, index: number, patch: Partial<Workout['exercises'][number]['sets'][number]>) => {
     const exercises = w.exercises.map((e) =>
       e.id === exerciseId
-        ? { ...e, sets: e.sets.map((s, i) => (i === index ? { ...s, done: !s.done } : s)) }
+        ? { ...e, sets: e.sets.map((s, i) => (i === index ? { ...s, ...patch } : s)) }
         : e,
     );
     update('workouts', w.id, { exercises });
+  };
+
+  /** Ticking a set on starts the rest timer; PR badges are derived at render time. */
+  const completeSet = (w: Workout, exercise: Workout['exercises'][number], index: number) => {
+    const nowDone = !exercise.sets[index].done;
+    patchSet(w, exercise.id, index, { done: nowDone });
+    if (nowDone) startRestTimer(exercise.restSec ?? state.settings.restTimerSec, exercise.name);
   };
 
   return (
@@ -406,36 +422,84 @@ export function WorkoutCard({ day }: { day: DayData }) {
                   </div>
                 ) : null}
 
-                <ul className="mt-2 space-y-1.5">
-                  {w.exercises.map((e) => (
-                    <li key={e.id} className="flex items-center justify-between gap-3">
-                      <span className="min-w-0 flex-1 truncate text-sm text-ink-secondary">
-                        {e.name}
-                        <span className="ml-1.5 text-xs text-ink-muted">
-                          {e.targetSets}×{e.targetReps}
-                        </span>
-                      </span>
-                      <span className="flex shrink-0 gap-1">
-                        {e.sets.map((s, i) => (
-                          <button
-                            key={i}
-                            type="button"
-                            onClick={() => toggleSet(w, e.id, i)}
-                            aria-label={`${e.name} set ${i + 1}`}
-                            aria-pressed={s.done}
-                            className={cx(
-                              'h-6 w-6 rounded-md border text-[10px] font-semibold tabular-nums transition-colors',
-                              s.done
-                                ? 'border-s2 bg-s2 text-white'
-                                : 'border-line bg-surface text-ink-muted hover:border-s2',
-                            )}
-                          >
-                            {i + 1}
-                          </button>
-                        ))}
-                      </span>
-                    </li>
-                  ))}
+                <ul className="mt-2 space-y-2.5">
+                  {w.exercises.map((e) => {
+                    const last = lastPerformance(state, e.name, w.date);
+                    return (
+                      <li key={e.id}>
+                        <div className="flex items-baseline justify-between gap-2">
+                          <span className="min-w-0 truncate text-sm text-ink-secondary">
+                            {e.name}
+                            <span className="ml-1.5 text-xs text-ink-muted">
+                              {e.targetSets}×{e.targetReps}
+                            </span>
+                          </span>
+                          {last ? (
+                            <span className="shrink-0 text-[11px] text-ink-muted">
+                              Last: {summarizeSets(last.sets, state.settings.weightUnit)}
+                            </span>
+                          ) : null}
+                        </div>
+                        <div className="mt-1 flex flex-wrap gap-1.5">
+                          {e.sets.map((s, i) => {
+                            const pr = isNewPR(state, e.name, s, w.date);
+                            return (
+                              <div
+                                key={i}
+                                className={cx(
+                                  'flex items-center gap-1 rounded-md border px-1.5 py-1',
+                                  s.done ? 'border-s2 bg-s2/10' : 'border-line bg-surface',
+                                )}
+                              >
+                                <span className="w-3 text-center text-[10px] text-ink-muted">{i + 1}</span>
+                                <input
+                                  type="number"
+                                  inputMode="decimal"
+                                  value={s.weight ?? ''}
+                                  onChange={(ev) =>
+                                    patchSet(w, e.id, i, { weight: ev.target.valueAsNumber || undefined })
+                                  }
+                                  placeholder="0"
+                                  aria-label={`${e.name} set ${i + 1} weight`}
+                                  className="w-10 rounded border-0 bg-transparent text-right text-xs tabular-nums text-ink focus:outline-none focus:ring-1 focus:ring-brand/40"
+                                />
+                                <span className="text-[10px] text-ink-muted">{state.settings.weightUnit}×</span>
+                                <input
+                                  type="number"
+                                  inputMode="numeric"
+                                  value={s.reps || ''}
+                                  onChange={(ev) => patchSet(w, e.id, i, { reps: ev.target.valueAsNumber || 0 })}
+                                  placeholder="0"
+                                  aria-label={`${e.name} set ${i + 1} reps`}
+                                  className="w-8 rounded border-0 bg-transparent text-right text-xs tabular-nums text-ink focus:outline-none focus:ring-1 focus:ring-brand/40"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => completeSet(w, e, i)}
+                                  aria-label={`Mark ${e.name} set ${i + 1} done`}
+                                  aria-pressed={s.done}
+                                  className={cx(
+                                    'flex h-5 w-5 items-center justify-center rounded transition-colors',
+                                    s.done ? 'bg-s2 text-white' : 'border border-line text-ink-muted hover:border-s2',
+                                  )}
+                                >
+                                  {s.done ? '✓' : ''}
+                                </button>
+                                {pr && s.done ? (
+                                  <span
+                                    className="rounded-full bg-warning/20 px-1.5 py-0.5 text-[9px] font-bold text-serious"
+                                    title="New personal record"
+                                  >
+                                    PR
+                                  </span>
+                                ) : null}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
 
                 {w.status !== 'completed' ? (

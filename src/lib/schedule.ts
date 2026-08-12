@@ -1,7 +1,8 @@
 import { fromISODate, fromMinutes, relativeDay, toMinutes } from '@/lib/date';
 import { uid } from '@/lib/id';
 import { meetingsOn } from '@/lib/selectors';
-import type { AppState, BlockKind, ClockTime, ISODate, ScheduleBlock } from '@/types';
+import { routineOn } from '@/lib/routine';
+import type { AppState, BlockKind, ClockTime, ISODate, ScheduleBlock, Weekday } from '@/types';
 
 /**
  * Builds a realistic day plan out of everything already tracked.
@@ -9,10 +10,12 @@ import type { AppState, BlockKind, ClockTime, ISODate, ScheduleBlock } from '@/t
  * The rules, in order of authority:
  *   1. Blocks you made or edited by hand are law — they are never moved.
  *   2. Meetings are fixed commitments and are placed next.
- *   3. Class time is reserved on weekdays from the school hours in settings.
- *   4. Anchors (wake, prayer, meals, workout, reading, wind-down) go at their
- *      configured times, and are skipped when something fixed already occupies
- *      the slot rather than double-booking you.
+ *   3. Class time is placed only where you have told the app you have a class
+ *      — a `CourseMeeting` you entered by hand or that came from a syllabus.
+ *      Nothing about school hours is ever guessed.
+ *   4. Anchors (wake, prayer, meals, workout, reading, wind-down) go at the
+ *      times set for that day of the week, and are skipped when something
+ *      fixed already occupies the slot rather than double-booking you.
  *   5. Whatever gaps remain get filled with school work first (soonest due
  *      date wins), then tasks, split into focus blocks with breaks between.
  *
@@ -72,6 +75,7 @@ export function generateSchedule(
   options: GenerateOptions = {},
 ): ScheduleBlock[] {
   const s = state.settings;
+  const routine = routineOn(s, date);
   const keep = options.keep ?? [];
   const out: ScheduleBlock[] = [...keep];
   const taken: Placed[] = keep.map((b) => ({
@@ -79,8 +83,8 @@ export function generateSchedule(
     end: toMinutes(b.end) || 1440,
   }));
 
-  const dayStart = toMinutes(s.wakeTime);
-  const dayEnd = toMinutes(s.bedTime);
+  const dayStart = toMinutes(routine.wakeTime);
+  const dayEnd = toMinutes(routine.bedTime);
 
   /** Every stretch of the day not yet claimed, in order. */
   const freeGaps = (): Placed[] => {
@@ -152,32 +156,31 @@ export function generateSchedule(
   });
 
   // --- 2. Class time -------------------------------------------------------
-  // Weekdays get the school window reserved before anything else is placed,
-  // otherwise the planner cheerfully schedules homework for 9am while you are
-  // sitting in class. Delete the block on days you are not on campus.
-  const weekday = fromISODate(date).getDay();
-  if (weekday >= 1 && weekday <= 5 && s.schoolStart !== s.schoolEnd) {
-    const start = toMinutes(s.schoolStart);
-    const end = toMinutes(s.schoolEnd);
-    const lunchStart = toMinutes(s.lunchTime);
-    const lunchEnd = lunchStart + 40;
-
-    // Leave a hole for lunch rather than one unbroken seven-hour block —
-    // otherwise the lunch anchor has nowhere to land and silently disappears.
-    const spans: Placed[] =
-      lunchStart > start + 30 && lunchEnd < end - 30
-        ? [
-            { start, end: lunchStart },
-            { start: lunchEnd, end },
-          ]
-        : [{ start, end }];
-
-    spans.forEach((span) => {
-      if (span.end <= span.start || overlaps(span, taken)) return;
-      out.push(block(date, span.start, span.end, 'Classes', 'school', { type: 'manual' }));
+  // Only classes you have actually told the app about — a CourseMeeting you
+  // entered by hand or pulled from a syllabus. Nothing about school hours is
+  // ever guessed or auto-filled.
+  const weekday = fromISODate(date).getDay() as Weekday;
+  state.courseMeetings
+    .filter((m) => m.weekday === weekday)
+    .forEach((m) => {
+      const course = state.courses.find((c) => c.id === m.courseId);
+      const start = toMinutes(m.startTime);
+      const end = Math.max(toMinutes(m.endTime), start + 15);
+      const span = { start, end };
+      if (overlaps(span, taken)) return;
+      out.push(
+        block(
+          date,
+          span.start,
+          span.end,
+          course?.name ?? 'Class',
+          'school',
+          { type: 'course', id: m.id },
+          m.location,
+        ),
+      );
       taken.push(span);
     });
-  }
 
   // --- 3. Anchors ----------------------------------------------------------
   // Each carries how far it may drift: a meal an hour late is still a meal, a
@@ -186,19 +189,26 @@ export function generateSchedule(
   type Anchor = [ClockTime, number, string, BlockKind, ScheduleBlock['source'], number];
 
   const anchors: Anchor[] = [
-    [s.breakfastTime, 30, 'Breakfast', 'meal', { type: 'meal' }, 60],
-    [s.lunchTime, 40, 'Lunch', 'meal', { type: 'meal' }, 90],
-    [s.dinnerTime, 45, 'Dinner', 'meal', { type: 'meal' }, 90],
-    [
-      workout?.startTime ?? s.workoutTime,
+    [routine.breakfastTime, 30, 'Breakfast', 'meal', { type: 'meal' }, 60],
+    [routine.lunchTime, 40, 'Lunch', 'meal', { type: 'meal' }, 90],
+    [routine.dinnerTime, 45, 'Dinner', 'meal', { type: 'meal' }, 90],
+    [routine.readingTime, s.readingGoalMin, 'Reading', 'reading', { type: 'reading' }, 180],
+  ];
+
+  // A workout only gets an anchor when there is something to anchor: either a
+  // planned session (its own start time wins) or this weekday has a workout
+  // time set at all. A rest day with no workout time set gets no gym block.
+  const workoutTime = workout?.startTime ?? routine.workoutTime;
+  if (workoutTime) {
+    anchors.push([
+      workoutTime,
       workout?.plannedMin ?? 60,
       workout ? workout.title : 'Workout',
       'workout',
       workout ? { type: 'workout', id: workout.id } : { type: 'manual' },
       240,
-    ],
-    [s.readingTime, s.readingGoalMin, 'Reading', 'reading', { type: 'reading' }, 180],
-  ];
+    ]);
+  }
 
   // Habits with an anchor time (wake-up, prayer rule, evening reflection)
   // become blocks of their own.

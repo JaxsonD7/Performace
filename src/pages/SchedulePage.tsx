@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { PageBody, PageHeader } from '@/components/PageHeader';
 import { BlockForm } from '@/components/forms/logForms';
 import { MeetingForm } from '@/components/forms/entryForms';
@@ -30,7 +31,8 @@ import type { ISODate, ScheduleBlock } from '@/types';
 
 export function SchedulePage() {
   const { state, setBlocks } = useStore();
-  const [date, setDate] = useState<ISODate>(today());
+  const [searchParams] = useSearchParams();
+  const [date, setDate] = useState<ISODate>(() => searchParams.get('date') || today());
   const [blockModal, setBlockModal] = useState<{ open: boolean; block?: ScheduleBlock }>({
     open: false,
   });

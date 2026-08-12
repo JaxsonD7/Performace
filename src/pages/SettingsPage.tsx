@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { PageBody, PageHeader } from '@/components/PageHeader';
 import {
+  Badge,
   Card,
   CardHeader,
   Field,
@@ -16,8 +17,9 @@ import {
   importJSONFile,
 } from '@/integrations/export/exporters';
 import { AppCard } from '@/pwa/AppCard';
+import { WEEKDAYS, WEEKDAY_NAMES, WEEKDAY_SHORT } from '@/lib/routine';
 import { useStore } from '@/store/store';
-import type { CollectionKey, DataSource, Settings, ThemePreference } from '@/types';
+import type { CollectionKey, DataSource, DayRoutine, OrthodoxCalendar, Settings, ThemePreference, Weekday, WeightUnit } from '@/types';
 
 const CSV_COLLECTIONS: [CollectionKey, string][] = [
   ['tasks', 'Tasks'],
@@ -33,10 +35,10 @@ const CSV_COLLECTIONS: [CollectionKey, string][] = [
 ];
 
 export function SettingsPage() {
-  const { state, updateSettings, replaceAll, resetToSample, resetToEmpty } = useStore();
+  const { state, updateSettings, replaceAll, resetToDefaults } = useStore();
   const s = state.settings;
   const fileInput = useRef<HTMLInputElement>(null);
-  const [confirm, setConfirm] = useState<'sample' | 'empty' | null>(null);
+  const [confirmErase, setConfirmErase] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
   const setNumber = (key: keyof Settings, fallback: number) => (value: string) =>
@@ -103,47 +105,39 @@ export function SettingsPage() {
                   <option value="manual">Manual only</option>
                 </Select>
               </Field>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <span className="label">Weight unit</span>
+                  <Segmented<WeightUnit>
+                    value={s.weightUnit}
+                    onChange={(weightUnit) => updateSettings({ weightUnit })}
+                    options={[
+                      { value: 'lb', label: 'lb' },
+                      { value: 'kg', label: 'kg' },
+                    ]}
+                  />
+                </div>
+                <Field label="Rest timer (sec)">
+                  <TextInput
+                    type="number"
+                    min={0}
+                    step={15}
+                    value={s.restTimerSec}
+                    onChange={(e) => setNumber('restTimerSec', 90)(e.target.value)}
+                  />
+                </Field>
+              </div>
             </div>
           </Card>
 
           <AppCard />
 
-          <Card>
-            <CardHeader
-              title="Daily rhythm"
-              icon="🕰️"
-              subtitle="The planner builds every day around these."
-            />
-            <div className="card-pad grid grid-cols-2 gap-3">
-              <TimeField label="Wake up" value={s.wakeTime} onChange={(wakeTime) => updateSettings({ wakeTime })} />
-              <TimeField label="Bed time" value={s.bedTime} onChange={(bedTime) => updateSettings({ bedTime })} />
-              <TimeField label="Breakfast" value={s.breakfastTime} onChange={(breakfastTime) => updateSettings({ breakfastTime })} />
-              <TimeField label="Lunch" value={s.lunchTime} onChange={(lunchTime) => updateSettings({ lunchTime })} />
-              <TimeField label="Dinner" value={s.dinnerTime} onChange={(dinnerTime) => updateSettings({ dinnerTime })} />
-              <TimeField label="Workout" value={s.workoutTime} onChange={(workoutTime) => updateSettings({ workoutTime })} />
-              <TimeField label="Reading" value={s.readingTime} onChange={(readingTime) => updateSettings({ readingTime })} />
-              <TimeField label="School starts" value={s.schoolStart} onChange={(schoolStart) => updateSettings({ schoolStart })} />
-              <TimeField label="School ends" value={s.schoolEnd} onChange={(schoolEnd) => updateSettings({ schoolEnd })} />
-              <Field label="Focus block (min)">
-                <TextInput
-                  type="number"
-                  min={15}
-                  step={5}
-                  value={s.focusBlockMin}
-                  onChange={(e) => setNumber('focusBlockMin', 50)(e.target.value)}
-                />
-              </Field>
-              <Field label="Break (min)">
-                <TextInput
-                  type="number"
-                  min={0}
-                  step={5}
-                  value={s.breakMin}
-                  onChange={(e) => setNumber('breakMin', 10)(e.target.value)}
-                />
-              </Field>
-            </div>
-          </Card>
+          <OrthodoxCalendarCard />
+          <ClaudeVisionCard />
+
+          <div className="min-w-0 lg:col-span-2">
+            <RoutinesCard />
+          </div>
 
           <Card>
             <CardHeader title="Targets" icon="🎯" />
@@ -203,6 +197,24 @@ export function SettingsPage() {
                   onChange={(e) => setNumber('workoutsPerWeekGoal', 5)(e.target.value)}
                 />
               </Field>
+              <Field label="Focus block (min)">
+                <TextInput
+                  type="number"
+                  min={15}
+                  step={5}
+                  value={s.focusBlockMin}
+                  onChange={(e) => setNumber('focusBlockMin', 50)(e.target.value)}
+                />
+              </Field>
+              <Field label="Break (min)">
+                <TextInput
+                  type="number"
+                  min={0}
+                  step={5}
+                  value={s.breakMin}
+                  onChange={(e) => setNumber('breakMin', 10)(e.target.value)}
+                />
+              </Field>
             </div>
           </Card>
 
@@ -220,8 +232,8 @@ export function SettingsPage() {
                   {state.habitLogs.length} habit entries · {state.meals.length} meals ·{' '}
                   {state.sleep.length} nights · {state.workouts.length} workouts ·{' '}
                   {state.reading.length} reading sessions · {state.assignments.length} assignments ·{' '}
-                  {state.meetings.length} events · {state.goals.length} goals ·{' '}
-                  {state.health.length} health days
+                  {state.meetings.length} events · {state.courseMeetings.length} class times ·{' '}
+                  {state.goals.length} goals · {state.health.length} health days
                 </p>
               </div>
 
@@ -275,14 +287,11 @@ export function SettingsPage() {
                 </p>
               ) : null}
 
-              <div className="flex flex-wrap gap-2 border-t border-line pt-3">
-                <button type="button" className="btn-ghost" onClick={() => setConfirm('sample')}>
-                  Reset to sample data
-                </button>
+              <div className="border-t border-line pt-3">
                 <button
                   type="button"
                   className="btn text-critical hover:bg-critical/10"
-                  onClick={() => setConfirm('empty')}
+                  onClick={() => setConfirmErase(true)}
                 >
                   Erase everything
                 </button>
@@ -329,46 +338,193 @@ export function SettingsPage() {
       </PageBody>
 
       <Modal
-        open={confirm !== null}
-        onClose={() => setConfirm(null)}
-        title={confirm === 'sample' ? 'Reset to sample data?' : 'Erase everything?'}
+        open={confirmErase}
+        onClose={() => setConfirmErase(false)}
+        title="Erase everything?"
         footer={
           <ModalActions
-            onCancel={() => setConfirm(null)}
+            onCancel={() => setConfirmErase(false)}
             destructive
-            confirmLabel={confirm === 'sample' ? 'Reset' : 'Erase'}
+            confirmLabel="Erase"
             onConfirm={() => {
-              if (confirm === 'sample') resetToSample();
-              else resetToEmpty();
-              setConfirm(null);
-              setMessage(confirm === 'sample' ? 'Sample data restored.' : 'All data erased.');
+              resetToDefaults();
+              setConfirmErase(false);
+              setMessage('All data erased. The default checklist and Orthodox rule are still here.');
             }}
           />
         }
       >
         <p className="text-sm text-ink-secondary">
-          {confirm === 'sample'
-            ? 'This replaces everything currently saved with the two-week sample. Export a backup first if you want to keep what you have.'
-            : 'This deletes every task, habit log, meal, workout, and reading session in this browser. The default checklist and Orthodox rule are kept so the app still works. This cannot be undone.'}
+          This deletes every task, habit log, meal, workout, class, and reading session in this
+          browser. The default daily checklist and Orthodox rule are kept so the app still works.
+          This cannot be undone — export a backup first if you want to keep what you have.
         </p>
       </Modal>
     </>
   );
 }
 
-function TimeField({
-  label,
-  value,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-}) {
+// ---------------------------------------------------------------------------
+
+function RoutinesCard() {
+  const { state, updateRoutine } = useStore();
+  const [day, setDay] = useState<Weekday>(() => new Date().getDay() as Weekday);
+  const routine = state.settings.routines[day];
+
+  const set = (patch: Partial<DayRoutine>) => updateRoutine(day, patch);
+
+  const copyToAll = () => {
+    WEEKDAYS.forEach((d) => {
+      if (d !== day) updateRoutine(d, routine);
+    });
+  };
+
+  const copyToWeekdays = () => {
+    [1, 2, 3, 4, 5].forEach((d) => {
+      if (d !== day) updateRoutine(d as Weekday, routine);
+    });
+  };
+
   return (
-    <Field label={label}>
-      <TextInput type="time" value={value} onChange={(e) => onChange(e.target.value)} />
-    </Field>
+    <Card>
+      <CardHeader
+        title="Daily rhythm"
+        icon="🕰️"
+        subtitle="Its own wake, meal, and workout times for every day — school days and weekends rarely match."
+      />
+      <div className="card-pad space-y-4">
+        <div className="scroll-x">
+          <div className="inline-flex rounded-lg border border-line bg-raised p-0.5">
+            {WEEKDAYS.map((d) => (
+              <button
+                key={d}
+                type="button"
+                onClick={() => setDay(d)}
+                aria-pressed={day === d}
+                className={`rounded-[6px] px-3 py-1.5 text-sm font-medium transition-colors ${
+                  day === d ? 'bg-surface text-ink shadow-card' : 'text-ink-muted hover:text-ink-secondary'
+                }`}
+              >
+                {WEEKDAY_SHORT[d]}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <Field label="Wake up">
+            <TextInput type="time" value={routine.wakeTime} onChange={(e) => set({ wakeTime: e.target.value })} />
+          </Field>
+          <Field label="Bed time">
+            <TextInput type="time" value={routine.bedTime} onChange={(e) => set({ bedTime: e.target.value })} />
+          </Field>
+          <Field label="Breakfast">
+            <TextInput
+              type="time"
+              value={routine.breakfastTime}
+              onChange={(e) => set({ breakfastTime: e.target.value })}
+            />
+          </Field>
+          <Field label="Lunch">
+            <TextInput type="time" value={routine.lunchTime} onChange={(e) => set({ lunchTime: e.target.value })} />
+          </Field>
+          <Field label="Dinner">
+            <TextInput type="time" value={routine.dinnerTime} onChange={(e) => set({ dinnerTime: e.target.value })} />
+          </Field>
+          <Field label="Reading">
+            <TextInput
+              type="time"
+              value={routine.readingTime}
+              onChange={(e) => set({ readingTime: e.target.value })}
+            />
+          </Field>
+          <Field label="Workout" hint="Leave blank on rest days — no gym block gets placed">
+            <TextInput
+              type="time"
+              value={routine.workoutTime ?? ''}
+              onChange={(e) => set({ workoutTime: e.target.value || undefined })}
+            />
+          </Field>
+        </div>
+
+        <div className="flex flex-wrap gap-2 border-t border-line pt-3 text-xs">
+          <button type="button" className="btn-quiet !py-1" onClick={copyToWeekdays}>
+            Copy {WEEKDAY_NAMES[day]} to Mon–Fri
+          </button>
+          <button type="button" className="btn-quiet !py-1" onClick={copyToAll}>
+            Copy {WEEKDAY_NAMES[day]} to every day
+          </button>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function OrthodoxCalendarCard() {
+  const { state, updateSettings } = useStore();
+  return (
+    <Card>
+      <CardHeader title="Church calendar" icon="✝️" />
+      <div className="card-pad space-y-3">
+        <div>
+          <span className="label">Calendar tradition</span>
+          <Segmented<OrthodoxCalendar>
+            value={state.settings.orthodoxCalendar}
+            onChange={(orthodoxCalendar) => updateSettings({ orthodoxCalendar })}
+            options={[
+              { value: 'new', label: 'New (Revised Julian)' },
+              { value: 'old', label: 'Old (all-Julian)' },
+            ]}
+          />
+        </div>
+        <p className="text-xs text-ink-muted">
+          Sets which dates fasting days and feasts fall on. Pascha and everything measured from it
+          (Great Lent, Holy Week, Pentecost…) is the same either way — only the fixed feasts and
+          the Nativity/Dormition/Apostles' fasts shift by 13 days.
+        </p>
+      </div>
+    </Card>
+  );
+}
+
+function ClaudeVisionCard() {
+  const { state, updateSettings } = useStore();
+  const [show, setShow] = useState(false);
+  const key = state.settings.anthropicApiKey ?? '';
+
+  return (
+    <Card>
+      <CardHeader
+        title="Meal photo analysis"
+        icon="📸"
+        action={key ? <Badge tone="good">✓ Connected</Badge> : null}
+      />
+      <div className="card-pad space-y-3">
+        <Field
+          label="Anthropic API key"
+          hint="Stored only in this browser and sent only to Anthropic, directly from your device, when you tap Analyze on a meal photo. This app has no server of its own to see it."
+        >
+          <div className="flex gap-2">
+            <TextInput
+              type={show ? 'text' : 'password'}
+              value={key}
+              onChange={(e) => updateSettings({ anthropicApiKey: e.target.value || undefined })}
+              placeholder="sk-ant-…"
+              autoComplete="off"
+            />
+            <button type="button" className="btn-ghost shrink-0" onClick={() => setShow((v) => !v)}>
+              {show ? 'Hide' : 'Show'}
+            </button>
+          </div>
+        </Field>
+        <p className="text-xs text-ink-muted">
+          Get a key at{' '}
+          <span className="text-brand">console.anthropic.com</span> → API Keys. Photo analysis costs
+          a few cents per photo on your own account; without a key, meals still work — you just log
+          calories and macros by hand.
+        </p>
+      </div>
+    </Card>
   );
 }
 

@@ -10,17 +10,19 @@ import {
   type ReactNode,
 } from 'react';
 import { persistence } from '@/data/persistence';
-import { emptyState, seedState, STATE_VERSION } from '@/data/seed';
-import { DEFAULT_SETTINGS } from '@/data/defaults';
+import { emptyState, STATE_VERSION } from '@/data/seed';
+import { DEFAULT_ROUTINES, DEFAULT_SETTINGS } from '@/data/defaults';
 import { uid } from '@/lib/id';
 import type {
   AppState,
   CollectionKey,
   DayLog,
+  DayRoutine,
   ISODate,
   RecordOf,
   ScheduleBlock,
   Settings,
+  Weekday,
 } from '@/types';
 
 // ---------------------------------------------------------------------------
@@ -34,6 +36,7 @@ type Action =
   | { type: 'update'; key: CollectionKey; id: string; patch: Record<string, unknown> }
   | { type: 'remove'; key: CollectionKey; id: string }
   | { type: 'settings'; patch: Partial<Settings> }
+  | { type: 'routine'; weekday: Weekday; patch: Partial<DayRoutine> }
   | { type: 'day'; date: ISODate; patch: Partial<DayLog> }
   | { type: 'setBlocks'; date: ISODate; blocks: ScheduleBlock[] };
 
@@ -63,6 +66,18 @@ function reducer(state: AppState, action: Action): AppState {
     case 'settings':
       return { ...state, settings: { ...state.settings, ...action.patch } };
 
+    case 'routine':
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          routines: {
+            ...state.settings.routines,
+            [action.weekday]: { ...state.settings.routines[action.weekday], ...action.patch },
+          },
+        },
+      };
+
     case 'day': {
       const existing = state.days.find((d) => d.date === action.date);
       const next: DayLog = existing
@@ -91,10 +106,45 @@ function reducer(state: AppState, action: Action): AppState {
 // Migration
 // ---------------------------------------------------------------------------
 
+/** The shape Settings had before per-day routines (version 1). */
+interface LegacySettings {
+  wakeTime?: string;
+  bedTime?: string;
+  breakfastTime?: string;
+  lunchTime?: string;
+  dinnerTime?: string;
+  workoutTime?: string;
+  readingTime?: string;
+  routines?: unknown;
+}
+
+function migrateSettings(raw: Partial<Settings> & LegacySettings): Settings {
+  const merged: Settings = { ...DEFAULT_SETTINGS, ...raw, routines: DEFAULT_ROUTINES };
+
+  if (raw.routines && typeof raw.routines === 'object') {
+    // Already on the new shape.
+    merged.routines = { ...DEFAULT_ROUTINES, ...(raw.routines as Record<Weekday, DayRoutine>) };
+  } else if (raw.wakeTime) {
+    // Version 1: one flat routine applied to every day.
+    const flat: DayRoutine = {
+      wakeTime: raw.wakeTime,
+      bedTime: raw.bedTime ?? DEFAULT_ROUTINES[1].bedTime,
+      breakfastTime: raw.breakfastTime ?? DEFAULT_ROUTINES[1].breakfastTime,
+      lunchTime: raw.lunchTime ?? DEFAULT_ROUTINES[1].lunchTime,
+      dinnerTime: raw.dinnerTime ?? DEFAULT_ROUTINES[1].dinnerTime,
+      workoutTime: raw.workoutTime,
+      readingTime: raw.readingTime ?? DEFAULT_ROUTINES[1].readingTime,
+    };
+    merged.routines = { 0: flat, 1: flat, 2: flat, 3: flat, 4: flat, 5: flat, 6: flat };
+  }
+
+  return merged;
+}
+
 /**
- * Brings a persisted blob up to the current shape. Today it only backfills
- * missing keys, which is exactly what an added feature needs; version-specific
- * transforms get their own branch as the schema evolves.
+ * Brings a persisted blob up to the current shape. Version-specific transforms
+ * get their own branch as the schema evolves; today that's the settings
+ * restructure above and backfilling any collection that did not exist yet.
  */
 function migrate(raw: AppState): AppState {
   const base = emptyState();
@@ -102,7 +152,7 @@ function migrate(raw: AppState): AppState {
     ...base,
     ...raw,
     version: STATE_VERSION,
-    settings: { ...DEFAULT_SETTINGS, ...(raw.settings ?? {}) },
+    settings: migrateSettings(raw.settings ?? {}),
   };
   // Never let a missing array crash a `.map` deep in a card.
   (Object.keys(base) as (keyof AppState)[]).forEach((k) => {
@@ -125,11 +175,12 @@ interface StoreValue {
   update: <K extends CollectionKey>(key: K, id: string, patch: Partial<RecordOf<K>>) => void;
   remove: (key: CollectionKey, id: string) => void;
   updateSettings: (patch: Partial<Settings>) => void;
+  updateRoutine: (weekday: Weekday, patch: Partial<DayRoutine>) => void;
   updateDay: (date: ISODate, patch: Partial<DayLog>) => void;
   setBlocks: (date: ISODate, blocks: ScheduleBlock[]) => void;
   replaceAll: (state: AppState) => void;
-  resetToSample: () => void;
-  resetToEmpty: () => void;
+  /** Erases every tracked record but keeps the default checklist and Orthodox rule. */
+  resetToDefaults: () => void;
 }
 
 const StoreContext = createContext<StoreValue | null>(null);
@@ -145,7 +196,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
     persistence.load().then((loaded) => {
       if (cancelled) return;
-      dispatch({ type: 'hydrate', state: loaded ? migrate(loaded) : seedState() });
+      dispatch({ type: 'hydrate', state: loaded ? migrate(loaded) : emptyState() });
       hydrated.current = true;
       setReady(true);
     });
@@ -164,7 +215,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, [state]);
 
   const add = useCallback<StoreValue['add']>((key, item) => {
-    const id = item.id ?? uid(key.slice(0, 4));
+    // Every "new record" form seeds its draft with id: '' as a sentinel, so
+    // this has to treat an empty string as absent too — `??` alone would
+    // leave every new record sharing the same blank id.
+    const id = item.id || uid(key.slice(0, 4));
     dispatch({ type: 'add', key, item: { ...item, id } as RecordOf<CollectionKey> });
     return id;
   }, []);
@@ -185,11 +239,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       update,
       remove,
       updateSettings: (patch) => dispatch({ type: 'settings', patch }),
+      updateRoutine: (weekday, patch) => dispatch({ type: 'routine', weekday, patch }),
       updateDay: (date, patch) => dispatch({ type: 'day', date, patch }),
       setBlocks: (date, blocks) => dispatch({ type: 'setBlocks', date, blocks }),
       replaceAll: (next) => dispatch({ type: 'replace', state: migrate(next) }),
-      resetToSample: () => dispatch({ type: 'replace', state: seedState() }),
-      resetToEmpty: () => dispatch({ type: 'replace', state: emptyState() }),
+      resetToDefaults: () => dispatch({ type: 'replace', state: emptyState() }),
     }),
     [state, ready, add, update, remove],
   );

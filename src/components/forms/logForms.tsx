@@ -1,8 +1,14 @@
+import { useRef, useState } from 'react';
 import { Modal, ModalActions } from '@/components/ui/Modal';
-import { Field, IconButton, Select, TextArea, TextInput, TrashIcon } from '@/components/ui/primitives';
+import { Field, IconButton, Select, TextArea, TextInput, TrashIcon, cx } from '@/components/ui/primitives';
 import { num, numOr, useFormDraft } from '@/components/forms/useFormDraft';
+import { ExerciseInput, useRememberExercise } from '@/components/lifting/ExerciseInput';
 import { durationBetween, today } from '@/lib/date';
 import { uid } from '@/lib/id';
+import { lastPerformance, personalBest, summarizeSets } from '@/lib/lifting';
+import { fastingStatus } from '@/lib/orthodoxCalendar';
+import { routineOn } from '@/lib/routine';
+import { analyzeFoodPhoto, compressPhoto, VisionError } from '@/integrations/vision/claude';
 import { useStore } from '@/store/store';
 import type {
   Book,
@@ -27,18 +33,67 @@ interface FormProps<T> {
 // ---------------------------------------------------------------------------
 
 export function MealForm({ open, onClose, initial, date = today() }: FormProps<Meal>) {
-  const { add, update } = useStore();
-  const { draft, set } = useFormDraft<Meal>(open, () =>
+  const { add, update, state } = useStore();
+  const { draft, set, setDraft } = useFormDraft<Meal>(open, () =>
     initial
       ? { ...initial }
-      : { id: '', date, type: 'breakfast', name: '', clean: true, time: '' },
+      : {
+          id: '',
+          date,
+          type: 'breakfast',
+          name: '',
+          clean: true,
+          time: '',
+          fasting: fastingStatus(date, state.settings.orthodoxCalendar).fasting,
+        },
   );
+  const todayFast = fastingStatus(draft.date, state.settings.orthodoxCalendar);
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [note, setNoteText] = useState<string | null>(null);
+  const hasKey = !!state.settings.anthropicApiKey;
 
   const save = () => {
     if (!draft.name.trim()) return;
     if (initial) update('meals', initial.id, draft);
     else add('meals', draft);
     onClose();
+  };
+
+  const onPhoto = async (file: File) => {
+    setError(null);
+    setNoteText(null);
+    try {
+      const photo = await compressPhoto(file);
+      setDraft((d) => ({ ...d, photo, analyzed: false }));
+    } catch {
+      setError('Could not read that photo.');
+    }
+  };
+
+  const analyze = async () => {
+    if (!draft.photo) return;
+    setBusy(true);
+    setError(null);
+    setNoteText(null);
+    try {
+      const result = await analyzeFoodPhoto(draft.photo, state.settings.anthropicApiKey ?? '');
+      setDraft((d) => ({
+        ...d,
+        name: d.name.trim() ? d.name : result.name,
+        calories: result.calories ?? d.calories,
+        protein: result.protein ?? d.protein,
+        carbs: result.carbs ?? d.carbs,
+        fat: result.fat ?? d.fat,
+        analyzed: true,
+      }));
+      if (result.note) setNoteText(result.note);
+    } catch (err) {
+      setError(err instanceof VisionError ? err.message : 'Something went wrong analyzing that photo.');
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -49,9 +104,64 @@ export function MealForm({ open, onClose, initial, date = today() }: FormProps<M
       footer={<ModalActions onCancel={onClose} onConfirm={save} disabled={!draft.name.trim()} />}
     >
       <div className="space-y-4">
+        <div>
+          <span className="label">Photo</span>
+          {draft.photo ? (
+            <div className="relative overflow-hidden rounded-xl border border-line">
+              <img src={draft.photo} alt="" className="max-h-56 w-full object-cover" />
+              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-black/50 p-2 backdrop-blur-sm">
+                <button
+                  type="button"
+                  className="btn-quiet !py-1 text-xs text-white hover:bg-white/10"
+                  onClick={() => setDraft((d) => ({ ...d, photo: undefined, analyzed: false }))}
+                >
+                  Remove
+                </button>
+                {hasKey ? (
+                  <button
+                    type="button"
+                    className="btn-primary !py-1 text-xs"
+                    onClick={() => void analyze()}
+                    disabled={busy}
+                  >
+                    {busy ? 'Analyzing…' : draft.analyzed ? 'Re-analyze' : '✨ Analyze with Claude'}
+                  </button>
+                ) : null}
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-line py-6 text-sm text-ink-muted hover:border-brand/40 hover:text-ink-secondary"
+              onClick={() => fileInput.current?.click()}
+            >
+              📷 Add a photo
+            </button>
+          )}
+          <input
+            ref={fileInput}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) void onPhoto(file);
+              e.target.value = '';
+            }}
+          />
+          {!hasKey && draft.photo ? (
+            <p className="mt-1.5 text-xs text-ink-muted">
+              Add an Anthropic API key in Settings to analyze photos automatically.
+            </p>
+          ) : null}
+          {error ? <p className="mt-1.5 text-xs text-critical">{error}</p> : null}
+          {note ? <p className="mt-1.5 text-xs text-ink-muted">Claude's note: {note}</p> : null}
+        </div>
+
         <Field label="What did you eat?">
           <TextInput
-            autoFocus
+            autoFocus={!draft.photo}
             value={draft.name}
             onChange={(e) => set('name', e.target.value)}
             placeholder="Chicken, rice, broccoli"
@@ -127,6 +237,11 @@ export function MealForm({ open, onClose, initial, date = today() }: FormProps<M
             />
             Kept the fast
           </label>
+          {todayFast.fasting ? (
+            <p className="pl-6 text-xs text-ink-muted">
+              {draft.date} is a fasting day{todayFast.label ? ` — ${todayFast.label}` : ''}.
+            </p>
+          ) : null}
         </div>
 
         <Field label="Notes">
@@ -146,19 +261,20 @@ export function MealForm({ open, onClose, initial, date = today() }: FormProps<M
 
 export function SleepForm({ open, onClose, initial, date = today() }: FormProps<SleepEntry>) {
   const { add, update, state } = useStore();
-  const { draft, set } = useFormDraft<SleepEntry>(open, () =>
-    initial
+  const { draft, set } = useFormDraft<SleepEntry>(open, () => {
+    const routine = routineOn(state.settings, date);
+    return initial
       ? { ...initial }
       : {
           id: '',
           date,
-          bedtime: state.settings.bedTime,
-          wakeTime: state.settings.wakeTime,
-          durationMin: durationBetween(state.settings.bedTime, state.settings.wakeTime),
+          bedtime: routine.bedTime,
+          wakeTime: routine.wakeTime,
+          durationMin: durationBetween(routine.bedTime, routine.wakeTime),
           quality: 3,
           source: state.settings.healthDevice,
-        },
-  );
+        };
+  });
 
   // Duration is always derived from the two clock times, so the trend charts
   // never disagree with what was entered.
@@ -268,6 +384,9 @@ export function SleepForm({ open, onClose, initial, date = today() }: FormProps<
 
 export function WorkoutForm({ open, onClose, initial, date = today() }: FormProps<Workout>) {
   const { add, update, state } = useStore();
+  const rememberExercise = useRememberExercise();
+  const [templateSaved, setTemplateSaved] = useState(false);
+
   const { draft, set, setDraft } = useFormDraft<Workout>(open, () =>
     initial
       ? { ...initial, exercises: initial.exercises.map((e) => ({ ...e, sets: [...e.sets] })) }
@@ -277,7 +396,7 @@ export function WorkoutForm({ open, onClose, initial, date = today() }: FormProp
           title: '',
           type: 'push',
           status: 'planned',
-          startTime: state.settings.workoutTime,
+          startTime: routineOn(state.settings, date).workoutTime ?? '16:00',
           plannedMin: 60,
           exercises: [],
         },
@@ -285,6 +404,7 @@ export function WorkoutForm({ open, onClose, initial, date = today() }: FormProp
 
   const save = () => {
     if (!draft.title.trim()) return;
+    draft.exercises.forEach((e) => rememberExercise(e.name));
     if (initial) update('workouts', initial.id, draft);
     else add('workouts', draft);
     onClose();
@@ -295,7 +415,16 @@ export function WorkoutForm({ open, onClose, initial, date = today() }: FormProp
       ...d,
       exercises: [
         ...d.exercises,
-        { id: uid('ex'), name: '', targetSets: 3, targetReps: '8-10', sets: [] },
+        {
+          id: uid('ex'),
+          name: '',
+          targetSets: 3,
+          targetReps: '8-10',
+          // Pre-populated to match targetSets, not left empty — otherwise the
+          // per-set weight/reps editor below has nothing to show until you
+          // happen to re-touch the Sets field.
+          sets: Array.from({ length: 3 }, () => ({ reps: 0, done: false })),
+        },
       ],
     }));
 
@@ -308,6 +437,39 @@ export function WorkoutForm({ open, onClose, initial, date = today() }: FormProp
   const removeExercise = (id: string) =>
     setDraft((d) => ({ ...d, exercises: d.exercises.filter((e) => e.id !== id) }));
 
+  const applyTemplate = (templateId: string) => {
+    const tpl = state.workoutTemplates.find((t) => t.id === templateId);
+    if (!tpl) return;
+    setDraft((d) => ({
+      ...d,
+      title: d.title || tpl.name,
+      type: tpl.type,
+      exercises: tpl.exercises.map((e) => ({
+        id: uid('ex'),
+        name: e.name,
+        targetSets: e.targetSets,
+        targetReps: e.targetReps,
+        sets: Array.from({ length: e.targetSets }, () => ({ reps: 0, done: false })),
+      })),
+    }));
+  };
+
+  const saveAsTemplate = () => {
+    if (!draft.title.trim() || !draft.exercises.length) return;
+    add('workoutTemplates', {
+      name: draft.title.trim(),
+      type: draft.type,
+      exercises: draft.exercises.map((e) => ({
+        name: e.name,
+        targetSets: e.targetSets,
+        targetReps: e.targetReps,
+      })),
+      createdAt: new Date().toISOString(),
+    });
+    setTemplateSaved(true);
+    setTimeout(() => setTemplateSaved(false), 2000);
+  };
+
   return (
     <Modal
       open={open}
@@ -317,6 +479,19 @@ export function WorkoutForm({ open, onClose, initial, date = today() }: FormProp
       footer={<ModalActions onCancel={onClose} onConfirm={save} disabled={!draft.title.trim()} />}
     >
       <div className="space-y-4">
+        {!initial && state.workoutTemplates.length ? (
+          <Field label="Start from a template" hint="Fills in the exercise list — nothing is saved until you press Save">
+            <Select defaultValue="" onChange={(e) => e.target.value && applyTemplate(e.target.value)}>
+              <option value="">Choose a template…</option>
+              {state.workoutTemplates.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name} ({t.exercises.length} exercises)
+                </option>
+              ))}
+            </Select>
+          </Field>
+        ) : null}
+
         <div className="grid grid-cols-2 gap-3">
           <Field label="Title" className="col-span-2">
             <TextInput
@@ -392,11 +567,19 @@ export function WorkoutForm({ open, onClose, initial, date = today() }: FormProp
         </div>
 
         <div>
-          <div className="mb-2 flex items-center justify-between">
+          <div className="mb-2 flex items-center justify-between gap-2">
             <span className="label mb-0">Exercises</span>
-            <button type="button" className="btn-ghost !py-1 text-xs" onClick={addExercise}>
-              + Add exercise
-            </button>
+            <div className="flex items-center gap-2">
+              {templateSaved ? <span className="text-xs text-good">Saved as template</span> : null}
+              {draft.exercises.length ? (
+                <button type="button" className="btn-quiet !py-1 text-xs" onClick={saveAsTemplate}>
+                  Save as template
+                </button>
+              ) : null}
+              <button type="button" className="btn-ghost !py-1 text-xs" onClick={addExercise}>
+                + Add exercise
+              </button>
+            </div>
           </div>
 
           {draft.exercises.length === 0 ? (
@@ -405,45 +588,123 @@ export function WorkoutForm({ open, onClose, initial, date = today() }: FormProp
             </p>
           ) : (
             <div className="space-y-2">
-              {draft.exercises.map((ex) => (
-                <div
-                  key={ex.id}
-                  className="grid grid-cols-[1fr_4rem_5rem_2rem] items-end gap-2 rounded-lg border border-line p-2"
-                >
-                  <Field label="Exercise">
-                    <TextInput
-                      value={ex.name}
-                      onChange={(e) => patchExercise(ex.id, { name: e.target.value })}
-                      placeholder="Bench press"
-                    />
-                  </Field>
-                  <Field label="Sets">
-                    <TextInput
-                      type="number"
-                      min={1}
-                      value={ex.targetSets}
-                      onChange={(e) => {
-                        const targetSets = numOr(e.target.value, 3);
-                        const sets = Array.from(
-                          { length: targetSets },
-                          (_, i) => ex.sets[i] ?? { reps: 0, done: false },
-                        );
-                        patchExercise(ex.id, { targetSets, sets });
-                      }}
-                    />
-                  </Field>
-                  <Field label="Reps">
-                    <TextInput
-                      value={ex.targetReps}
-                      onChange={(e) => patchExercise(ex.id, { targetReps: e.target.value })}
-                      placeholder="8-10"
-                    />
-                  </Field>
-                  <IconButton onClick={() => removeExercise(ex.id)} label="Remove exercise" tone="danger">
-                    <TrashIcon />
-                  </IconButton>
-                </div>
-              ))}
+              {draft.exercises.map((ex) => {
+                const last = ex.name.trim() ? lastPerformance(state, ex.name, draft.date) : undefined;
+                const best = ex.name.trim() ? personalBest(state, ex.name, draft.date) : undefined;
+                return (
+                  <div key={ex.id} className="rounded-lg border border-line p-2">
+                    <div className="grid grid-cols-[1fr_4rem_5rem_2rem] items-end gap-2">
+                      <Field label="Exercise">
+                        <ExerciseInput
+                          value={ex.name}
+                          onChange={(name) => patchExercise(ex.id, { name })}
+                        />
+                      </Field>
+                      <Field label="Sets">
+                        <TextInput
+                          type="number"
+                          min={1}
+                          value={ex.targetSets}
+                          onChange={(e) => {
+                            const targetSets = numOr(e.target.value, 3);
+                            const sets = Array.from(
+                              { length: targetSets },
+                              (_, i) => ex.sets[i] ?? { reps: 0, done: false },
+                            );
+                            patchExercise(ex.id, { targetSets, sets });
+                          }}
+                        />
+                      </Field>
+                      <Field label="Reps">
+                        <TextInput
+                          value={ex.targetReps}
+                          onChange={(e) => patchExercise(ex.id, { targetReps: e.target.value })}
+                          placeholder="8-10"
+                        />
+                      </Field>
+                      <IconButton onClick={() => removeExercise(ex.id)} label="Remove exercise" tone="danger">
+                        <TrashIcon />
+                      </IconButton>
+                    </div>
+                    {last || best ? (
+                      <p className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-ink-muted">
+                        {last ? (
+                          <span>
+                            Last time: {summarizeSets(last.sets, state.settings.weightUnit)}
+                          </span>
+                        ) : null}
+                        {best ? (
+                          <span>
+                            PR: {best.weight}
+                            {state.settings.weightUnit}×{best.reps}
+                          </span>
+                        ) : null}
+                      </p>
+                    ) : null}
+                    {ex.sets.length ? (
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {ex.sets.map((s, i) => (
+                          <div
+                            key={i}
+                            className={cx(
+                              'flex items-center gap-1 rounded-md border px-1.5 py-1',
+                              s.done ? 'border-s2 bg-s2/10' : 'border-line',
+                            )}
+                          >
+                            <span className="w-3 text-center text-[10px] text-ink-muted">{i + 1}</span>
+                            <input
+                              type="number"
+                              inputMode="decimal"
+                              value={s.weight ?? ''}
+                              onChange={(ev) => {
+                                const sets = ex.sets.map((set, si) =>
+                                  si === i ? { ...set, weight: ev.target.valueAsNumber || undefined } : set,
+                                );
+                                patchExercise(ex.id, { sets });
+                              }}
+                              placeholder="0"
+                              aria-label={`${ex.name || 'Exercise'} set ${i + 1} weight`}
+                              className="w-10 rounded border-0 bg-transparent text-right text-xs tabular-nums text-ink focus:outline-none focus:ring-1 focus:ring-brand/40"
+                            />
+                            <span className="text-[10px] text-ink-muted">{state.settings.weightUnit}×</span>
+                            <input
+                              type="number"
+                              inputMode="numeric"
+                              value={s.reps || ''}
+                              onChange={(ev) => {
+                                const sets = ex.sets.map((set, si) =>
+                                  si === i ? { ...set, reps: ev.target.valueAsNumber || 0 } : set,
+                                );
+                                patchExercise(ex.id, { sets });
+                              }}
+                              placeholder="0"
+                              aria-label={`${ex.name || 'Exercise'} set ${i + 1} reps`}
+                              className="w-8 rounded border-0 bg-transparent text-right text-xs tabular-nums text-ink focus:outline-none focus:ring-1 focus:ring-brand/40"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const sets = ex.sets.map((set, si) =>
+                                  si === i ? { ...set, done: !set.done } : set,
+                                );
+                                patchExercise(ex.id, { sets });
+                              }}
+                              aria-label={`Mark ${ex.name || 'exercise'} set ${i + 1} done`}
+                              aria-pressed={s.done}
+                              className={cx(
+                                'flex h-5 w-5 items-center justify-center rounded transition-colors',
+                                s.done ? 'bg-s2 text-white' : 'border border-line text-ink-muted',
+                              )}
+                            >
+                              {s.done ? '✓' : ''}
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>

@@ -1,5 +1,6 @@
 import { addDays, today, weekDates } from '@/lib/date';
 import { meetingsOn } from '@/lib/selectors';
+import { fastDaysInWeek } from '@/lib/orthodoxCalendar';
 import type { AppState, Goal, Habit, ISODate } from '@/types';
 
 /** Consecutive days ending today (or yesterday, if today is still open). */
@@ -37,8 +38,16 @@ export function habitStreak(state: AppState, habit: Habit, weekStart: ISODate): 
     prev = d;
   });
 
-  const weekDone = weekDates(weekStart).filter((d) => done.has(d)).length;
-  return { current, longest, weekDone, weekTarget: habit.targetPerWeek };
+  const dates = weekDates(weekStart);
+  const weekDone = dates.filter((d) => done.has(d)).length;
+  // The Fasting habit's real weekly target moves with the liturgical calendar
+  // — a feast week can have zero fast days — so it is computed rather than
+  // read from the habit's static targetPerWeek.
+  const weekTarget =
+    habit.group === 'orthodox' && habit.name === 'Fasting'
+      ? fastDaysInWeek(dates, state.settings.orthodoxCalendar)
+      : habit.targetPerWeek;
+  return { current, longest, weekDone, weekTarget };
 }
 
 export interface DayPoint {

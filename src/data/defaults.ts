@@ -1,10 +1,14 @@
 import { uid } from '@/lib/id';
-import type { Habit, Settings } from '@/types';
+import type { DayRoutine, Habit, Settings, Weekday } from '@/types';
 
-export const DEFAULT_SETTINGS: Settings = {
-  name: '',
-  theme: 'system',
-  weekStartsOn: 0,
+const now = () => new Date().toISOString();
+
+/**
+ * A reasonable starting rhythm. Every field is meant to be edited — the whole
+ * point of per-day routines is that a Tuesday and a Saturday rarely look
+ * alike, and this is just where a new day starts before you say otherwise.
+ */
+const WEEKDAY_ROUTINE: DayRoutine = {
   wakeTime: '06:30',
   bedTime: '22:30',
   breakfastTime: '07:15',
@@ -12,8 +16,33 @@ export const DEFAULT_SETTINGS: Settings = {
   dinnerTime: '18:30',
   workoutTime: '16:00',
   readingTime: '20:30',
-  schoolStart: '08:00',
-  schoolEnd: '15:00',
+};
+
+const WEEKEND_ROUTINE: DayRoutine = {
+  wakeTime: '08:00',
+  bedTime: '23:00',
+  breakfastTime: '09:00',
+  lunchTime: '13:00',
+  dinnerTime: '18:30',
+  workoutTime: '10:00',
+  readingTime: '20:00',
+};
+
+export const DEFAULT_ROUTINES: Record<Weekday, DayRoutine> = {
+  0: { ...WEEKEND_ROUTINE },
+  1: { ...WEEKDAY_ROUTINE },
+  2: { ...WEEKDAY_ROUTINE },
+  3: { ...WEEKDAY_ROUTINE },
+  4: { ...WEEKDAY_ROUTINE },
+  5: { ...WEEKDAY_ROUTINE },
+  6: { ...WEEKEND_ROUTINE },
+};
+
+export const DEFAULT_SETTINGS: Settings = {
+  name: '',
+  theme: 'system',
+  weekStartsOn: 0,
+  routines: DEFAULT_ROUTINES,
   focusBlockMin: 50,
   breakMin: 10,
   waterGoalCups: 8,
@@ -24,9 +53,10 @@ export const DEFAULT_SETTINGS: Settings = {
   stepGoal: 10000,
   workoutsPerWeekGoal: 5,
   healthDevice: 'apple-watch',
+  weightUnit: 'lb',
+  restTimerSec: 90,
+  orthodoxCalendar: 'new',
 };
-
-const now = () => new Date().toISOString();
 
 function habit(
   name: string,
@@ -56,7 +86,7 @@ export function defaultImprovementHabits(): Habit[] {
   return [
     habit('Wake up on time', 'improvement', '☀️', 1, { anchorTime: '06:30', durationMin: 20 }),
     // No anchor time: the Orthodox "Prayer rule" practice owns that block on
-    // the schedule, and two prayer blocks at 6:45 would be one too many.
+    // the schedule, and two prayer blocks at the same time would be one too many.
     habit('Morning prayer', 'improvement', '🕯️', 2),
     habit('Read', 'improvement', '📖', 3),
     habit('Workout', 'improvement', '🏋️', 4, { targetPerWeek: 5 }),
@@ -69,7 +99,11 @@ export function defaultImprovementHabits(): Habit[] {
   ];
 }
 
-/** The Orthodox rule of life from the brief. */
+/**
+ * The Orthodox rule of life from the brief. `targetPerWeek` here is a display
+ * default only — actual fasting days are computed from the real liturgical
+ * calendar (`src/lib/orthodoxCalendar.ts`), not hardcoded to Wednesday/Friday.
+ */
 export function defaultOrthodoxHabits(): Habit[] {
   return [
     habit('Prayer rule', 'orthodox', '📿', 1, {
@@ -87,7 +121,7 @@ export function defaultOrthodoxHabits(): Habit[] {
     }),
     habit('Fasting', 'orthodox', '🍞', 4, {
       targetPerWeek: 2,
-      notes: 'Wednesday and Friday, plus fasting seasons.',
+      notes: 'Kept according to the Church calendar — see Today for what applies.',
     }),
     habit('Church attendance', 'orthodox', '⛪', 5, {
       targetPerWeek: 1,

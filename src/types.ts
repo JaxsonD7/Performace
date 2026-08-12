@@ -11,6 +11,8 @@
 export type ISODate = string;
 /** 24h clock time: "HH:MM". */
 export type ClockTime = string;
+/** 0 = Sunday, matching Date#getDay(). */
+export type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 export type LifeArea =
   | 'faith'
@@ -100,6 +102,10 @@ export interface Meal {
   /** True when the meal was kept within a fasting rule (Orthodox fast days). */
   fasting?: boolean;
   notes?: string;
+  /** A compressed data URL — the visual record, and the input to photo analysis. */
+  photo?: string;
+  /** Set once Claude Vision has filled in the fields below from the photo. */
+  analyzed?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -152,7 +158,51 @@ export interface Exercise {
   targetSets: number;
   targetReps: string;
   sets: ExerciseSet[];
+  /** Seconds to rest after this exercise's sets. Falls back to the global default. */
+  restSec?: number;
   notes?: string;
+}
+
+// ---------------------------------------------------------------------------
+// Exercise library
+// ---------------------------------------------------------------------------
+
+export type MuscleGroup =
+  | 'chest'
+  | 'back'
+  | 'shoulders'
+  | 'biceps'
+  | 'triceps'
+  | 'quads'
+  | 'hamstrings'
+  | 'glutes'
+  | 'calves'
+  | 'core'
+  | 'full-body'
+  | 'cardio';
+
+export interface ExerciseDef {
+  id: string;
+  name: string;
+  muscles: MuscleGroup[];
+  equipment?: string;
+  /** True for exercises the user added; false for the built-in library. */
+  custom: boolean;
+}
+
+/** A saved list of exercises you can drop into a new workout in one tap. */
+export interface WorkoutTemplateExercise {
+  name: string;
+  targetSets: number;
+  targetReps: string;
+}
+
+export interface WorkoutTemplate {
+  id: string;
+  name: string;
+  type: WorkoutType;
+  exercises: WorkoutTemplateExercise[];
+  createdAt: string;
 }
 
 export interface Workout {
@@ -212,8 +262,23 @@ export interface Course {
   id: string;
   name: string;
   code?: string;
+  instructor?: string;
   /** Categorical slot index 1-8 so a course keeps its color everywhere. */
   colorSlot: number;
+}
+
+/**
+ * A recurring class meeting — the schedule only ever shows class time you have
+ * explicitly told it about, whether typed in by hand or pulled from a syllabus.
+ * Nothing is inferred or auto-filled.
+ */
+export interface CourseMeeting {
+  id: string;
+  courseId: string;
+  weekday: Weekday;
+  startTime: ClockTime;
+  endTime: ClockTime;
+  location?: string;
 }
 
 export interface Assignment {
@@ -317,7 +382,16 @@ export type BlockKind =
 
 /** Which record a generated block came from, so edits can flow back. */
 export interface BlockSource {
-  type: 'task' | 'assignment' | 'meeting' | 'workout' | 'habit' | 'reading' | 'meal' | 'manual';
+  type:
+    | 'task'
+    | 'assignment'
+    | 'meeting'
+    | 'workout'
+    | 'habit'
+    | 'reading'
+    | 'meal'
+    | 'course'
+    | 'manual';
   id?: string;
 }
 
@@ -353,21 +427,35 @@ export interface DayLog {
 // ---------------------------------------------------------------------------
 
 export type ThemePreference = 'system' | 'light' | 'dark';
+export type WeightUnit = 'lb' | 'kg';
+/** Fixed feasts on the civil (Gregorian) date most US jurisdictions use, or
+ * the all-Julian dates some jurisdictions keep. Pascha follows the same
+ * Paschalion either way — only the fixed feasts and fasts shift. */
+export type OrthodoxCalendar = 'new' | 'old';
+
+/**
+ * One day's rhythm. Every field is optional here so a day can override just
+ * what's different about it (a Saturday with no workout time, say) while
+ * `DEFAULT_ROUTINE` fills the rest — see `resolveRoutine`.
+ */
+export interface DayRoutine {
+  wakeTime: ClockTime;
+  bedTime: ClockTime;
+  breakfastTime: ClockTime;
+  lunchTime: ClockTime;
+  dinnerTime: ClockTime;
+  /** Unset means no workout anchor is placed that day. */
+  workoutTime?: ClockTime;
+  readingTime: ClockTime;
+}
 
 export interface Settings {
   name: string;
   theme: ThemePreference;
   /** 0 = Sunday. Orthodox weeks and US school weeks both start Sunday. */
   weekStartsOn: 0 | 1;
-  wakeTime: ClockTime;
-  bedTime: ClockTime;
-  breakfastTime: ClockTime;
-  lunchTime: ClockTime;
-  dinnerTime: ClockTime;
-  workoutTime: ClockTime;
-  readingTime: ClockTime;
-  schoolStart: ClockTime;
-  schoolEnd: ClockTime;
+  /** One routine per weekday — wake/sleep/meal times are rarely the same every day. */
+  routines: Record<Weekday, DayRoutine>;
   /** Longest stretch of focused work the scheduler will place at once. */
   focusBlockMin: number;
   breakMin: number;
@@ -380,6 +468,16 @@ export interface Settings {
   workoutsPerWeekGoal: number;
   /** Which device the health numbers are expected to come from. */
   healthDevice: DataSource;
+  weightUnit: WeightUnit;
+  /** Default rest between sets, in seconds — the rest timer starts here. */
+  restTimerSec: number;
+  orthodoxCalendar: OrthodoxCalendar;
+  /**
+   * Stored only in this browser and sent only to Anthropic, straight from your
+   * device, when you ask the app to analyze a meal photo. Never touches any
+   * server of this app's own.
+   */
+  anthropicApiKey?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -396,9 +494,12 @@ export interface AppState {
   meals: Meal[];
   sleep: SleepEntry[];
   workouts: Workout[];
+  workoutTemplates: WorkoutTemplate[];
+  customExercises: ExerciseDef[];
   books: Book[];
   reading: ReadingSession[];
   courses: Course[];
+  courseMeetings: CourseMeeting[];
   assignments: Assignment[];
   meetings: Meeting[];
   goals: Goal[];
@@ -415,9 +516,12 @@ export type CollectionKey =
   | 'meals'
   | 'sleep'
   | 'workouts'
+  | 'workoutTemplates'
+  | 'customExercises'
   | 'books'
   | 'reading'
   | 'courses'
+  | 'courseMeetings'
   | 'assignments'
   | 'meetings'
   | 'goals'
