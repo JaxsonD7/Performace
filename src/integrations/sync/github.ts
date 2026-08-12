@@ -74,3 +74,22 @@ export async function pushSyncGist(token: string, gistId: string, content: strin
     token,
   );
 }
+
+/**
+ * Best-effort push for the moment a tab is backgrounded or closed — `fetch`
+ * with `keepalive: true` is the one request type browsers let outlive page
+ * teardown, which a normal debounced push cannot survive if the tab is
+ * closed before its timer fires. Not awaited by design (there is nowhere
+ * left to report an error to by the time this runs) and skipped for payloads
+ * over ~60KB, since keepalive requests carry the same body-size ceiling most
+ * browsers impose on `navigator.sendBeacon`.
+ */
+export function flushSyncGist(token: string, gistId: string, content: string): void {
+  if (content.length > 60_000) return;
+  fetch(`${API}/gists/${gistId}`, {
+    method: 'PATCH',
+    headers: headers(token),
+    body: JSON.stringify({ files: { [FILE_NAME]: { content } } }),
+    keepalive: true,
+  }).catch(() => {});
+}

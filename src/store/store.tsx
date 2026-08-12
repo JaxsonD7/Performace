@@ -13,7 +13,7 @@ import { persistence } from '@/data/persistence';
 import { emptyState, STATE_VERSION } from '@/data/seed';
 import { DEFAULT_ROUTINES, DEFAULT_SETTINGS, defaultQuickActions } from '@/data/defaults';
 import { uid } from '@/lib/id';
-import { createSyncGist, fetchSyncGist, pushSyncGist, SyncError } from '@/integrations/sync/github';
+import { createSyncGist, fetchSyncGist, flushSyncGist, pushSyncGist, SyncError } from '@/integrations/sync/github';
 import type {
   AppState,
   Assignment,
@@ -370,22 +370,60 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   // Load once on mount. Nothing is written back until this finishes, so a slow
   // read can never be overwritten by the empty initial state.
+  //
+  // When sync is configured, the remote copy is fetched and compared *before*
+  // the app ever becomes interactive, and whichever side wins is what gets
+  // hydrated — not "hydrate local, then correct it a moment later." That
+  // matters: if the app went interactive on stale local data first, a tap in
+  // the window before the pull resolved would stamp a fresh `updatedAt` on
+  // that stale copy, making it look newer than the real remote state and
+  // winning a comparison it should have lost. This is the fix for devices
+  // that "don't stay in sync" — the previous flow had exactly this race.
   useEffect(() => {
     let cancelled = false;
-    persistence.load().then((loaded) => {
+    (async () => {
+      const loaded = await persistence.load();
       if (cancelled) return;
-      const initial = loaded ? migrate(loaded) : emptyState();
+      let initial = loaded ? migrate(loaded) : emptyState();
+      const { githubToken, syncGistId } = initial.settings;
+      let pushAfter = false;
+
+      if (githubToken && syncGistId) {
+        setSync({ connected: true, state: 'syncing' });
+        try {
+          const remote = await pullRemote(githubToken, syncGistId);
+          if (cancelled) return;
+          if (remote && remote.updatedAt > initial.updatedAt) {
+            initial = attachSyncCreds(remote, githubToken, syncGistId);
+            settledUpdatedAt.current = initial.updatedAt;
+          } else {
+            pushAfter = true;
+          }
+        } catch (err) {
+          // A startup network hiccup should not block opening the app on
+          // whatever is already on disk — surface it, keep going.
+          setSync({
+            connected: true,
+            state: 'error',
+            error: err instanceof SyncError ? err.message : 'Sync failed.',
+          });
+          pushAfter = true;
+        }
+      }
+
       dispatch({ type: 'hydrate', state: initial });
       hydrated.current = true;
       setReady(true);
-      if (initial.settings.githubToken && initial.settings.syncGistId) {
-        setSync({ connected: true, state: 'idle' });
-        void reconcile(initial.settings.githubToken, initial.settings.syncGistId);
+
+      if (githubToken && syncGistId) {
+        if (pushAfter) await pushLocal(githubToken, syncGistId, initial);
+        else setSync({ connected: true, state: 'idle', lastSyncedAt: Date.now() });
       }
-    });
+    })();
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Persist on every change, debounced so a burst of checkbox taps writes once.
@@ -410,6 +448,56 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }, 2500);
     return () => clearTimeout(handle);
   }, [state]);
+
+  // A debounced push can lose the race against the tab actually closing —
+  // backgrounding a phone app seconds after an edit is completely normal
+  // usage, and 2.5s is an eternity next to that. `visibilitychange` firing
+  // "hidden" and `pagehide` both catch it; a keepalive fetch is the one
+  // request shape allowed to outlive the page teardown that follows.
+  useEffect(() => {
+    const { githubToken, syncGistId } = state.settings;
+    if (!hydrated.current || !githubToken || !syncGistId) return;
+    if (settledUpdatedAt.current === state.updatedAt) return;
+
+    const flush = () => {
+      if (document.visibilityState !== 'hidden') return;
+      if (settledUpdatedAt.current === state.updatedAt) return;
+      flushSyncGist(githubToken, syncGistId, JSON.stringify(stripSyncCreds(state)));
+      // Optimistic: a keepalive request's outcome can't be observed from
+      // here, so this is marked settled on send rather than confirmed
+      // delivery. Worse case is an unnecessary re-push next time the tab
+      // opens, not a lost edit.
+      settledUpdatedAt.current = state.updatedAt;
+    };
+
+    document.addEventListener('visibilitychange', flush);
+    window.addEventListener('pagehide', flush);
+    return () => {
+      document.removeEventListener('visibilitychange', flush);
+      window.removeEventListener('pagehide', flush);
+    };
+  }, [state]);
+
+  // Re-check the gist whenever an already-open tab comes back to the
+  // foreground — leaving the app open all day and alt-tabbing back should
+  // not mean staring at a copy from this morning. Throttled so rapid tab
+  // switching doesn't hammer the API.
+  useEffect(() => {
+    const { githubToken, syncGistId } = state.settings;
+    if (!githubToken || !syncGistId) return;
+    let lastCheck = Date.now();
+
+    const onForeground = () => {
+      if (document.visibilityState !== 'visible') return;
+      if (Date.now() - lastCheck < 15_000) return;
+      lastCheck = Date.now();
+      void reconcile(githubToken, syncGistId);
+    };
+
+    document.addEventListener('visibilitychange', onForeground);
+    return () => document.removeEventListener('visibilitychange', onForeground);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.settings.githubToken, state.settings.syncGistId]);
 
   /** Pushes this device's current copy up, marking it settled on success. */
   const pushLocal = useCallback(async (token: string, gistId: string, toPush: AppState) => {

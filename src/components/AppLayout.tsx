@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet } from 'react-router-dom';
 import { cx } from '@/components/ui/primitives';
 import { dayScore } from '@/lib/metrics';
 import { formatDate, today } from '@/lib/date';
-import { useStore } from '@/store/store';
+import { useStore, type SyncStatus } from '@/store/store';
 
 interface NavItem {
   to: string;
@@ -29,7 +29,7 @@ const MOBILE_NAV_LABELS = ['Home', 'Today', 'Schedule', 'School & Tasks', 'Goals
 const MOBILE_NAV = MOBILE_NAV_LABELS.map((label) => NAV.find((n) => n.label === label)!);
 
 export function AppLayout() {
-  const { state } = useStore();
+  const { state, sync } = useStore();
   const [drawer, setDrawer] = useState(false);
   const score = dayScore(state, today());
 
@@ -43,7 +43,7 @@ export function AppLayout() {
             <SideLink key={item.to} item={item} />
           ))}
         </nav>
-        <Footprint />
+        <Footprint sync={sync} />
       </aside>
 
       {/* --- Mobile top bar --- */}
@@ -52,14 +52,19 @@ export function AppLayout() {
           <p className="text-sm font-semibold text-ink">Performace</p>
           <p className="text-xs text-ink-muted">{formatDate(today(), { month: 'short', day: 'numeric', weekday: 'short' })}</p>
         </div>
-        <button
-          type="button"
-          className="btn-ghost"
-          onClick={() => setDrawer((d) => !d)}
-          aria-expanded={drawer}
-        >
-          {drawer ? 'Close' : 'More'}
-        </button>
+        <div className="flex items-center gap-2">
+          <Link to="/settings" aria-label="Sync status" className="shrink-0">
+            <SyncDot sync={sync} />
+          </Link>
+          <button
+            type="button"
+            className="btn-ghost"
+            onClick={() => setDrawer((d) => !d)}
+            aria-expanded={drawer}
+          >
+            {drawer ? 'Close' : 'More'}
+          </button>
+        </div>
       </header>
 
       {drawer ? (
@@ -177,12 +182,62 @@ function Brand({ score }: { score: number }) {
   );
 }
 
-function Footprint() {
+function SyncDot({ sync }: { sync: SyncStatus }) {
+  if (!sync.connected) {
+    return <span className="h-2 w-2 rounded-full bg-ink-muted" aria-hidden="true" title="Not syncing" />;
+  }
+  if (sync.state === 'error') {
+    return <span className="h-2 w-2 rounded-full bg-critical" aria-hidden="true" title="Sync error" />;
+  }
+  if (sync.state === 'syncing') {
+    return <span className="h-2 w-2 animate-pulse rounded-full bg-s1" aria-hidden="true" title="Syncing" />;
+  }
+  return (
+    <span
+      className="h-2 w-2 rounded-full bg-good"
+      style={{ boxShadow: '0 0 5px calc(1px * var(--glow-strength)) rgb(var(--good) / var(--glow-strength))' }}
+      aria-hidden="true"
+      title="Synced"
+    />
+  );
+}
+
+function Footprint({ sync }: { sync: SyncStatus }) {
   return (
     <div className="border-t border-line px-5 py-3">
-      <p className="text-[11px] leading-relaxed text-ink-muted">
-        Local-first — everything stays in this browser.
-      </p>
+      {!sync.connected ? (
+        <Link
+          to="/settings"
+          className="flex items-center gap-1.5 text-[11px] leading-relaxed text-ink-muted transition-colors hover:text-brand"
+        >
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-ink-muted" aria-hidden="true" />
+          <span>This device isn't syncing — connect it →</span>
+        </Link>
+      ) : sync.state === 'error' ? (
+        <Link
+          to="/settings"
+          className="flex items-center gap-1.5 text-[11px] leading-relaxed text-critical hover:underline"
+        >
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-critical" aria-hidden="true" />
+          <span>Sync error — check Settings</span>
+        </Link>
+      ) : sync.state === 'syncing' ? (
+        <p className="flex items-center gap-1.5 text-[11px] leading-relaxed text-ink-muted">
+          <span className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-s1" aria-hidden="true" />
+          <span>Syncing…</span>
+        </p>
+      ) : (
+        <p className="flex items-center gap-1.5 text-[11px] leading-relaxed text-ink-muted">
+          <span
+            className="h-1.5 w-1.5 shrink-0 rounded-full bg-good"
+            style={{ boxShadow: '0 0 5px calc(1px * var(--glow-strength)) rgb(var(--good) / var(--glow-strength))' }}
+            aria-hidden="true"
+          />
+          <span>
+            Synced{sync.lastSyncedAt ? ` · ${new Date(sync.lastSyncedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}` : ''}
+          </span>
+        </p>
+      )}
     </div>
   );
 }
