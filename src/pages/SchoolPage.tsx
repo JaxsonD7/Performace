@@ -23,6 +23,8 @@ import {
   cx,
 } from '@/components/ui/primitives';
 import { StatTile } from '@/components/ui/charts';
+import { CalendarImportModal } from '@/components/school/CalendarImportModal';
+import { downloadIcs } from '@/integrations/calendar/export';
 import { formatDuration, formatTime, relativeDay, today } from '@/lib/date';
 import { courseGrade, letterGrade } from '@/lib/grades';
 import { WEEKDAY_SHORT } from '@/lib/routine';
@@ -320,6 +322,7 @@ function TasksTab() {
 function MeetingsTab() {
   const { state, remove } = useStore();
   const [modal, setModal] = useState<{ open: boolean; item?: Meeting }>({ open: false });
+  const [importOpen, setImportOpen] = useState(false);
   const upcoming = useMemo(() => upcomingMeetings(state, today(), 14), [state]);
 
   return (
@@ -328,13 +331,21 @@ function MeetingsTab() {
         title="Next two weeks"
         icon="👥"
         action={
-          <button
-            type="button"
-            className="btn-primary !py-1 text-xs"
-            onClick={() => setModal({ open: true })}
-          >
-            + Event
-          </button>
+          <div className="flex items-center gap-2">
+            <button type="button" className="btn-ghost !py-1 text-xs" onClick={() => setImportOpen(true)}>
+              Import .ics
+            </button>
+            <button type="button" className="btn-ghost !py-1 text-xs" onClick={() => downloadIcs(state)}>
+              Export .ics
+            </button>
+            <button
+              type="button"
+              className="btn-primary !py-1 text-xs"
+              onClick={() => setModal({ open: true })}
+            >
+              + Event
+            </button>
+          </div>
         }
       />
       {upcoming.length ? (
@@ -370,6 +381,7 @@ function MeetingsTab() {
         <EmptyState message="No meetings or club events coming up." />
       )}
       <MeetingForm open={modal.open} onClose={() => setModal({ open: false })} initial={modal.item} />
+      <CalendarImportModal open={importOpen} onClose={() => setImportOpen(false)} />
     </Card>
   );
 }

@@ -1,3 +1,4 @@
+import { parseIcs, type IcsParseResult } from '@/integrations/calendar/ics';
 import type { Meeting } from '@/types';
 
 /**
@@ -10,14 +11,15 @@ import type { Meeting } from '@/types';
 export interface CalendarImporter {
   name: string;
   accepts: string[];
-  parse(file: File): Promise<Meeting[]>;
+  parse(file: File): Promise<IcsParseResult>;
 }
 
 export const icsImporter: CalendarImporter = {
   name: 'Calendar file (.ics)',
   accepts: ['.ics'],
-  async parse() {
-    throw new Error('Calendar import is not wired up yet — add events by hand for now.');
+  async parse(file) {
+    const text = await file.text();
+    return parseIcs(text);
   },
 };
 

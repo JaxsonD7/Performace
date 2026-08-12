@@ -12,6 +12,7 @@ import { SettingsPage } from '@/pages/SettingsPage';
 import { TodayPage } from '@/pages/TodayPage';
 import { UpdateBanner } from '@/pwa/UpdateBanner';
 import { RestTimerHost } from '@/components/lifting/RestTimer';
+import { NotificationHost } from '@/components/notifications/NotificationHost';
 import { ToastHost } from '@/components/ui/Toast';
 import { useStore } from '@/store/store';
 
@@ -55,6 +56,7 @@ export function App() {
       <UpdateBanner />
       <RestTimerHost />
       <ToastHost />
+      <NotificationHost />
     </>
   );
 }

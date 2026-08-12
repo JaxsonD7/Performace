@@ -17,6 +17,7 @@ import {
   importJSONFile,
 } from '@/integrations/export/exporters';
 import { AppCard } from '@/pwa/AppCard';
+import { requestPermission } from '@/integrations/notifications';
 import { WEEKDAYS, WEEKDAY_NAMES, WEEKDAY_SHORT } from '@/lib/routine';
 import { useStore } from '@/store/store';
 import type { CollectionKey, DataSource, DayRoutine, OrthodoxCalendar, Settings, ThemePreference, Weekday, WeightUnit } from '@/types';
@@ -133,6 +134,7 @@ export function SettingsPage() {
           <AppCard />
           <CloudSyncCard />
 
+          <NotificationsCard />
           <OrthodoxCalendarCard />
           <ClaudeVisionCard />
 
@@ -302,27 +304,26 @@ export function SettingsPage() {
         </div>
 
         <Card>
-          <CardHeader title="What comes next" icon="🔌" subtitle="Where each future feature plugs in." />
+          <CardHeader
+            title="Already wired up"
+            icon="✓"
+            subtitle="Apple Watch, calendar, reminders, exports — all live, all in this settings page."
+          />
           <div className="card-pad grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <Seam
-              title="Apple Watch Ultra import"
-              path="src/integrations/health"
-              body="Export from Health on iPhone, parse the XML, merge days into the health table."
+              title="Apple Watch pairing"
+              path="Health & Gym → Watch"
+              body="Shortcut push for daily numbers, or a one-time Health export for history."
             />
             <Seam
-              title="Calendar import"
-              path="src/integrations/calendar"
-              body="Parse .ics into Meetings; the planner already treats them as fixed."
+              title="Calendar import / export"
+              path="School & Tasks → Meetings"
+              body="Bring in a .ics from any calendar app, or export meetings, classes, and due dates to one."
             />
             <Seam
-              title="Notifications"
-              path="src/integrations/notifications"
-              body="Turn today's blocks into reminders once permission is granted."
-            />
-            <Seam
-              title="AI daily schedules"
-              path="src/integrations/ai"
-              body="Implement DayPlanner.plan and the pages pick it up unchanged."
+              title="Reminders"
+              path="Settings → Reminders"
+              body="Browser notifications a few minutes before each block — while this tab is open."
             />
             <Seam
               title="Charts & reports"
@@ -331,9 +332,19 @@ export function SettingsPage() {
             />
             <Seam
               title="CSV / PDF export"
-              path="src/integrations/export"
-              body="CSV works now; PDF goes through the browser's print dialog."
+              path="Settings → Your data"
+              body="CSV per table, a full JSON backup, or print-to-PDF."
             />
+          </div>
+          <div className="card-pad pt-0">
+            <p className="text-xs text-ink-muted">
+              Still just a seam:{' '}
+              <code className="rounded bg-raised px-1 text-brand">src/integrations/ai</code> — an AI
+              day-planner that would replace the rules-based scheduler. Left alone on purpose: this
+              app's whole point is that nothing about your day gets guessed, and an AI planner is
+              exactly a kind of guess. If you want that anyway, say the word and how much control it
+              should have.
+            </p>
           </div>
         </Card>
       </PageBody>
@@ -632,6 +643,75 @@ function CloudSyncCard() {
             </p>
           </>
         )}
+      </div>
+    </Card>
+  );
+}
+
+function NotificationsCard() {
+  const { state, updateSettings } = useStore();
+  const [error, setError] = useState<string | null>(null);
+  const supported = typeof window !== 'undefined' && 'Notification' in window;
+  const permission = supported ? Notification.permission : 'denied';
+  const enabled = state.settings.notificationsEnabled;
+
+  const enable = async () => {
+    setError(null);
+    if (!supported) {
+      setError('This browser does not support notifications.');
+      return;
+    }
+    const granted = await requestPermission();
+    if (!granted) {
+      setError('Permission was not granted — check your browser/site notification settings.');
+      return;
+    }
+    updateSettings({ notificationsEnabled: true });
+  };
+
+  return (
+    <Card>
+      <CardHeader
+        title="Reminders"
+        icon="🔔"
+        action={enabled && permission === 'granted' ? <Badge tone="good">✓ On</Badge> : null}
+      />
+      <div className="card-pad space-y-3">
+        <p className="text-xs text-ink-muted">
+          Fires a browser notification a few minutes before each schedule block starts — but only
+          while this tab is open. A static site has no push server, so this can't wake your phone
+          from your pocket; it's for while the app is up on a screen in front of you.
+        </p>
+        {enabled && permission === 'granted' ? (
+          <div className="flex items-center gap-3">
+            <Field label="Lead time (min)" className="max-w-[8rem]">
+              <TextInput
+                type="number"
+                min={1}
+                max={60}
+                value={state.settings.notificationLeadMin}
+                onChange={(e) => updateSettings({ notificationLeadMin: Math.max(1, numOr(e.target.value, 5)) })}
+              />
+            </Field>
+            <button
+              type="button"
+              className="btn-ghost mt-5 !py-1 text-xs"
+              onClick={() => updateSettings({ notificationsEnabled: false })}
+            >
+              Turn off
+            </button>
+          </div>
+        ) : (
+          <button type="button" className="btn-primary" onClick={() => void enable()}>
+            Enable reminders
+          </button>
+        )}
+        {permission === 'denied' && supported ? (
+          <p className="text-xs text-critical">
+            Notifications are blocked for this site — re-enable them in your browser's site settings.
+          </p>
+        ) : null}
+        {error ? <p className="text-xs text-critical">{error}</p> : null}
       </div>
     </Card>
   );

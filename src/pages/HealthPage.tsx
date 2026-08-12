@@ -588,6 +588,24 @@ function WatchTab({ shortcutData }: { shortcutData?: string }) {
 
   return (
     <div className="space-y-4">
+      {!state.health.length ? (
+        <Card>
+          <div className="card-pad flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-ink">⌚ Pair your Apple Watch</p>
+              <p className="mt-0.5 max-w-md text-xs text-ink-secondary">
+                No app can talk to the Watch directly over Bluetooth — the real "pairing" here is a
+                Shortcut that pushes today's numbers in one tap, or a one-time Health export for
+                everything before today.
+              </p>
+            </div>
+            <button type="button" className="btn-primary shrink-0" onClick={() => setImportOpen(true)}>
+              Set it up
+            </button>
+          </div>
+        </Card>
+      ) : null}
+
       <Card>
         <CardHeader
           title="Steps this week"
@@ -630,7 +648,7 @@ function WatchTab({ shortcutData }: { shortcutData?: string }) {
                 className="btn-ghost !py-1 text-xs"
                 onClick={() => setImportOpen(true)}
               >
-                Import
+                Pair / Import
               </button>
               <button
                 type="button"

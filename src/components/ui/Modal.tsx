@@ -1,9 +1,18 @@
 import { useEffect, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 
 /**
  * A single dialog shell for every add/edit form in the app. It traps nothing
  * fancy — one focus ring, Escape to close, scroll lock — but it keeps every
  * form looking and behaving the same way.
+ *
+ * Rendered through a portal to `document.body` on purpose: this component is
+ * routinely mounted as a JSX child of a `Card`, and `Card` carries a `filter`
+ * (for the glow that survives its clipped corners) — `filter` on an ancestor
+ * makes it the containing block for `position: fixed` descendants per the CSS
+ * spec, which would otherwise trap this dialog inside that card's own small
+ * box instead of covering the viewport. Portaling out is the fix that holds
+ * regardless of what an ancestor's CSS does next.
  */
 export function Modal({
   open,
@@ -36,7 +45,7 @@ export function Modal({
 
   if (!open) return null;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
@@ -75,7 +84,8 @@ export function Modal({
           </footer>
         ) : null}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

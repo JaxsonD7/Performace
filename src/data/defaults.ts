@@ -56,6 +56,8 @@ export const DEFAULT_SETTINGS: Settings = {
   weightUnit: 'lb',
   restTimerSec: 90,
   orthodoxCalendar: 'new',
+  notificationsEnabled: false,
+  notificationLeadMin: 5,
 };
 
 /**

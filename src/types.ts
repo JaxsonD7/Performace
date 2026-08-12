@@ -489,6 +489,10 @@ export interface Settings {
   githubToken?: string;
   /** The private gist this device mirrors its data to and pulls updates from. */
   syncGistId?: string;
+  /** Reminders only ever fire while this tab is open — no push server behind a static site. */
+  notificationsEnabled: boolean;
+  /** How many minutes before a block starts its reminder fires. */
+  notificationLeadMin: number;
 }
 
 // ---------------------------------------------------------------------------

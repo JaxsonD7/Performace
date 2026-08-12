@@ -125,10 +125,11 @@ body {
   position: relative;
 }
 
-/* A faint drifting grid behind everything — the one "moving" element the app
-   has, kept slow and low-contrast enough to read as ambient texture rather
-   than motion that competes with the data. Disabled outright for anyone who
-   asked their OS to reduce motion. */
+/* Two layers behind everything: soft asymmetric glow (nebulae, not centered,
+   never identical to the last reload) sitting under a faint drifting grid.
+   The grid is the one "moving" element the app has — slow and low-contrast
+   enough to read as ambient texture, not motion that competes with the data.
+   Both disabled outright for anyone who asked their OS to reduce motion. */
 body::before {
   content: '';
   position: fixed;
@@ -136,10 +137,25 @@ body::before {
   z-index: 0;
   pointer-events: none;
   background-image:
+    radial-gradient(640px 640px at 12% 18%, rgb(var(--series-1) / calc(var(--glow-strength) * 0.12)), transparent 60%),
+    radial-gradient(560px 560px at 88% 82%, rgb(var(--series-7) / calc(var(--glow-strength) * 0.09)), transparent 62%),
+    radial-gradient(420px 420px at 78% 8%, rgb(var(--series-5) / calc(var(--glow-strength) * 0.07)), transparent 65%),
+    radial-gradient(480px 480px at 8% 88%, rgb(var(--series-3) / calc(var(--glow-strength) * 0.07)), transparent 65%);
+  animation: nebula-drift 42s ease-in-out infinite alternate;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: -10% -10%;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
     linear-gradient(rgb(var(--gridline) / 0.5) 1px, transparent 1px),
     linear-gradient(90deg, rgb(var(--gridline) / 0.5) 1px, transparent 1px);
   background-size: 48px 48px;
-  opacity: calc(0.25 + var(--glow-strength) * 0.15);
+  opacity: calc(0.22 + var(--glow-strength) * 0.13);
+  transform: rotate(-2.5deg);
   animation: grid-drift 90s linear infinite;
 }
 
@@ -157,6 +173,15 @@ body::before {
   }
 }
 
+@keyframes nebula-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-1.5%, 1.5%, 0) scale(1.04);
+  }
+}
+
 @keyframes glow-pulse {
   0%,
   100% {
@@ -168,7 +193,8 @@ body::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body::before {
+  body::before,
+  body::after {
     animation: none;
   }
 }
@@ -176,14 +202,28 @@ body::before {
 @layer components {
   .card {
     /* min-w-0 keeps a card that holds a wide table from stretching its grid
-       column — the table scrolls inside .scroll-x instead. */
-    @apply relative min-w-0 rounded-xl border bg-surface;
+       column — the table scrolls inside .scroll-x instead. Two opposite
+       corners (top-right, bottom-left) are cut at an angle instead of
+       rounded — the panel silhouette that reads as "instrument," not "box."
+       The other two corners stay sharp and carry the bracket accent below.
+       Glow is a drop-shadow, not a box-shadow, specifically because
+       box-shadow gets clipped away along with everything outside the cut
+       polygon — filter-based shadows are computed after clipping, so the
+       glow still escapes the shape the way it should. */
+    @apply relative min-w-0 border bg-surface;
+    --cut: 16px;
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--cut)) 0,
+      100% var(--cut),
+      100% 100%,
+      var(--cut) 100%,
+      0 calc(100% - var(--cut))
+    );
     border-color: rgb(var(--border) / 0.5);
-    box-shadow:
-      0 0 0 1px rgb(var(--series-1) / calc(0.05 + var(--glow-strength) * 0.05)),
-      0 0 calc(16px * var(--glow-strength)) rgb(var(--series-1) / calc(var(--glow-strength) * 0.12));
+    filter: drop-shadow(0 0 calc(14px * var(--glow-strength)) rgb(var(--series-1) / calc(var(--glow-strength) * 0.16)));
   }
-  /* A hairline corner bracket on two opposite corners — the one purely
+  /* A hairline corner bracket on the two square corners — the one purely
      decorative HUD-panel touch, kept small enough it never competes with the
      card's own border or header rule. */
   .card::before,
@@ -200,14 +240,12 @@ body::before {
     left: -1px;
     border-top: 2px solid rgb(var(--series-1));
     border-left: 2px solid rgb(var(--series-1));
-    border-top-left-radius: 3px;
   }
   .card::after {
     bottom: -1px;
     right: -1px;
     border-bottom: 2px solid rgb(var(--series-1));
     border-right: 2px solid rgb(var(--series-1));
-    border-bottom-right-radius: 3px;
   }
   .card-pad {
     @apply p-4 sm:p-5;

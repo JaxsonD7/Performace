@@ -109,33 +109,67 @@ function SideLink({ item, onNavigate }: { item: NavItem; onNavigate?: () => void
       onClick={onNavigate}
       className={({ isActive }) =>
         cx(
-          'flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-          isActive ? 'bg-brand/10 text-brand' : 'text-ink-secondary hover:bg-raised hover:text-ink',
+          'relative flex items-center gap-2.5 px-3 py-2 text-sm font-medium transition-colors',
+          isActive ? 'text-brand' : 'text-ink-secondary hover:text-ink',
         )
       }
     >
-      <span className="w-4 text-center text-base leading-none" aria-hidden="true">
-        {item.icon}
-      </span>
-      <span className="truncate">{item.label}</span>
+      {({ isActive }) => (
+        <>
+          {/* A slanted accent bar instead of a filled pill — the same "cut"
+              language as the cards, at nav-item scale. */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-y-0.5 left-0 w-1 transition-opacity"
+            style={{
+              background: 'rgb(var(--series-1))',
+              clipPath: 'polygon(0 20%, 100% 0, 100% 100%, 0 80%)',
+              opacity: isActive ? 1 : 0,
+              boxShadow: isActive
+                ? '0 0 calc(8px * var(--glow-strength)) rgb(var(--series-1) / var(--glow-strength))'
+                : 'none',
+            }}
+          />
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 transition-opacity"
+            style={{
+              background: 'linear-gradient(90deg, rgb(var(--series-1) / 0.1), transparent 75%)',
+              opacity: isActive ? 1 : 0,
+            }}
+          />
+          <span className="relative w-4 text-center text-base leading-none" aria-hidden="true">
+            {item.icon}
+          </span>
+          <span className="relative truncate">{item.label}</span>
+        </>
+      )}
     </NavLink>
   );
 }
 
 function Brand({ score }: { score: number }) {
   return (
-    <div className="border-b border-line px-5 py-4">
-      <p className="text-base font-semibold tracking-tight text-ink">Performace</p>
+    <div className="relative overflow-hidden px-5 py-4">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-px"
+        style={{
+          background:
+            'linear-gradient(90deg, rgb(var(--series-1) / 0.6), rgb(var(--border) / 0.4) 60%, transparent)',
+        }}
+      />
+      <p className="hud-mono text-base font-semibold tracking-[0.08em] text-ink">PERFORMACE</p>
       <p className="mt-0.5 text-xs text-ink-muted">{formatDate(today())}</p>
       <div className="mt-3">
         <div className="mb-1 flex items-baseline justify-between text-xs">
           <span className="text-ink-secondary">Today</span>
-          <span className="font-semibold tabular-nums text-ink">{score}%</span>
+          <span className="hud-mono font-semibold text-ink">{score}%</span>
         </div>
         <div className="h-1.5 w-full overflow-hidden rounded-full bg-raised">
           <div
             className="h-full rounded-full bg-brand transition-[width] duration-500"
-            style={{ width: `${score}%` }}
+            style={{ boxShadow: '0 0 6px calc(1px * var(--glow-strength)) rgb(var(--series-1) / var(--glow-strength))', width: `${score}%` }}
           />
         </div>
       </div>
