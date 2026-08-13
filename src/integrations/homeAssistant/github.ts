@@ -1,4 +1,4 @@
-import type { HomeAssistantContext } from '@/types';
+import type { HaStatus, HomeAssistantContext } from '@/types';
 
 /**
  * Pushes homeassistant.json to a dedicated private repo — not the sync gist,
@@ -15,8 +15,10 @@ export class HomeAssistantSyncError extends Error {}
 const OWNER = 'JaxsonD7';
 const REPO = 'performace-ha';
 const PATH = 'homeassistant.json';
+const STATUS_PATH = 'ha-status.json';
 const API = 'https://api.github.com';
 const CONTENTS_URL = `${API}/repos/${OWNER}/${REPO}/contents/${PATH}`;
+const STATUS_URL = `${API}/repos/${OWNER}/${REPO}/contents/${STATUS_PATH}`;
 
 function headers(token: string): HeadersInit {
   return {
@@ -24,6 +26,15 @@ function headers(token: string): HeadersInit {
     Accept: 'application/vnd.github+json',
     'X-GitHub-Api-Version': '2022-11-28',
     'Content-Type': 'application/json',
+  };
+}
+
+/** Raw media type — the response body is the file's bytes directly, no base64 envelope to unwrap. */
+function rawHeaders(token: string): HeadersInit {
+  return {
+    Authorization: `Bearer ${token.trim()}`,
+    Accept: 'application/vnd.github.raw+json',
+    'X-GitHub-Api-Version': '2022-11-28',
   };
 }
 
@@ -75,4 +86,21 @@ export function flushHomeAssistantContext(token: string, context: HomeAssistantC
   const body = putBody(context, cachedSha);
   if (body.length > 60_000) return;
   fetch(CONTENTS_URL, { method: 'PUT', headers: headers(token), body, keepalive: true }).catch(() => {});
+}
+
+/**
+ * Reads ha-status.json — the reverse direction, written by Home Assistant
+ * itself using its own token. This app never writes to this file. A 404
+ * (HA hasn't written it yet) or any other failure resolves to null rather
+ * than throwing — this is a nice-to-have display, not something that should
+ * ever block the app.
+ */
+export async function fetchHaStatus(token: string): Promise<HaStatus | null> {
+  try {
+    const res = await fetch(STATUS_URL, { headers: rawHeaders(token) });
+    if (!res.ok) return null;
+    return (await res.json()) as HaStatus;
+  } catch {
+    return null;
+  }
 }

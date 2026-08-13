@@ -657,9 +657,11 @@ function CloudSyncCard() {
  * read back from that repo into the app.
  */
 function HomeAssistantCard() {
-  const { state, haSync, updateSettings, pushHomeAssistantNow } = useStore();
-  const configured = !!state.settings.haPushToken;
-  const [token, setToken] = useState('');
+  const { state, haSync, haStatus, updateSettings, pushHomeAssistantNow } = useStore();
+  const pushConfigured = !!state.settings.haPushToken;
+  const readConfigured = !!state.settings.haReadToken;
+  const [pushToken, setPushToken] = useState('');
+  const [readToken, setReadToken] = useState('');
   const [showInfo, setShowInfo] = useState(false);
 
   const statusLabel = () => {
@@ -675,74 +677,126 @@ function HomeAssistantCard() {
         title="Home Assistant"
         icon="🏠"
         action={
-          configured ? (
+          pushConfigured ? (
             <Badge tone={haSync.state === 'error' ? 'critical' : 'good'}>
               {haSync.state === 'error' ? '⚠ Error' : '✓ Connected'}
             </Badge>
           ) : null
         }
       />
-      <div className="card-pad space-y-3">
-        {configured ? (
-          <>
-            <p className="text-xs text-ink-muted">{statusLabel()}</p>
-            <div className="flex gap-2">
-              <button type="button" className="btn-ghost" onClick={() => void pushHomeAssistantNow()}>
-                Push now
+      <div className="card-pad space-y-4">
+        <div className="space-y-3">
+          <p className="label mb-0">Pushing your schedule to Home Assistant</p>
+          {pushConfigured ? (
+            <>
+              <p className="text-xs text-ink-muted">{statusLabel()}</p>
+              <div className="flex gap-2">
+                <button type="button" className="btn-ghost" onClick={() => void pushHomeAssistantNow()}>
+                  Push now
+                </button>
+                <button
+                  type="button"
+                  className="btn-ghost"
+                  onClick={() => updateSettings({ haPushToken: undefined })}
+                >
+                  Disconnect
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Field
+                label="Push token"
+                hint="A fine-grained PAT scoped only to the performace-ha repo, Contents: Read and write. Different from the sync token above — this one can't touch this app's own repo or your gists."
+              >
+                <TextInput
+                  type="password"
+                  value={pushToken}
+                  onChange={(e) => setPushToken(e.target.value)}
+                  placeholder="github_pat_…"
+                  autoComplete="off"
+                />
+              </Field>
+              {haSync.state === 'error' ? <p className="text-xs text-critical">{haSync.error}</p> : null}
+              <button
+                type="button"
+                className="btn-primary"
+                disabled={!pushToken.trim()}
+                onClick={() => {
+                  updateSettings({ haPushToken: pushToken.trim() });
+                  setPushToken('');
+                }}
+              >
+                Connect
               </button>
+            </>
+          )}
+        </div>
+
+        <div className="space-y-3 border-t border-line pt-3">
+          <p className="label mb-0">Reading presence/temperature from Home Assistant</p>
+          {readConfigured ? (
+            <>
+              <p className="text-xs text-ink-muted">
+                {haStatus ? `Last written ${new Date(haStatus.generated_at).toLocaleTimeString()}` : 'Waiting on Home Assistant to write ha-status.json'}
+              </p>
               <button
                 type="button"
                 className="btn-ghost"
-                onClick={() => updateSettings({ haPushToken: undefined })}
+                onClick={() => updateSettings({ haReadToken: undefined })}
               >
                 Disconnect
               </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <Field
-              label="Push token"
-              hint="A fine-grained PAT scoped only to the performace-ha repo, Contents: Read and write. Different from the sync token above — this one can't touch this app's own repo or your gists."
-            >
-              <TextInput
-                type="password"
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-                placeholder="github_pat_…"
-                autoComplete="off"
-              />
-            </Field>
-            {haSync.state === 'error' ? <p className="text-xs text-critical">{haSync.error}</p> : null}
-            <button
-              type="button"
-              className="btn-primary"
-              disabled={!token.trim()}
-              onClick={() => {
-                updateSettings({ haPushToken: token.trim() });
-                setToken('');
-              }}
-            >
-              Connect
-            </button>
-          </>
-        )}
+            </>
+          ) : (
+            <>
+              <Field
+                label="Read token"
+                hint="A separate fine-grained PAT, Contents: Read-only, scoped to performace-ha — reads ha-status.json, which Home Assistant writes itself. This app never writes to it."
+              >
+                <TextInput
+                  type="password"
+                  value={readToken}
+                  onChange={(e) => setReadToken(e.target.value)}
+                  placeholder="github_pat_…"
+                  autoComplete="off"
+                />
+              </Field>
+              <button
+                type="button"
+                className="btn-primary"
+                disabled={!readToken.trim()}
+                onClick={() => {
+                  updateSettings({ haReadToken: readToken.trim() });
+                  setReadToken('');
+                }}
+              >
+                Connect
+              </button>
+            </>
+          )}
+        </div>
+
         <button type="button" className="text-xs text-brand" onClick={() => setShowInfo((v) => !v)}>
-          {showInfo ? 'Hide' : 'Show'} what Home Assistant needs to read this
+          {showInfo ? 'Hide' : 'Show'} the exact endpoints
         </button>
         {showInfo ? (
           <div className="space-y-1.5 rounded-lg border border-line p-3 text-xs text-ink-secondary">
+            <p className="font-medium text-ink">Home Assistant reads (schedule/goals context):</p>
             <p className="hud-mono break-all">
               GET https://api.github.com/repos/JaxsonD7/performace-ha/contents/homeassistant.json
             </p>
             <p>
-              Headers: <span className="hud-mono">Authorization: Bearer &lt;separate read-only PAT&gt;</span>,{' '}
+              Headers: <span className="hud-mono">Authorization: Bearer &lt;its own read-only PAT&gt;</span>,{' '}
               <span className="hud-mono">Accept: application/vnd.github.raw+json</span>
             </p>
+            <p className="mt-2 font-medium text-ink">Home Assistant writes (presence/environment):</p>
+            <p className="hud-mono break-all">
+              PUT https://api.github.com/repos/JaxsonD7/performace-ha/contents/ha-status.json
+            </p>
             <p>
-              That token is its own fine-grained PAT, Contents: Read-only, scoped only to
-              performace-ha — created in GitHub, entered directly into Home Assistant, never
-              touching this app or this browser.
+              With <span className="hud-mono">Contents: Read and write</span> on its own token — this app
+              only ever reads that file back, never writes it.
             </p>
             <p>
               Full schema and field docs live in the repo's README:{' '}

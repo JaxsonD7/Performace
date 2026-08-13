@@ -259,8 +259,20 @@ export function MealForm({ open, onClose, initial, date = today() }: FormProps<M
 // Sleep
 // ---------------------------------------------------------------------------
 
+/** ISO datetime -> local "HH:MM", for turning haStatus.lights_off_at into a bedtime suggestion. */
+function toLocalClock(iso: string): string {
+  const d = new Date(iso);
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
+
 export function SleepForm({ open, onClose, initial, date = today() }: FormProps<SleepEntry>) {
-  const { add, update, state } = useStore();
+  const { add, update, state, haStatus } = useStore();
+  // Only a suggestion, never auto-logged — same rule as everything else in
+  // this app. It just replaces the routine-default bedtime on a *new* entry
+  // when Home Assistant knows when the lights actually went out; editing an
+  // existing entry never touches it, and the field stays fully editable.
+  const suggestedBedtime = !initial && haStatus?.lights_off_at ? toLocalClock(haStatus.lights_off_at) : null;
+
   const { draft, set } = useFormDraft<SleepEntry>(open, () => {
     const routine = routineOn(state.settings, date);
     return initial
@@ -268,9 +280,9 @@ export function SleepForm({ open, onClose, initial, date = today() }: FormProps<
       : {
           id: '',
           date,
-          bedtime: routine.bedTime,
+          bedtime: suggestedBedtime ?? routine.bedTime,
           wakeTime: routine.wakeTime,
-          durationMin: durationBetween(routine.bedTime, routine.wakeTime),
+          durationMin: durationBetween(suggestedBedtime ?? routine.bedTime, routine.wakeTime),
           quality: 3,
           source: state.settings.healthDevice,
         };
@@ -315,7 +327,10 @@ export function SleepForm({ open, onClose, initial, date = today() }: FormProps<
               <option value="fitbit">Fitbit</option>
             </Select>
           </Field>
-          <Field label="Bedtime">
+          <Field
+            label="Bedtime"
+            hint={suggestedBedtime ? '🏠 Suggested from when your lights went out — edit freely' : undefined}
+          >
             <TextInput
               type="time"
               value={draft.bedtime}

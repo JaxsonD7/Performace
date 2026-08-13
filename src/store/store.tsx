@@ -15,17 +15,25 @@ import { DEFAULT_ROUTINES, DEFAULT_SETTINGS, defaultQuickActions } from '@/data/
 import { uid } from '@/lib/id';
 import { createSyncGist, fetchSyncGist, flushSyncGist, pushSyncGist, SyncError } from '@/integrations/sync/github';
 import {
+  fetchHaStatus,
   flushHomeAssistantContext,
   HomeAssistantSyncError,
   pushHomeAssistantContext,
 } from '@/integrations/homeAssistant/github';
-import { computeHomeAssistantContext } from '@/lib/homeAssistant';
+import { fetchMailDigest } from '@/integrations/mail';
+import { fetchFinanceDigest } from '@/integrations/finance';
+import { fetchPackageDigest } from '@/integrations/packages';
+import { fetchDeadlineDigest } from '@/integrations/deadlines';
+import { fetchCanvasDigest } from '@/integrations/canvas';
+import { computeAttentionFlags, computeHomeAssistantContext } from '@/lib/homeAssistant';
 import type {
   AppState,
   Assignment,
   CollectionKey,
   DayLog,
   DayRoutine,
+  HaStatus,
+  HomeAssistantContext,
   ISODate,
   QuickAction,
   RecordOf,
@@ -357,6 +365,8 @@ interface StoreValue {
   haSync: HomeAssistantSyncStatus;
   /** Pushes the current Home Assistant context now instead of waiting for the debounce. */
   pushHomeAssistantNow: () => Promise<void>;
+  /** What Home Assistant itself last wrote — null until a read token is set and it has written something. */
+  haStatus: HaStatus | null;
   /**
    * Turns on cloud sync. Pass an existing gist ID to join a device that
    * already has one going (this is how a second device connects to the
@@ -406,6 +416,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   // there just 409s harmlessly — the next debounced or periodic push looks
   // it up fresh and corrects it.
   const haSha = useRef<string | undefined>(undefined);
+  // The last fully-computed context (base fields + attention flags from the
+  // fetched digests) — the flush-on-hide path reuses this instead of
+  // re-fetching four digest files during page teardown, which keepalive
+  // can't wait around for anyway.
+  const lastHaContext = useRef<HomeAssistantContext | null>(null);
+
+  // Home Assistant's own write-back — presence/temperature/lights-off, read
+  // with a separate, read-only token. Never written to from this app.
+  const [haStatus, setHaStatus] = useState<HaStatus | null>(null);
 
   const [sync, setSync] = useState<SyncStatus>({ connected: false, state: 'idle' });
   // The `updatedAt` this device last confirmed matches the gist — pushing or
@@ -545,17 +564,29 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, [state.settings.githubToken, state.settings.syncGistId]);
 
   /**
-   * Computes the current Home Assistant context and pushes it to the
+   * Computes the current Home Assistant context — including attention flags,
+   * which need the already-fetched digest files — and pushes it to the
    * dedicated `performace-ha` repo. Entirely separate from cross-device
    * sync — different token, different repo, one-way (nothing is ever read
-   * back from it into the app). Claude is never involved in this call path.
+   * back from homeassistant.json into the app). Claude is never involved in
+   * this call path.
    */
   const pushHaContext = useCallback(async () => {
     const token = stateRef.current.settings.haPushToken;
     if (!token) return;
     setHaSync((s) => ({ ...s, configured: true, state: 'syncing' }));
     try {
-      const context = computeHomeAssistantContext(stateRef.current, new Date());
+      const [mail, finance, packages, deadlines, canvas] = await Promise.all([
+        fetchMailDigest(),
+        fetchFinanceDigest(),
+        fetchPackageDigest(),
+        fetchDeadlineDigest(),
+        fetchCanvasDigest(),
+      ]);
+      const base = computeHomeAssistantContext(stateRef.current, new Date());
+      const attention = computeAttentionFlags(stateRef.current, { mail, finance, packages, deadlines, canvas });
+      const context: HomeAssistantContext = { ...base, ...attention };
+      lastHaContext.current = context;
       haSha.current = await pushHomeAssistantContext(token, context);
       setHaSync({ configured: true, state: 'idle', lastPushedAt: Date.now() });
     } catch (err) {
@@ -578,12 +609,19 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   // Best-effort flush on tab-hide/close, same reasoning as the sync gist's
   // flush: a debounced push can lose the race against the tab actually
   // closing, and keepalive is the one request shape that survives teardown.
+  // Reuses the last fully-computed context (base fields + attention flags)
+  // rather than recomputing — fetching four digest files has no place to
+  // finish during page teardown, so this trades a slightly-stale attention
+  // flag for actually landing the request at all.
   useEffect(() => {
     const token = state.settings.haPushToken;
     if (!hydrated.current || !token) return;
     const flush = () => {
       if (document.visibilityState !== 'hidden') return;
-      const context = computeHomeAssistantContext(stateRef.current, new Date());
+      const base = computeHomeAssistantContext(stateRef.current, new Date());
+      const context: HomeAssistantContext = lastHaContext.current
+        ? { ...base, attention_needed: lastHaContext.current.attention_needed, grade_posted: lastHaContext.current.grade_posted }
+        : { ...base };
       flushHomeAssistantContext(token, context, haSha.current);
     };
     document.addEventListener('visibilitychange', flush);
@@ -603,6 +641,31 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const interval = setInterval(() => void pushHaContext(), 15 * 60 * 1000);
     return () => clearInterval(interval);
   }, [state.settings.haPushToken, pushHaContext]);
+
+  // The reverse direction: poll what Home Assistant itself has written.
+  // Read-only from here on — this app never writes ha-status.json. Fetches
+  // on mount/token-set and every few minutes after; a stale/missing file
+  // just leaves haStatus at whatever it last was (or null), never an error
+  // state, since this is a display nicety, not something to load-bear on.
+  useEffect(() => {
+    const token = state.settings.haReadToken;
+    if (!token) {
+      setHaStatus(null);
+      return;
+    }
+    let cancelled = false;
+    const poll = () => {
+      void fetchHaStatus(token).then((status) => {
+        if (!cancelled) setHaStatus(status);
+      });
+    };
+    poll();
+    const interval = setInterval(poll, 5 * 60 * 1000);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, [state.settings.haReadToken]);
 
   /** Pushes this device's current copy up, marking it settled on success. */
   const pushLocal = useCallback(async (token: string, gistId: string, toPush: AppState) => {
@@ -731,6 +794,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       sync,
       haSync,
       pushHomeAssistantNow: pushHaContext,
+      haStatus,
       connectSync,
       disconnectSync,
       syncNow,
@@ -751,7 +815,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       replaceAll: (next) => dispatch({ type: 'replace', state: migrate(next) }),
       resetToDefaults: () => dispatch({ type: 'replace', state: emptyState() }),
     }),
-    [state, ready, sync, haSync, pushHaContext, connectSync, disconnectSync, syncNow, add, update, remove, logMealPrep],
+    [state, ready, sync, haSync, pushHaContext, haStatus, connectSync, disconnectSync, syncNow, add, update, remove, logMealPrep],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

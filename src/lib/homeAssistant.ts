@@ -1,7 +1,19 @@
 import { addDays, fromISODate, toISODate, toMinutes } from '@/lib/date';
+import { dayScore } from '@/lib/metrics';
 import { routineOn } from '@/lib/routine';
 import { generateSchedule, nextBlock } from '@/lib/schedule';
-import type { AppState, ClockTime, HomeAssistantContext, ISODate } from '@/types';
+import { sumMacros } from '@/lib/selectors';
+import type {
+  AppState,
+  CanvasDigest,
+  ClockTime,
+  DeadlineDigest,
+  FinanceDigest,
+  HomeAssistantContext,
+  ISODate,
+  MailDigest,
+  PackageDigest,
+} from '@/types';
 
 /** A block's kind counts as "study" for the heuristic study_block_* fields. */
 const STUDY_KINDS = new Set(['school', 'task']);
@@ -49,6 +61,11 @@ export function computeHomeAssistantContext(state: AppState, now: Date): HomeAss
     (b) => STUDY_KINDS.has(b.kind) && toMinutes(b.start) > toMinutes(nowClock),
   );
 
+  const day = state.days.find((d) => d.date === today);
+  const waterGoal = state.settings.waterGoalOz;
+  const calorieGoal = state.settings.calorieGoal;
+  const caloriesToday = sumMacros(state.meals.filter((m) => m.date === today)).calories;
+
   return {
     generated_at: now.toISOString(),
     wake_time: routineToday.wakeTime,
@@ -62,5 +79,49 @@ export function computeHomeAssistantContext(state: AppState, now: Date): HomeAss
     gym_time: gymTime,
     study_block_start: studyBlock ? toISODateTime(today, studyBlock.start) : null,
     study_block_end: studyBlock ? toISODateTime(today, studyBlock.end) : null,
+    mood: day?.mood ?? null,
+    energy: day?.energy ?? null,
+    water_pct: waterGoal > 0 ? Math.round((day?.waterOz ?? 0) / waterGoal * 100) : null,
+    calorie_pct: calorieGoal > 0 ? Math.round((caloriesToday / calorieGoal) * 100) : null,
+    habit_completion_pct: dayScore(state, today).pct,
+    // Attention flags need the fetched digest files, not just AppState — see computeAttentionFlags below.
+    attention_needed: false,
+    grade_posted: false,
+  };
+}
+
+export interface DigestSnapshot {
+  mail: MailDigest | null;
+  finance: FinanceDigest | null;
+  packages: PackageDigest | null;
+  deadlines: DeadlineDigest | null;
+  canvas: CanvasDigest | null;
+}
+
+/**
+ * Separate from computeHomeAssistantContext because these need the already-
+ * fetched digest files (mail/finance/etc.), not just AppState — the digests
+ * live as static files the app fetches at runtime, not in AppState itself.
+ * Still pure given its inputs; store.tsx does the fetching beforehand.
+ */
+export function computeAttentionFlags(
+  state: AppState,
+  digests: DigestSnapshot,
+): Pick<HomeAssistantContext, 'attention_needed' | 'grade_posted'> {
+  const undismissed = <T extends { id: string }>(items: T[] | undefined, dismissedIds: string[]) =>
+    (items ?? []).filter((i) => !dismissedIds.includes(i.id));
+
+  const highMail = undismissed(digests.mail?.emails, state.dismissedMailIds).some(
+    (e) => e.importance === 'high',
+  );
+  const finance = undismissed(digests.finance?.items, state.dismissedFinanceIds).length > 0;
+  const deadlines = undismissed(digests.deadlines?.items, state.dismissedDeadlineIds).length > 0;
+
+  const today = toISODate(new Date());
+  const gradePosted = (digests.canvas?.items ?? []).some((i) => i.receivedAt.slice(0, 10) === today);
+
+  return {
+    attention_needed: highMail || finance || deadlines,
+    grade_posted: gradePosted,
   };
 }

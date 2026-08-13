@@ -3,6 +3,7 @@ import { PageBody, PageHeader } from '@/components/PageHeader';
 import { CanvasCard } from '@/components/home/CanvasCard';
 import { DeadlineCard } from '@/components/home/DeadlineCard';
 import { FinanceCard } from '@/components/home/FinanceCard';
+import { HouseCard } from '@/components/home/HouseCard';
 import { MailCard } from '@/components/home/MailCard';
 import { PackageCard } from '@/components/home/PackageCard';
 import { Card, RadialGauge, cx } from '@/components/ui/primitives';
@@ -160,6 +161,7 @@ export function HomePage() {
             <PackageCard />
             <DeadlineCard />
             <CanvasCard />
+            <HouseCard />
           </div>
         </div>
       </PageBody>

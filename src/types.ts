@@ -500,6 +500,8 @@ export interface Settings {
    * read-only PAT that never touches this browser at all.
    */
   haPushToken?: string;
+  /** A separate fine-grained PAT, Contents: Read-only, scoped to performace-ha — reads what Home Assistant itself writes there. Never used to write anything. */
+  haReadToken?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -670,6 +672,33 @@ export interface HomeAssistantContext {
   /** Heuristic: next upcoming block of kind 'school'/'task' today — there is no deliberate "study mode" concept yet. */
   study_block_start: string | null;
   study_block_end: string | null;
+  /** Today's DayLog values, 1-5, null if not logged yet today. */
+  mood: 1 | 2 | 3 | 4 | 5 | null;
+  energy: 1 | 2 | 3 | 4 | 5 | null;
+  /** 0-100, null when no goal is set. */
+  water_pct: number | null;
+  calorie_pct: number | null;
+  /** Today's habit-checklist completion, 0-100. */
+  habit_completion_pct: number;
+  /** True when any undismissed high-importance mail, finance, or deadline item exists. */
+  attention_needed: boolean;
+  /** True when canvas.json has an item from today — false/absent until a school mail source is actually connected. */
+  grade_posted: boolean;
+}
+
+// ---------------------------------------------------------------------------
+// Home status — the reverse direction: Home Assistant writes this, the app
+// only ever reads it. Presence/environment facts, nothing the app can act on
+// beyond display and a form pre-fill suggestion.
+// ---------------------------------------------------------------------------
+
+export interface HaStatus {
+  generated_at: string;
+  home: boolean | null;
+  temperature_f: number | null;
+  humidity_pct: number | null;
+  /** ISO instant of the last time the bedroom lights went off — used only as a bedtime *suggestion*, never auto-logged. */
+  lights_off_at: string | null;
 }
 
 // ---------------------------------------------------------------------------
