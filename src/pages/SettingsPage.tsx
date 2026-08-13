@@ -133,6 +133,7 @@ export function SettingsPage() {
 
           <AppCard />
           <CloudSyncCard />
+          <HomeAssistantCard />
 
           <NotificationsCard />
           <OrthodoxCalendarCard />
@@ -643,6 +644,119 @@ function CloudSyncCard() {
             </p>
           </>
         )}
+      </div>
+    </Card>
+  );
+}
+
+/**
+ * One-way, read-only-from-HA's-side export to a dedicated private repo
+ * (`JaxsonD7/performace-ha`) — deliberately not the sync gist and not this
+ * app's own public repo, since schedule/sleep/gym timing is more sensitive
+ * than what already sits on the public mail-digest surface. Nothing is ever
+ * read back from that repo into the app.
+ */
+function HomeAssistantCard() {
+  const { state, haSync, updateSettings, pushHomeAssistantNow } = useStore();
+  const configured = !!state.settings.haPushToken;
+  const [token, setToken] = useState('');
+  const [showInfo, setShowInfo] = useState(false);
+
+  const statusLabel = () => {
+    if (haSync.state === 'syncing') return 'Pushing…';
+    if (haSync.state === 'error') return haSync.error ?? 'Push error';
+    if (haSync.lastPushedAt) return `Last pushed ${new Date(haSync.lastPushedAt).toLocaleTimeString()}`;
+    return 'Connected — first push on the next edit';
+  };
+
+  return (
+    <Card>
+      <CardHeader
+        title="Home Assistant"
+        icon="🏠"
+        action={
+          configured ? (
+            <Badge tone={haSync.state === 'error' ? 'critical' : 'good'}>
+              {haSync.state === 'error' ? '⚠ Error' : '✓ Connected'}
+            </Badge>
+          ) : null
+        }
+      />
+      <div className="card-pad space-y-3">
+        {configured ? (
+          <>
+            <p className="text-xs text-ink-muted">{statusLabel()}</p>
+            <div className="flex gap-2">
+              <button type="button" className="btn-ghost" onClick={() => void pushHomeAssistantNow()}>
+                Push now
+              </button>
+              <button
+                type="button"
+                className="btn-ghost"
+                onClick={() => updateSettings({ haPushToken: undefined })}
+              >
+                Disconnect
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <Field
+              label="Push token"
+              hint="A fine-grained PAT scoped only to the performace-ha repo, Contents: Read and write. Different from the sync token above — this one can't touch this app's own repo or your gists."
+            >
+              <TextInput
+                type="password"
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+                placeholder="github_pat_…"
+                autoComplete="off"
+              />
+            </Field>
+            {haSync.state === 'error' ? <p className="text-xs text-critical">{haSync.error}</p> : null}
+            <button
+              type="button"
+              className="btn-primary"
+              disabled={!token.trim()}
+              onClick={() => {
+                updateSettings({ haPushToken: token.trim() });
+                setToken('');
+              }}
+            >
+              Connect
+            </button>
+          </>
+        )}
+        <button type="button" className="text-xs text-brand" onClick={() => setShowInfo((v) => !v)}>
+          {showInfo ? 'Hide' : 'Show'} what Home Assistant needs to read this
+        </button>
+        {showInfo ? (
+          <div className="space-y-1.5 rounded-lg border border-line p-3 text-xs text-ink-secondary">
+            <p className="hud-mono break-all">
+              GET https://api.github.com/repos/JaxsonD7/performace-ha/contents/homeassistant.json
+            </p>
+            <p>
+              Headers: <span className="hud-mono">Authorization: Bearer &lt;separate read-only PAT&gt;</span>,{' '}
+              <span className="hud-mono">Accept: application/vnd.github.raw+json</span>
+            </p>
+            <p>
+              That token is its own fine-grained PAT, Contents: Read-only, scoped only to
+              performace-ha — created in GitHub, entered directly into Home Assistant, never
+              touching this app or this browser.
+            </p>
+            <p>
+              Full schema and field docs live in the repo's README:{' '}
+              <a
+                className="text-brand"
+                href="https://github.com/JaxsonD7/performace-ha"
+                target="_blank"
+                rel="noreferrer"
+              >
+                github.com/JaxsonD7/performace-ha
+              </a>
+            </p>
+          </div>
+        ) : null}
       </div>
     </Card>
   );

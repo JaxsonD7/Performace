@@ -493,6 +493,13 @@ export interface Settings {
   notificationsEnabled: boolean;
   /** How many minutes before a block starts its reminder fires. */
   notificationLeadMin: number;
+  /**
+   * A fine-grained GitHub PAT, Contents: Read and write, scoped only to the
+   * dedicated `performace-ha` repo — never the sync token, and never able to
+   * touch this app's own repo. Home Assistant reads with a *separate*,
+   * read-only PAT that never touches this browser at all.
+   */
+  haPushToken?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -638,6 +645,31 @@ export interface CanvasItem {
 export interface CanvasDigest {
   generatedAt: string;
   items: CanvasItem[];
+}
+
+// ---------------------------------------------------------------------------
+// Home Assistant context — a small, factual, derived snapshot the app
+// computes and pushes itself (no Claude involvement at runtime) to a
+// dedicated private repo, for a home-server Home Assistant instance to poll.
+// Recurring daily anchors are plain "HH:MM" local-clock strings; specific
+// one-time occurrences are full UTC ISO instants. Any field is null when
+// nothing applies that day.
+// ---------------------------------------------------------------------------
+
+export interface HomeAssistantContext {
+  generated_at: string;
+  wake_time: ClockTime;
+  wake_time_tomorrow: ClockTime;
+  bedtime_target: ClockTime;
+  next_event_title: string | null;
+  next_event_kind: BlockKind | null;
+  next_event_start: string | null;
+  next_event_end: string | null;
+  gym_today: boolean;
+  gym_time: ClockTime | null;
+  /** Heuristic: next upcoming block of kind 'school'/'task' today — there is no deliberate "study mode" concept yet. */
+  study_block_start: string | null;
+  study_block_end: string | null;
 }
 
 // ---------------------------------------------------------------------------

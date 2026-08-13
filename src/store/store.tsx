@@ -14,6 +14,12 @@ import { emptyState, STATE_VERSION } from '@/data/seed';
 import { DEFAULT_ROUTINES, DEFAULT_SETTINGS, defaultQuickActions } from '@/data/defaults';
 import { uid } from '@/lib/id';
 import { createSyncGist, fetchSyncGist, flushSyncGist, pushSyncGist, SyncError } from '@/integrations/sync/github';
+import {
+  flushHomeAssistantContext,
+  HomeAssistantSyncError,
+  pushHomeAssistantContext,
+} from '@/integrations/homeAssistant/github';
+import { computeHomeAssistantContext } from '@/lib/homeAssistant';
 import type {
   AppState,
   Assignment,
@@ -336,10 +342,21 @@ export interface SyncStatus {
   lastSyncedAt?: number;
 }
 
+/** Same shape as SyncStatus, kept separate because this is a one-way push to a different repo with its own token — not part of cross-device sync at all. */
+export interface HomeAssistantSyncStatus {
+  configured: boolean;
+  state: 'idle' | 'syncing' | 'error';
+  error?: string;
+  lastPushedAt?: number;
+}
+
 interface StoreValue {
   state: AppState;
   ready: boolean;
   sync: SyncStatus;
+  haSync: HomeAssistantSyncStatus;
+  /** Pushes the current Home Assistant context now instead of waiting for the debounce. */
+  pushHomeAssistantNow: () => Promise<void>;
   /**
    * Turns on cloud sync. Pass an existing gist ID to join a device that
    * already has one going (this is how a second device connects to the
@@ -382,6 +399,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const hydrated = useRef(false);
   const stateRef = useRef(state);
   stateRef.current = state;
+
+  const [haSync, setHaSync] = useState<HomeAssistantSyncStatus>({ configured: false, state: 'idle' });
+  // The homeassistant.json blob's current SHA, so a best-effort flush-on-hide
+  // push doesn't have to spend a round trip fetching it first. A stale SHA
+  // there just 409s harmlessly — the next debounced or periodic push looks
+  // it up fresh and corrects it.
+  const haSha = useRef<string | undefined>(undefined);
 
   const [sync, setSync] = useState<SyncStatus>({ connected: false, state: 'idle' });
   // The `updatedAt` this device last confirmed matches the gist — pushing or
@@ -520,6 +544,66 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.settings.githubToken, state.settings.syncGistId]);
 
+  /**
+   * Computes the current Home Assistant context and pushes it to the
+   * dedicated `performace-ha` repo. Entirely separate from cross-device
+   * sync — different token, different repo, one-way (nothing is ever read
+   * back from it into the app). Claude is never involved in this call path.
+   */
+  const pushHaContext = useCallback(async () => {
+    const token = stateRef.current.settings.haPushToken;
+    if (!token) return;
+    setHaSync((s) => ({ ...s, configured: true, state: 'syncing' }));
+    try {
+      const context = computeHomeAssistantContext(stateRef.current, new Date());
+      haSha.current = await pushHomeAssistantContext(token, context);
+      setHaSync({ configured: true, state: 'idle', lastPushedAt: Date.now() });
+    } catch (err) {
+      setHaSync({
+        configured: true,
+        state: 'error',
+        error: err instanceof HomeAssistantSyncError ? err.message : 'Push to Home Assistant repo failed.',
+      });
+    }
+  }, []);
+
+  // Debounced push on every change, same shape as the sync-gist push below
+  // but to a different repo/token — a burst of edits pushes once.
+  useEffect(() => {
+    if (!hydrated.current || !state.settings.haPushToken) return;
+    const handle = setTimeout(() => void pushHaContext(), 2500);
+    return () => clearTimeout(handle);
+  }, [state, pushHaContext]);
+
+  // Best-effort flush on tab-hide/close, same reasoning as the sync gist's
+  // flush: a debounced push can lose the race against the tab actually
+  // closing, and keepalive is the one request shape that survives teardown.
+  useEffect(() => {
+    const token = state.settings.haPushToken;
+    if (!hydrated.current || !token) return;
+    const flush = () => {
+      if (document.visibilityState !== 'hidden') return;
+      const context = computeHomeAssistantContext(stateRef.current, new Date());
+      flushHomeAssistantContext(token, context, haSha.current);
+    };
+    document.addEventListener('visibilitychange', flush);
+    window.addEventListener('pagehide', flush);
+    return () => {
+      document.removeEventListener('visibilitychange', flush);
+      window.removeEventListener('pagehide', flush);
+    };
+  }, [state.settings.haPushToken]);
+
+  // The context can go stale purely from time passing — "next event" rolls
+  // to the next block, or the day rolls over — with no state edit to trigger
+  // the debounced push above. A periodic re-push while a tab is open keeps
+  // day-boundary fields correct within one interval either way.
+  useEffect(() => {
+    if (!state.settings.haPushToken) return;
+    const interval = setInterval(() => void pushHaContext(), 15 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [state.settings.haPushToken, pushHaContext]);
+
   /** Pushes this device's current copy up, marking it settled on success. */
   const pushLocal = useCallback(async (token: string, gistId: string, toPush: AppState) => {
     setSync((s) => ({ ...s, state: 'syncing' }));
@@ -645,6 +729,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       state,
       ready,
       sync,
+      haSync,
+      pushHomeAssistantNow: pushHaContext,
       connectSync,
       disconnectSync,
       syncNow,
@@ -665,7 +751,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       replaceAll: (next) => dispatch({ type: 'replace', state: migrate(next) }),
       resetToDefaults: () => dispatch({ type: 'replace', state: emptyState() }),
     }),
-    [state, ready, sync, connectSync, disconnectSync, syncNow, add, update, remove, logMealPrep],
+    [state, ready, sync, haSync, pushHaContext, connectSync, disconnectSync, syncNow, add, update, remove, logMealPrep],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
