@@ -1,19 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Badge, Card, CardHeader, IconButton } from '@/components/ui/primitives';
 import { fetchMailDigest } from '@/integrations/mail';
+import { timeAgo } from '@/lib/date';
 import { useStore } from '@/store/store';
 import type { MailAccount, MailDigest } from '@/types';
 
 const ACCOUNT_LABEL: Record<MailAccount, string> = { personal: 'Personal', school: 'School' };
-
-function timeAgo(iso: string): string {
-  const ms = Date.now() - new Date(iso).getTime();
-  const min = Math.round(ms / 60000);
-  if (min < 60) return `${Math.max(0, min)}m ago`;
-  const hr = Math.round(min / 60);
-  if (hr < 48) return `${hr}h ago`;
-  return `${Math.round(hr / 24)}d ago`;
-}
 
 /**
  * Nothing here is fetched live from Gmail — there is no in-app Google

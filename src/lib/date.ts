@@ -69,6 +69,16 @@ export function relativeDay(iso: ISODate): string {
   return formatDate(iso, { month: 'short', day: 'numeric' });
 }
 
+/** "12m ago", "3h ago", "2d ago" — for a full datetime, not a calendar day. */
+export function timeAgo(iso: string): string {
+  const ms = Date.now() - new Date(iso).getTime();
+  const min = Math.round(ms / 60000);
+  if (min < 60) return `${Math.max(0, min)}m ago`;
+  const hr = Math.round(min / 60);
+  if (hr < 48) return `${hr}h ago`;
+  return `${Math.round(hr / 24)}d ago`;
+}
+
 // --- Clock time helpers ----------------------------------------------------
 
 export function toMinutes(t: ClockTime): number {

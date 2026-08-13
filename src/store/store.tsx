@@ -45,6 +45,9 @@ type Action =
   | { type: 'setQuickActions'; actions: QuickAction[] }
   | { type: 'removeHabit'; id: string }
   | { type: 'dismissMail'; id: string }
+  | { type: 'dismissFinance'; id: string }
+  | { type: 'dismissPackage'; id: string }
+  | { type: 'dismissDeadline'; id: string }
   | { type: 'logMealPrep'; batchId: string; meal: RecordOf<'meals'> };
 
 /**
@@ -142,6 +145,21 @@ function applyAction(state: AppState, action: Action): AppState {
       return state.dismissedMailIds.includes(action.id)
         ? state
         : { ...state, dismissedMailIds: [...state.dismissedMailIds, action.id] };
+
+    case 'dismissFinance':
+      return state.dismissedFinanceIds.includes(action.id)
+        ? state
+        : { ...state, dismissedFinanceIds: [...state.dismissedFinanceIds, action.id] };
+
+    case 'dismissPackage':
+      return state.dismissedPackageIds.includes(action.id)
+        ? state
+        : { ...state, dismissedPackageIds: [...state.dismissedPackageIds, action.id] };
+
+    case 'dismissDeadline':
+      return state.dismissedDeadlineIds.includes(action.id)
+        ? state
+        : { ...state, dismissedDeadlineIds: [...state.dismissedDeadlineIds, action.id] };
 
     case 'logMealPrep':
       return {
@@ -341,6 +359,9 @@ interface StoreValue {
   removeHabit: (id: string) => void;
   /** Clears one mail-digest item; it won't reappear even once the digest file regenerates. */
   dismissMail: (id: string) => void;
+  dismissFinance: (id: string) => void;
+  dismissPackage: (id: string) => void;
+  dismissDeadline: (id: string) => void;
   /** Logs a meal from a prepped batch and decrements its remaining-servings count, atomically. */
   logMealPrep: (batchId: string, meal: Omit<RecordOf<'meals'>, 'id'> & { id?: string }) => void;
   updateSettings: (patch: Partial<Settings>) => void;
@@ -632,6 +653,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       remove,
       removeHabit: (id) => dispatch({ type: 'removeHabit', id }),
       dismissMail: (id) => dispatch({ type: 'dismissMail', id }),
+      dismissFinance: (id) => dispatch({ type: 'dismissFinance', id }),
+      dismissPackage: (id) => dispatch({ type: 'dismissPackage', id }),
+      dismissDeadline: (id) => dispatch({ type: 'dismissDeadline', id }),
       logMealPrep,
       updateSettings: (patch) => dispatch({ type: 'settings', patch }),
       updateRoutine: (weekday, patch) => dispatch({ type: 'routine', weekday, patch }),

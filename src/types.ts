@@ -557,6 +557,90 @@ export interface MailDigest {
 }
 
 // ---------------------------------------------------------------------------
+// Finance, package, and deadline digests — same generated-outside-the-app
+// pattern as mail, split into their own files so each has a focused card
+// instead of one giant inbox dump.
+// ---------------------------------------------------------------------------
+
+export type FinanceKind = 'failed_payment' | 'subscription_charge' | 'low_balance' | 'unusual_charge' | 'other';
+export type FinanceSeverity = 'info' | 'warning' | 'critical';
+
+export interface FinanceItem {
+  id: string;
+  subject: string;
+  from: string;
+  receivedAt: string;
+  /** Dollars, when the email states one plainly — never estimated. */
+  amount?: number;
+  merchant?: string;
+  kind: FinanceKind;
+  reason: string;
+  severity: FinanceSeverity;
+}
+
+export interface FinanceDigest {
+  generatedAt: string;
+  items: FinanceItem[];
+}
+
+export type PackageStatus = 'ordered' | 'shipped' | 'out_for_delivery' | 'delivered' | 'delayed' | 'unknown';
+
+export interface PackageItem {
+  id: string;
+  subject: string;
+  from: string;
+  receivedAt: string;
+  merchant?: string;
+  carrier?: string;
+  trackingNumber?: string;
+  status: PackageStatus;
+  /** ISO date, only when the email states one — never guessed from a shipping average. */
+  estimatedDate?: ISODate;
+}
+
+export interface PackageDigest {
+  generatedAt: string;
+  items: PackageItem[];
+}
+
+export interface DeadlineItem {
+  id: string;
+  subject: string;
+  from: string;
+  receivedAt: string;
+  /** ISO date, only when the email states one plainly. */
+  dueDate?: ISODate;
+  reason: string;
+}
+
+export interface DeadlineDigest {
+  generatedAt: string;
+  items: DeadlineItem[];
+}
+
+export type CanvasItemKind = 'grade_posted' | 'announcement' | 'assignment_feedback' | 'other';
+
+/**
+ * Scaffolded ahead of actually having a source for it — there is no school
+ * Gmail or Canvas token connected yet, so nothing generates this file today.
+ * The card reads the same way the mail card did before its first scan: an
+ * honest "not connected" state rather than fabricated contents.
+ */
+export interface CanvasItem {
+  id: string;
+  courseName?: string;
+  kind: CanvasItemKind;
+  subject: string;
+  receivedAt: string;
+  reason: string;
+}
+
+export interface CanvasDigest {
+  generatedAt: string;
+  items: CanvasItem[];
+}
+
+// ---------------------------------------------------------------------------
 // Meal prep
 // ---------------------------------------------------------------------------
 
@@ -670,6 +754,9 @@ export interface AppState {
   gradeEntries: GradeEntry[];
   /** Mail digest items you've cleared — the digest file regenerates daily, this is what keeps a dismissal from coming back. */
   dismissedMailIds: string[];
+  dismissedFinanceIds: string[];
+  dismissedPackageIds: string[];
+  dismissedDeadlineIds: string[];
 }
 
 /** Keys of AppState that hold arrays of records with an `id`. */

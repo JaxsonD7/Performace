@@ -6,7 +6,7 @@ import {
 } from '@/data/defaults';
 import type { AppState } from '@/types';
 
-export const STATE_VERSION = 6;
+export const STATE_VERSION = 7;
 
 /**
  * The real starting state. The only defaults are the ones the brief asks for
@@ -48,5 +48,8 @@ export function emptyState(): AppState {
     gradeCategories: [],
     gradeEntries: [],
     dismissedMailIds: [],
+    dismissedFinanceIds: [],
+    dismissedPackageIds: [],
+    dismissedDeadlineIds: [],
   };
 }

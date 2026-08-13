@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom';
 import { PageBody, PageHeader } from '@/components/PageHeader';
+import { CanvasCard } from '@/components/home/CanvasCard';
+import { DeadlineCard } from '@/components/home/DeadlineCard';
+import { FinanceCard } from '@/components/home/FinanceCard';
 import { MailCard } from '@/components/home/MailCard';
+import { PackageCard } from '@/components/home/PackageCard';
 import { Card, RadialGauge, cx } from '@/components/ui/primitives';
 import { formatDate, startOfWeek, today } from '@/lib/date';
 import { bodyGoalProgress, liftGoalProgress } from '@/lib/goals';
@@ -148,7 +152,16 @@ export function HomePage() {
           </Card>
         ) : null}
 
-        <MailCard />
+        <div>
+          <p className="section-title mb-3 px-1">Signals</p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <MailCard />
+            <FinanceCard />
+            <PackageCard />
+            <DeadlineCard />
+            <CanvasCard />
+          </div>
+        </div>
       </PageBody>
     </>
   );
