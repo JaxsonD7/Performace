@@ -1,5 +1,16 @@
 {
-  "generatedAt": "2026-08-13T13:15:00Z",
+  "generatedAt": "2026-08-14T12:30:00Z",
   "accounts": ["personal"],
-  "emails": []
+  "emails": [
+    {
+      "id": "19ffca309fd5940f",
+      "account": "personal",
+      "subject": "Texas A&M University Forwarding Confirmation - Receive Mail from jaxsond@tamu.edu",
+      "from": "forwarding-noreply@google.com",
+      "receivedAt": "2026-08-13T19:39:30Z",
+      "snippet": "jaxsond@tamu.edu has requested to automatically forward mail to your email address jaxsondriscollfcd7@gmail.com. Click the link in this email to confirm.",
+      "importance": "medium",
+      "reason": "Still unconfirmed a day later — school mail (and Canvas notifications) won't start flowing until this link is clicked."
+    }
+  ]
 }
