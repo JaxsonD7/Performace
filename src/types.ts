@@ -719,6 +719,39 @@ export interface MealPrepBatch {
 }
 
 // ---------------------------------------------------------------------------
+// Pantry & shopping — what food is actually in the house, and what to buy
+// next. Meal prep batches (already tracked separately) live alongside these
+// on the same page since they're the same underlying question: what do I
+// have to eat or cook with right now.
+// ---------------------------------------------------------------------------
+
+export type PantryCategory = 'produce' | 'protein' | 'grain' | 'dairy' | 'frozen' | 'pantry' | 'other';
+
+export interface PantryItem {
+  id: string;
+  name: string;
+  category: PantryCategory;
+  quantity: number;
+  /** Free text on purpose — "oz", "lbs", "cans", "count" all show up in a real kitchen. */
+  unit: string;
+  /** When set, quantity at or below this counts as running low. Unset means never flagged. */
+  lowStockThreshold?: number;
+  notes?: string;
+  updatedAt: string;
+}
+
+export interface ShoppingListItem {
+  id: string;
+  name: string;
+  /** Free text like "2 lbs" — a shopping line doesn't need pantry-grade precision. */
+  quantity?: string;
+  checked: boolean;
+  /** Set when this row came from tapping "Add to list" on a low pantry item, so it can be traced back. */
+  pantryItemId?: string;
+  addedAt: string;
+}
+
+// ---------------------------------------------------------------------------
 // Body & lifting goals — dated targets, tracked against data already logged
 // elsewhere (HealthMetric.bodyWeight, workout sets) rather than a separate log.
 // ---------------------------------------------------------------------------
@@ -809,6 +842,8 @@ export interface AppState {
   /** Always exactly six, in display order. */
   quickActions: QuickAction[];
   mealPrepBatches: MealPrepBatch[];
+  pantryItems: PantryItem[];
+  shoppingListItems: ShoppingListItem[];
   bodyGoals: BodyGoal[];
   liftGoals: LiftGoal[];
   gradeCategories: GradeCategory[];
@@ -840,6 +875,8 @@ export type CollectionKey =
   | 'health'
   | 'blocks'
   | 'mealPrepBatches'
+  | 'pantryItems'
+  | 'shoppingListItems'
   | 'bodyGoals'
   | 'liftGoals'
   | 'gradeCategories'

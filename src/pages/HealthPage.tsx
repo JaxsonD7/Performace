@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { PageBody, PageHeader } from '@/components/PageHeader';
 import { HealthForm, MealForm, SleepForm, WorkoutForm } from '@/components/forms/logForms';
-import { MealPrepForm } from '@/components/forms/mealPrepForms';
 import { HealthImportModal } from '@/components/health/HealthImportModal';
+import { PantryTab } from '@/components/health/PantryTab';
 import {
   Badge,
   Card,
@@ -24,9 +24,9 @@ import { exerciseProgress, loggedExerciseNames, platesFor } from '@/lib/lifting'
 import { weekSummary } from '@/lib/metrics';
 import { sumMacros } from '@/lib/selectors';
 import { useStore } from '@/store/store';
-import type { HealthMetric, Meal, MealPrepBatch, SleepEntry, Workout } from '@/types';
+import type { HealthMetric, Meal, SleepEntry, Workout } from '@/types';
 
-type Tab = 'workouts' | 'sleep' | 'diet' | 'watch';
+type Tab = 'workouts' | 'sleep' | 'diet' | 'pantry' | 'watch';
 
 export function HealthPage() {
   const { state } = useStore();
@@ -70,6 +70,7 @@ export function HealthPage() {
             { value: 'workouts', label: 'Workouts' },
             { value: 'sleep', label: 'Sleep' },
             { value: 'diet', label: 'Diet' },
+            { value: 'pantry', label: 'Pantry' },
             { value: 'watch', label: 'Watch' },
           ]}
         />
@@ -97,6 +98,7 @@ export function HealthPage() {
         {tab === 'workouts' ? <WorkoutsTab /> : null}
         {tab === 'sleep' ? <SleepTab /> : null}
         {tab === 'diet' ? <DietTab /> : null}
+        {tab === 'pantry' ? <PantryTab /> : null}
         {tab === 'watch' ? <WatchTab shortcutData={shortcutData} /> : null}
       </PageBody>
     </>
@@ -430,8 +432,6 @@ function DietTab() {
 
   return (
     <>
-      <MealPrepCard />
-
       <Card>
         <CardHeader
           title="Meal log"
@@ -497,80 +497,6 @@ function DietTab() {
       </Card>
     </>
   );
-}
-
-function MealPrepCard() {
-  const { state, logMealPrep } = useStore();
-  const [modal, setModal] = useState<{ open: boolean; item?: MealPrepBatch }>({ open: false });
-  const batches = [...state.mealPrepBatches].sort((a, b) => (a.madeOn < b.madeOn ? 1 : -1));
-
-  const logServing = (b: MealPrepBatch) => {
-    logMealPrep(b.id, {
-      date: today(),
-      type: mealTypeNow(),
-      name: b.name,
-      time: new Date().toTimeString().slice(0, 5),
-      clean: true,
-      calories: b.caloriesPerServing,
-      protein: b.proteinPerServing,
-      carbs: b.carbsPerServing,
-      fat: b.fatPerServing,
-    });
-  };
-
-  return (
-    <Card>
-      <CardHeader
-        title="Meal prep"
-        icon="🍱"
-        subtitle="Cooked once, logged in one tap all week"
-        action={
-          <button type="button" className="btn-primary !py-1 text-xs" onClick={() => setModal({ open: true })}>
-            + Batch
-          </button>
-        }
-      />
-      {batches.length ? (
-        <ul className="divide-y divide-line">
-          {batches.map((b) => (
-            <li key={b.id} className="group flex items-center gap-3 px-4 py-2.5">
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm text-ink">{b.name}</p>
-                <p className="text-[11px] text-ink-muted">
-                  {b.caloriesPerServing} kcal{b.proteinPerServing ? ` · ${b.proteinPerServing}g protein` : ''} ·{' '}
-                  {b.servingsLeft} of {b.totalServings} left
-                </p>
-              </div>
-              <button
-                type="button"
-                className="btn-ghost !px-2.5 !py-1 text-xs"
-                disabled={b.servingsLeft <= 0}
-                onClick={() => logServing(b)}
-              >
-                {b.servingsLeft > 0 ? 'Log a serving' : 'Empty'}
-              </button>
-              <span className="flex shrink-0 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
-                <IconButton onClick={() => setModal({ open: true, item: b })} label="Edit batch">
-                  <PencilIcon />
-                </IconButton>
-              </span>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <EmptyState message="No batches yet — log one after your next cook day." />
-      )}
-      <MealPrepForm open={modal.open} onClose={() => setModal({ open: false })} initial={modal.item} />
-    </Card>
-  );
-}
-
-function mealTypeNow(): 'breakfast' | 'lunch' | 'dinner' | 'snack' {
-  const h = new Date().getHours();
-  if (h < 11) return 'breakfast';
-  if (h < 15) return 'lunch';
-  if (h < 21) return 'dinner';
-  return 'snack';
 }
 
 // ---------------------------------------------------------------------------
