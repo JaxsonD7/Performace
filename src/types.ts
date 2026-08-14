@@ -738,6 +738,8 @@ export interface PantryItem {
   lowStockThreshold?: number;
   notes?: string;
   updatedAt: string;
+  /** Set when this item was added via barcode scan — a rescan of the same code restocks it instead of creating a duplicate row. */
+  barcode?: string;
 }
 
 export interface ShoppingListItem {

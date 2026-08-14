@@ -18,10 +18,13 @@ export function PantryItemForm({
   open,
   onClose,
   initial,
+  prefill,
 }: {
   open: boolean;
   onClose: () => void;
   initial?: PantryItem;
+  /** Seeds a *new* item's draft (e.g. from a barcode scan) — ignored when editing an existing one. Nothing here is saved until the user confirms. */
+  prefill?: Partial<PantryItem>;
 }) {
   const { add, update, remove } = useStore();
   const { draft, set } = useFormDraft<PantryItem>(open, () =>
@@ -34,6 +37,7 @@ export function PantryItemForm({
           quantity: 1,
           unit: 'count',
           updatedAt: new Date().toISOString(),
+          ...prefill,
         },
   );
 
@@ -78,6 +82,11 @@ export function PantryItemForm({
             placeholder="Chicken breast"
           />
         </Field>
+        {draft.barcode ? (
+          <p className="text-xs text-ink-muted">
+            📷 Scanned {draft.barcode} — rescanning this code will restock this item instead of adding a duplicate.
+          </p>
+        ) : null}
 
         <div className="grid grid-cols-3 gap-3">
           <Field label="Quantity">

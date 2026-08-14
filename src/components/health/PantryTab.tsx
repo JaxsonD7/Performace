@@ -1,19 +1,31 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { PantryItemForm, ShoppingItemForm } from '@/components/forms/pantryForms';
 import { MealPrepForm } from '@/components/forms/mealPrepForms';
+import { Modal, ModalActions } from '@/components/ui/Modal';
 import {
   Badge,
   Card,
   CardHeader,
   EmptyState,
+  Field,
   IconButton,
   PencilIcon,
+  TextInput,
   TrashIcon,
 } from '@/components/ui/primitives';
 import { today } from '@/lib/date';
 import { runningLow } from '@/lib/pantry';
+import { numOr } from '@/components/forms/useFormDraft';
+import { lookupProduct } from '@/integrations/barcode/lookup';
 import { useStore } from '@/store/store';
 import type { MealPrepBatch, PantryCategory, PantryItem } from '@/types';
+
+// The barcode scanner pulls in ZXing (~120KB gzipped) — lazy-loaded so that
+// weight only ever downloads for someone who actually taps Scan, not on
+// every page load for everyone who never uses it.
+const BarcodeScanner = lazy(() =>
+  import('@/components/health/BarcodeScanner').then((m) => ({ default: m.BarcodeScanner })),
+);
 
 const CATEGORY_LABEL: Record<PantryCategory, string> = {
   produce: 'Produce',
@@ -43,7 +55,12 @@ export function PantryTab() {
 
 function PantryCard() {
   const { state, update, add, remove } = useStore();
-  const [modal, setModal] = useState<{ open: boolean; item?: PantryItem }>({ open: false });
+  const [modal, setModal] = useState<{ open: boolean; item?: PantryItem; prefill?: Partial<PantryItem> }>({
+    open: false,
+  });
+  const [scannerOpen, setScannerOpen] = useState(false);
+  const [lookingUp, setLookingUp] = useState(false);
+  const [restock, setRestock] = useState<PantryItem | null>(null);
   const items = [...state.pantryItems].sort((a, b) => a.name.localeCompare(b.name));
   const low = runningLow(state.pantryItems);
 
@@ -66,6 +83,30 @@ function PantryCard() {
     });
   };
 
+  // A rescan of a barcode already on an item restocks it instead of making a
+  // duplicate row. A new barcode looks itself up (Open Food Facts) and opens
+  // the normal add form pre-filled but fully editable — nothing is ever
+  // saved just because a scan happened.
+  const handleScan = async (code: string) => {
+    setScannerOpen(false);
+    const match = state.pantryItems.find((i) => i.barcode === code);
+    if (match) {
+      setRestock(match);
+      return;
+    }
+    setLookingUp(true);
+    const product = await lookupProduct(code);
+    setLookingUp(false);
+    setModal({
+      open: true,
+      prefill: {
+        name: product?.name ?? '',
+        barcode: code,
+        notes: product?.packageSize ? `Package: ${product.packageSize}` : undefined,
+      },
+    });
+  };
+
   return (
     <Card>
       <CardHeader
@@ -73,9 +114,23 @@ function PantryCard() {
         icon="🧺"
         subtitle="What's actually in the house"
         action={
-          <button type="button" className="btn-primary !py-1 text-xs" onClick={() => setModal({ open: true })}>
-            + Item
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="btn-ghost !py-1 text-xs"
+              disabled={lookingUp}
+              onClick={() => setScannerOpen(true)}
+            >
+              {lookingUp ? 'Looking up…' : '📷 Scan'}
+            </button>
+            <button
+              type="button"
+              className="btn-primary !py-1 text-xs"
+              onClick={() => setModal({ open: true, prefill: undefined })}
+            >
+              + Item
+            </button>
+          </div>
         }
       />
 
@@ -141,8 +196,59 @@ function PantryCard() {
       ) : (
         <EmptyState message="Nothing tracked yet — add what's in the kitchen." />
       )}
-      <PantryItemForm open={modal.open} onClose={() => setModal({ open: false })} initial={modal.item} />
+      <PantryItemForm
+        open={modal.open}
+        onClose={() => setModal({ open: false })}
+        initial={modal.item}
+        prefill={modal.prefill}
+      />
+      {scannerOpen ? (
+        <Suspense fallback={null}>
+          <BarcodeScanner open onClose={() => setScannerOpen(false)} onScan={(code) => void handleScan(code)} />
+        </Suspense>
+      ) : null}
+      <RestockConfirm item={restock} onClose={() => setRestock(null)} />
     </Card>
+  );
+}
+
+/** A rescan of a tracked item's barcode lands here instead of opening the full edit form — the common case is just "I bought another one." */
+function RestockConfirm({ item, onClose }: { item: PantryItem | null; onClose: () => void }) {
+  const { update } = useStore();
+  const [amount, setAmount] = useState(1);
+
+  if (!item) return null;
+
+  const confirm = () => {
+    update('pantryItems', item.id, {
+      quantity: Math.max(0, item.quantity + amount),
+      updatedAt: new Date().toISOString(),
+    });
+    onClose();
+  };
+
+  return (
+    <Modal
+      open
+      onClose={onClose}
+      title="Restock item"
+      footer={<ModalActions onCancel={onClose} onConfirm={confirm} confirmLabel={`Add ${amount}`} />}
+    >
+      <div className="space-y-4">
+        <p className="text-sm text-ink-secondary">
+          You already track <span className="font-medium text-ink">{item.name}</span> — currently{' '}
+          {item.quantity} {item.unit}.
+        </p>
+        <Field label={`Add how many ${item.unit}`}>
+          <TextInput
+            type="number"
+            min={1}
+            value={amount}
+            onChange={(e) => setAmount(Math.max(1, numOr(e.target.value, 1)))}
+          />
+        </Field>
+      </div>
+    </Modal>
   );
 }
 
