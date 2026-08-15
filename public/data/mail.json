@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-08-14T12:30:00Z",
-  "accounts": ["personal"],
+  "generatedAt": "2026-08-15T12:30:00Z",
+  "accounts": ["personal", "school"],
   "emails": [
     {
-      "id": "19ffca309fd5940f",
+      "id": "1a001cc784d73359",
       "account": "personal",
-      "subject": "Texas A&M University Forwarding Confirmation - Receive Mail from jaxsond@tamu.edu",
-      "from": "forwarding-noreply@google.com",
-      "receivedAt": "2026-08-13T19:39:30Z",
-      "snippet": "jaxsond@tamu.edu has requested to automatically forward mail to your email address jaxsondriscollfcd7@gmail.com. Click the link in this email to confirm.",
+      "subject": "[JaxsonD7/Grocery-List] Run failed: Deploy to GitHub Pages - claude/pantry-grocery-tracker-2dzitg (7229c9b)",
+      "from": "notifications@github.com",
+      "receivedAt": "2026-08-14T19:42:51Z",
+      "snippet": "Deploy to GitHub Pages workflow run: Some jobs were not successful. Deploy to GitHub Pages / build failed.",
       "importance": "medium",
-      "reason": "Still unconfirmed a day later — school mail (and Canvas notifications) won't start flowing until this link is clicked."
+      "reason": "A deploy on a different repo of yours (Grocery-List) failed and hasn't been followed up."
     }
   ]
 }
