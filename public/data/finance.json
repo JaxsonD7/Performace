@@ -1,15 +1,4 @@
 {
-  "generatedAt": "2026-08-14T12:30:00Z",
-  "items": [
-    {
-      "id": "19fed4c49b336b96",
-      "subject": "Action Required: You will be missed!",
-      "from": "customerservice@bodyhealth.com",
-      "receivedAt": "2026-08-10T20:10:26Z",
-      "merchant": "BodyHealth",
-      "kind": "failed_payment",
-      "reason": "Recurring order payment has failed repeatedly since mid-July; BodyHealth now says the subscription will be canceled if it isn't fixed.",
-      "severity": "warning"
-    }
-  ]
+  "generatedAt": "2026-08-15T12:30:00Z",
+  "items": []
 }
