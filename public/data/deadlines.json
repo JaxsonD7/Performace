@@ -1,13 +1,4 @@
 {
-  "generatedAt": "2026-08-15T12:30:00Z",
-  "items": [
-    {
-      "id": "19ff32b2283fea95",
-      "subject": "Important: your data is at risk and will be deleted in 30 days.",
-      "from": "support@mega.nz",
-      "receivedAt": "2026-08-11T23:31:57Z",
-      "dueDate": "2026-09-10",
-      "reason": "MEGA account has been over its storage limit for 40+ days; the account said data gets deleted 30 days from this notice if left untouched."
-    }
-  ]
+  "generatedAt": "2026-08-16T12:30:00Z",
+  "items": []
 }
