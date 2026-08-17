@@ -1,4 +1,13 @@
 {
-  "generatedAt": "2026-08-15T12:30:00Z",
-  "items": []
+  "generatedAt": "2026-08-17T12:30:00Z",
+  "items": [
+    {
+      "id": "1a00c502a243f56f",
+      "subject": "Order #3256104 confirmed",
+      "from": "customerservice@bodyhealth.com",
+      "receivedAt": "2026-08-16T20:42:55Z",
+      "merchant": "BodyHealth",
+      "status": "ordered"
+    }
+  ]
 }
