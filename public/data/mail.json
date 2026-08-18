@@ -1,7 +1,17 @@
 {
-  "generatedAt": "2026-08-17T12:30:00Z",
+  "generatedAt": "2026-08-18T12:35:00Z",
   "accounts": ["personal", "school"],
   "emails": [
+    {
+      "id": "19fa66ea2b70f15c",
+      "account": "personal",
+      "subject": "Re: intern program — lunch with Iva (Gallagher/AJG)",
+      "from": "Iva_Giddiens@ajg.com",
+      "receivedAt": "2026-07-28T01:54:55Z",
+      "snippet": "You agreed to grab lunch with Iva Giddiens (Gallagher/AJG, re: their intern program) on Wednesday, August 19th — no time or place was ever confirmed.",
+      "importance": "high",
+      "reason": "That lunch is tomorrow and still has no time or place set — thread's been quiet since your July 28 reply."
+    },
     {
       "id": "1a001cc784d73359",
       "account": "personal",
@@ -10,7 +20,7 @@
       "receivedAt": "2026-08-14T19:42:51Z",
       "snippet": "Deploy to GitHub Pages workflow run: Some jobs were not successful. Deploy to GitHub Pages / build failed.",
       "importance": "medium",
-      "reason": "A deploy on a different repo of yours (Grocery-List) failed and hasn't been followed up."
+      "reason": "A deploy on a different repo of yours (Grocery-List) failed and still hasn't been followed up, 4 days later."
     }
   ]
 }
