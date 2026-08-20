@@ -1,26 +1,16 @@
 {
-  "generatedAt": "2026-08-18T12:35:00Z",
+  "generatedAt": "2026-08-20T12:30:00Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
-      "id": "19fa66ea2b70f15c",
-      "account": "personal",
-      "subject": "Re: intern program — lunch with Iva (Gallagher/AJG)",
-      "from": "Iva_Giddiens@ajg.com",
-      "receivedAt": "2026-07-28T01:54:55Z",
-      "snippet": "You agreed to grab lunch with Iva Giddiens (Gallagher/AJG, re: their intern program) on Wednesday, August 19th — no time or place was ever confirmed.",
-      "importance": "high",
-      "reason": "That lunch is tomorrow and still has no time or place set — thread's been quiet since your July 28 reply."
-    },
-    {
-      "id": "1a001cc784d73359",
-      "account": "personal",
-      "subject": "[JaxsonD7/Grocery-List] Run failed: Deploy to GitHub Pages - claude/pantry-grocery-tracker-2dzitg (7229c9b)",
-      "from": "notifications@github.com",
-      "receivedAt": "2026-08-14T19:42:51Z",
-      "snippet": "Deploy to GitHub Pages workflow run: Some jobs were not successful. Deploy to GitHub Pages / build failed.",
+      "id": "1a0166288e3e5945",
+      "account": "school",
+      "subject": "You're Invited: Finance Program Informational - Sept. 1st",
+      "from": "landriejordan@tamu.edu",
+      "receivedAt": "2026-08-18T19:39:05Z",
+      "snippet": "Mays Business School finance grad-program informational session, Sept. 1st — explore graduate opportunities and connect with industry-focused programs.",
       "importance": "medium",
-      "reason": "A deploy on a different repo of yours (Grocery-List) failed and still hasn't been followed up, 4 days later."
+      "reason": "Real school opportunity with a date attached (Sept 1) — needs an RSVP/decision before then."
     }
   ]
 }
