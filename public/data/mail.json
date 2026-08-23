@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-22T12:30:00Z",
+  "generatedAt": "2026-08-23T12:30:00Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -11,6 +11,16 @@
       "snippet": "Mays Business School finance grad-program informational session, Sept. 1st — explore graduate opportunities and connect with industry-focused programs.",
       "importance": "medium",
       "reason": "Real school opportunity with a date attached (Sept 1) — needs an RSVP/decision before then."
+    },
+    {
+      "id": "1a02bd54ba4d8eac",
+      "account": "school",
+      "subject": "Fwd: Texas A&M Men's Soccer Tryouts",
+      "from": "arad-texas-2029@tamu.edu",
+      "receivedAt": "2026-08-22T23:36:18Z",
+      "snippet": "Forwarded tryout announcement from Aggie Soccer — check the original posting for tryout dates/registration if interested.",
+      "importance": "medium",
+      "reason": "Forwarded tryout opportunity — needs a decision on whether to register before the tryout date."
     }
   ]
 }
