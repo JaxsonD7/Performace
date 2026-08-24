@@ -5,7 +5,7 @@ import { routineOn } from '@/lib/routine';
 import type { AppState, BlockKind, ClockTime, ISODate, ScheduleBlock, Weekday } from '@/types';
 
 /**
- * Builds a realistic day plan out of everything already tracked.
+ * Builds a day plan out of what is actually known, not what is guessed.
  *
  * The rules, in order of authority:
  *   1. Blocks you made or edited by hand are law — they are never moved.
@@ -13,11 +13,17 @@ import type { AppState, BlockKind, ClockTime, ISODate, ScheduleBlock, Weekday } 
  *   3. Class time is placed only where you have told the app you have a class
  *      — a `CourseMeeting` you entered by hand or that came from a syllabus.
  *      Nothing about school hours is ever guessed.
- *   4. Anchors (wake, prayer, meals, workout, reading, wind-down) go at the
- *      times set for that day of the week, and are skipped when something
- *      fixed already occupies the slot rather than double-booking you.
- *   5. Whatever gaps remain get filled with school work first (soonest due
- *      date wins), then tasks, split into focus blocks with breaks between.
+ *   4. Whatever gaps remain get filled with school work first (soonest due
+ *      date wins), then tasks, split into focus blocks with breaks between —
+ *      but only for an assignment or task you have explicitly opted into
+ *      scheduling (`schedule: true`); everything else stays empty for you to
+ *      fill in by hand with "+ Block" or "+ Event".
+ *
+ * Wake/prayer/meals/workout/reading/wind-down are routine *targets*, not
+ * known commitments for a given day — they used to be auto-placed as blocks,
+ * which meant "Build the day" filled the whole day whether or not any of
+ * that was actually true that day. They are intentionally left out here; add
+ * them by hand when they're real for that day.
  *
  * It is intentionally a pure function of (state, date, keep) so that swapping in
  * an AI planner later means replacing this one call, not rewiring the UI.
@@ -86,63 +92,6 @@ export function generateSchedule(
   const dayStart = toMinutes(routine.wakeTime);
   const dayEnd = toMinutes(routine.bedTime);
 
-  /** Every stretch of the day not yet claimed, in order. */
-  const freeGaps = (): Placed[] => {
-    const gaps: Placed[] = [];
-    let cursor = dayStart;
-    [...taken]
-      .sort((a, b) => a.start - b.start)
-      .forEach((t) => {
-        if (t.start > cursor) gaps.push({ start: cursor, end: t.start });
-        cursor = Math.max(cursor, t.end);
-      });
-    if (dayEnd > cursor) gaps.push({ start: cursor, end: dayEnd });
-    return gaps;
-  };
-
-  /**
-   * Finds room for something that wants a particular time.
-   *
-   * A workout at 4pm behind a 5pm club meeting should slide to 6pm, not vanish
-   * — but breakfast pushed to 3pm is worse than no breakfast block at all. So:
-   * take the free gap nearest the preferred time, and give up entirely once the
-   * drift passes what that kind of block can tolerate.
-   */
-  const findSlot = (preferred: number, dur: number, maxDrift: number): number | null => {
-    let best: number | null = null;
-    let bestDrift = Infinity;
-
-    freeGaps().forEach((gap) => {
-      if (gap.end - gap.start < dur) return;
-      // Sit at the preferred time when the gap contains it, otherwise hug
-      // whichever end of the gap is closest to it.
-      const start = Math.min(Math.max(preferred, gap.start), gap.end - dur);
-      const drift = Math.abs(start - preferred);
-      if (drift < bestDrift) {
-        bestDrift = drift;
-        best = start;
-      }
-    });
-
-    return bestDrift <= maxDrift ? best : null;
-  };
-
-  const place = (
-    preferred: number,
-    durationMin: number,
-    title: string,
-    kind: BlockKind,
-    source: ScheduleBlock['source'],
-    maxDrift = 120,
-  ): boolean => {
-    const start = findSlot(preferred, durationMin, maxDrift);
-    if (start === null) return false;
-    const slot = { start, end: start + durationMin };
-    out.push(block(date, slot.start, slot.end, title, kind, source));
-    taken.push(slot);
-    return true;
-  };
-
   // --- 1. Meetings: fixed commitments -------------------------------------
   meetingsOn(state, date).forEach((m) => {
     const start = toMinutes(m.startTime);
@@ -154,6 +103,20 @@ export function generateSchedule(
     );
     taken.push(slot);
   });
+
+  // --- 1b. A workout you actually planned for this date, at its own time --
+  // (Not a routine-time guess — only a real Workout entry with a startTime.)
+  const workout = state.workouts.find(
+    (w) => w.date === date && w.status !== 'skipped' && w.startTime,
+  );
+  if (workout?.startTime) {
+    const start = toMinutes(workout.startTime);
+    const slot = { start, end: start + workout.plannedMin };
+    if (!overlaps(slot, taken)) {
+      out.push(block(date, slot.start, slot.end, workout.title, 'workout', { type: 'workout', id: workout.id }));
+      taken.push(slot);
+    }
+  }
 
   // --- 2. Class time -------------------------------------------------------
   // Only classes you have actually told the app about — a CourseMeeting you
@@ -182,59 +145,7 @@ export function generateSchedule(
       taken.push(span);
     });
 
-  // --- 3. Anchors ----------------------------------------------------------
-  // Each carries how far it may drift: a meal an hour late is still a meal, a
-  // meal five hours late is a lie, while the gym can move across the evening.
-  const workout = state.workouts.find((w) => w.date === date && w.status !== 'skipped');
-  type Anchor = [ClockTime, number, string, BlockKind, ScheduleBlock['source'], number];
-
-  const anchors: Anchor[] = [
-    [routine.breakfastTime, 30, 'Breakfast', 'meal', { type: 'meal' }, 60],
-    [routine.lunchTime, 40, 'Lunch', 'meal', { type: 'meal' }, 90],
-    [routine.dinnerTime, 45, 'Dinner', 'meal', { type: 'meal' }, 90],
-    [routine.readingTime, s.readingGoalMin, 'Reading', 'reading', { type: 'reading' }, 180],
-  ];
-
-  // A workout only gets an anchor when there is something to anchor: either a
-  // planned session (its own start time wins) or this weekday has a workout
-  // time set at all. A rest day with no workout time set gets no gym block.
-  const workoutTime = workout?.startTime ?? routine.workoutTime;
-  if (workoutTime) {
-    anchors.push([
-      workoutTime,
-      workout?.plannedMin ?? 60,
-      workout ? workout.title : 'Workout',
-      'workout',
-      workout ? { type: 'workout', id: workout.id } : { type: 'manual' },
-      240,
-    ]);
-  }
-
-  // Habits with an anchor time (wake-up, prayer rule, evening reflection)
-  // become blocks of their own.
-  state.habits
-    .filter((h) => !h.archived && h.anchorTime)
-    .forEach((h) => {
-      anchors.push([
-        h.anchorTime!,
-        h.durationMin ?? 15,
-        h.name,
-        h.group === 'orthodox' ? 'prayer' : 'routine',
-        { type: 'habit', id: h.id },
-        90,
-      ]);
-    });
-
-  anchors
-    .sort((a, b) => toMinutes(a[0]) - toMinutes(b[0]))
-    .forEach(([time, dur, title, kind, source, drift]) => {
-      place(toMinutes(time), dur, title, kind, source, drift);
-    });
-
-  // Wind-down closes the day so the evening does not silently run past bedtime.
-  place(Math.max(dayStart, dayEnd - 30), 30, 'Wind down & sleep', 'sleep', { type: 'manual' }, 60);
-
-  // --- 4. Free gaps --------------------------------------------------------
+  // --- 3. Free gaps --------------------------------------------------------
   const gaps: Placed[] = [];
   const sorted = [...taken].sort((a, b) => a.start - b.start);
   let cursor = dayStart;
@@ -248,7 +159,7 @@ export function generateSchedule(
     gaps.push({ start: cursor + TRANSITION_MIN, end: dayEnd });
   }
 
-  // --- 5. Queue of flexible work ------------------------------------------
+  // --- 4. Queue of flexible work ------------------------------------------
   const priorityWeight = { high: 0, medium: 1, low: 2 };
 
   interface QueueItem {
@@ -298,7 +209,7 @@ export function generateSchedule(
       });
     });
 
-  // --- 6. Fill the gaps ----------------------------------------------------
+  // --- 5. Fill the gaps ----------------------------------------------------
   let qi = 0;
   gaps.forEach((gap) => {
     let at = gap.start;

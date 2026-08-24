@@ -146,7 +146,10 @@ export function SchedulePage() {
               blocks={day.blocks}
               showCurrent={isToday(date)}
               onEdit={(block) => setBlockModal({ open: true, block })}
-              emptyMessage='Nothing planned. "Build the day" pulls in your meetings, workout, school work, reading, and prayer rule.'
+              emptyMessage={
+                'Nothing planned. "Build the day" pulls in your meetings, class times, and a ' +
+                "planned workout — school work only for what you've opted in to scheduling. Add the rest by hand."
+              }
             />
           </Card>
 
@@ -183,7 +186,7 @@ export function SchedulePage() {
                 <Line label="Meetings & church" value={`${day.meetings.length} today`} />
                 <Line
                   label="Workout"
-                  value={day.workouts.length ? day.workouts[0].title : 'None planned'}
+                  value={day.workouts.find((w) => w.startTime)?.title ?? 'None planned'}
                 />
                 <Line label="School due soon" value={`${state.assignments.filter((a) => a.status !== 'done').length} open`} />
                 <Line
@@ -198,12 +201,12 @@ export function SchedulePage() {
                   label="Class times"
                   value={`${state.courseMeetings.length} set`}
                 />
-                <Line label="Reading goal" value={`${state.settings.readingGoalMin} min`} />
                 <p className="pt-2 text-xs text-ink-muted">
-                  Nothing here is guessed: classes only show up once you add them under Courses,
-                  and homework only gets placed on an assignment where you've turned it on. Blocks
-                  you add or edit by hand are marked manual and survive a rebuild — everything else
-                  is regenerated from scratch.
+                  Only known commitments get auto-placed: meetings, class times, and a workout you
+                  gave a start time. Homework only gets placed on an assignment where you've turned
+                  it on. Meals, reading, prayer, and everything else are yours to add by hand — a
+                  rebuild never fills the whole day for you. Blocks you add or edit by hand are
+                  marked manual and survive a rebuild; everything else is regenerated from scratch.
                 </p>
               </div>
             </Card>
