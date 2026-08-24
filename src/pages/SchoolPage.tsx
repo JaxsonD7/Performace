@@ -92,10 +92,19 @@ export function SchoolPage() {
 const TEST_QUIZ_TYPES: Assignment['type'][] = ['exam', 'quiz'];
 const CLASS_TOPIC_TYPES: Assignment['type'][] = ['other'];
 
+type AssignmentGroup = 'tests' | 'homework' | 'class';
+
+const ASSIGNMENT_GROUP_META: Record<AssignmentGroup, { title: string; icon: string; empty: string }> = {
+  tests: { title: 'Tests & quizzes', icon: '📝', empty: 'No exams or quizzes on the books.' },
+  homework: { title: 'Homework', icon: '🎓', empty: "Nothing due. Add an assignment to start tracking it." },
+  class: { title: "What's covered in class", icon: '🏫', empty: 'No class-day content logged.' },
+};
+
 function AssignmentsTab() {
   const { state, update, remove } = useStore();
   const [modal, setModal] = useState<{ open: boolean; item?: Assignment }>({ open: false });
   const [showDone, setShowDone] = useState(false);
+  const [group, setGroup] = useState<AssignmentGroup>('tests');
 
   const all = useMemo(
     () =>
@@ -105,60 +114,53 @@ function AssignmentsTab() {
     [state, showDone],
   );
 
-  const testsQuizzes = all.filter((a) => TEST_QUIZ_TYPES.includes(a.type));
-  const classTopics = all.filter((a) => CLASS_TOPIC_TYPES.includes(a.type));
-  const homework = all.filter(
-    (a) => !TEST_QUIZ_TYPES.includes(a.type) && !CLASS_TOPIC_TYPES.includes(a.type),
-  );
+  const byGroup: Record<AssignmentGroup, Assignment[]> = {
+    tests: all.filter((a) => TEST_QUIZ_TYPES.includes(a.type)),
+    class: all.filter((a) => CLASS_TOPIC_TYPES.includes(a.type)),
+    homework: all.filter(
+      (a) => !TEST_QUIZ_TYPES.includes(a.type) && !CLASS_TOPIC_TYPES.includes(a.type),
+    ),
+  };
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-end gap-2">
-        <button
-          type="button"
-          className="btn-quiet !px-2 !py-1 text-xs"
-          onClick={() => setShowDone((v) => !v)}
-        >
-          {showDone ? 'Hide finished' : 'Show finished'}
-        </button>
-        <button
-          type="button"
-          className="btn-primary !py-1 text-xs"
-          onClick={() => setModal({ open: true })}
-        >
-          + Assignment
-        </button>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <Segmented<AssignmentGroup>
+          size="sm"
+          value={group}
+          onChange={setGroup}
+          options={(Object.keys(ASSIGNMENT_GROUP_META) as AssignmentGroup[]).map((g) => ({
+            value: g,
+            label: `${ASSIGNMENT_GROUP_META[g].title} (${byGroup[g].length})`,
+          }))}
+        />
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="btn-quiet !px-2 !py-1 text-xs"
+            onClick={() => setShowDone((v) => !v)}
+          >
+            {showDone ? 'Hide finished' : 'Show finished'}
+          </button>
+          <button
+            type="button"
+            className="btn-primary !py-1 text-xs"
+            onClick={() => setModal({ open: true })}
+          >
+            + Assignment
+          </button>
+        </div>
       </div>
 
       <AssignmentSection
-        title="Tests & quizzes"
-        icon="📝"
-        rows={testsQuizzes}
+        title={ASSIGNMENT_GROUP_META[group].title}
+        icon={ASSIGNMENT_GROUP_META[group].icon}
+        rows={byGroup[group]}
         state={state}
         update={update}
         remove={remove}
         onEdit={(item) => setModal({ open: true, item })}
-        emptyMessage="No exams or quizzes on the books."
-      />
-      <AssignmentSection
-        title="Homework"
-        icon="🎓"
-        rows={homework}
-        state={state}
-        update={update}
-        remove={remove}
-        onEdit={(item) => setModal({ open: true, item })}
-        emptyMessage="Nothing due. Add an assignment to start tracking it."
-      />
-      <AssignmentSection
-        title="What's covered in class"
-        icon="🏫"
-        rows={classTopics}
-        state={state}
-        update={update}
-        remove={remove}
-        onEdit={(item) => setModal({ open: true, item })}
-        emptyMessage="No class-day content logged."
+        emptyMessage={ASSIGNMENT_GROUP_META[group].empty}
       />
 
       <AssignmentForm
@@ -295,20 +297,32 @@ function AssignmentSection({
 
 // ---------------------------------------------------------------------------
 
+type TaskGroup = 'overdue' | 'today' | 'upcoming' | 'backlog' | 'done';
+
+const TASK_GROUP_LABEL: Record<TaskGroup, string> = {
+  overdue: 'Overdue',
+  today: 'Today',
+  upcoming: 'Upcoming',
+  backlog: 'Backlog',
+  done: 'Done',
+};
+
 function TasksTab() {
   const { state, update, remove } = useStore();
   const [modal, setModal] = useState<{ open: boolean; item?: Task }>({ open: false });
 
-  const groups: [string, Task[]][] = [
-    ['Overdue', state.tasks.filter((t) => !t.completed && t.date && t.date < today())],
-    ['Today', state.tasks.filter((t) => !t.completed && t.date === today())],
-    [
-      'Upcoming',
-      state.tasks.filter((t) => !t.completed && t.date && t.date > today()),
-    ],
-    ['Backlog', state.tasks.filter((t) => !t.completed && !t.date)],
-    ['Done', state.tasks.filter((t) => t.completed)],
-  ];
+  const byGroup: Record<TaskGroup, Task[]> = {
+    overdue: state.tasks.filter((t) => !t.completed && t.date && t.date < today()),
+    today: state.tasks.filter((t) => !t.completed && t.date === today()),
+    upcoming: state.tasks.filter((t) => !t.completed && t.date && t.date > today()),
+    backlog: state.tasks.filter((t) => !t.completed && !t.date),
+    done: state.tasks.filter((t) => t.completed),
+  };
+  const order: TaskGroup[] = ['overdue', 'today', 'upcoming', 'backlog', 'done'];
+  const [group, setGroup] = useState<TaskGroup>(
+    () => order.find((g) => byGroup[g].length) ?? 'overdue',
+  );
+  const items = byGroup[group];
 
   return (
     <Card>
@@ -325,16 +339,17 @@ function TasksTab() {
           </button>
         }
       />
-      <div className="divide-y divide-line">
-        {groups
-          .filter(([, items]) => items.length)
-          .map(([label, items]) => (
-            <div key={label}>
-              <p className="bg-raised px-4 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
-                {label} · {items.length}
-              </p>
-              <ul className="divide-y divide-line">
-                {items.map((t) => (
+      <div className="border-b border-line px-4 py-2.5 sm:px-5">
+        <Segmented<TaskGroup>
+          size="sm"
+          value={group}
+          onChange={setGroup}
+          options={order.map((g) => ({ value: g, label: `${TASK_GROUP_LABEL[g]} (${byGroup[g].length})` }))}
+        />
+      </div>
+      {items.length ? (
+        <ul className="divide-y divide-line">
+          {items.map((t) => (
                   <li key={t.id} className="group flex items-center gap-1 px-2">
                     <div className="min-w-0 flex-1">
                       <Checkbox
@@ -370,12 +385,11 @@ function TasksTab() {
                       </IconButton>
                     </span>
                   </li>
-                ))}
-              </ul>
-            </div>
           ))}
-        {state.tasks.length === 0 ? <EmptyState message="No tasks yet." /> : null}
-      </div>
+        </ul>
+      ) : (
+        <EmptyState message={state.tasks.length === 0 ? 'No tasks yet.' : `Nothing in ${TASK_GROUP_LABEL[group].toLowerCase()}.`} />
+      )}
       <TaskForm open={modal.open} onClose={() => setModal({ open: false })} initial={modal.item} />
     </Card>
   );
