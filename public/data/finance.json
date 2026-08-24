@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-23T12:30:00Z",
+  "generatedAt": "2026-08-24T12:30:00Z",
   "items": [
     {
       "id": "1a02b54bcc1f1be5",
@@ -9,7 +9,7 @@
       "amount": 21.32,
       "merchant": "Vercel",
       "kind": "failed_payment",
-      "reason": "Card ending 0946 declined for the 'Athlo' team — Vercel is warning of a shutdown if billing isn't updated.",
+      "reason": "Card ending 0946 declined for the 'Athlo' team — Vercel is warning of a shutdown if billing isn't updated. Still unresolved.",
       "severity": "critical"
     }
   ]
