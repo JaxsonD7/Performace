@@ -1,15 +1,4 @@
 {
-  "generatedAt": "2026-08-23T12:30:00Z",
-  "items": [
-    {
-      "id": "1a00c502a243f56f",
-      "subject": "Your BodyHealth.com LLC package was delivered",
-      "from": "no-reply@shipping.amazon.com",
-      "receivedAt": "2026-08-22T20:17:14Z",
-      "merchant": "BodyHealth",
-      "carrier": "Amazon Logistics",
-      "trackingNumber": "TBA333823619906",
-      "status": "delivered"
-    }
-  ]
+  "generatedAt": "2026-08-24T12:30:00Z",
+  "items": []
 }
