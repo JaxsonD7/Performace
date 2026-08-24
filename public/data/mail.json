@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-23T12:30:00Z",
+  "generatedAt": "2026-08-24T12:30:00Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -21,6 +21,16 @@
       "snippet": "Forwarded tryout announcement from Aggie Soccer — check the original posting for tryout dates/registration if interested.",
       "importance": "medium",
       "reason": "Forwarded tryout opportunity — needs a decision on whether to register before the tryout date."
+    },
+    {
+      "id": "1a030825199659c3",
+      "account": "school",
+      "subject": "Your Missouri State Ticket Pull Opens Tuesday",
+      "from": "info@updates.12thmanfoundation.com",
+      "receivedAt": "2026-08-23T21:03:26Z",
+      "snippet": "Aggie Football season-opener vs. Missouri State student ticket pull opens Tuesday — claim your ticket before the window closes.",
+      "importance": "medium",
+      "reason": "Time-sensitive: the season-opener student ticket pull opens tomorrow (Tue Aug 25)."
     }
   ]
 }
