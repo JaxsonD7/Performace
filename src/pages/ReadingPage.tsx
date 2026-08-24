@@ -25,7 +25,7 @@ const KIND_TONE: Record<Book['kind'], 'brand' | 'good' | 'neutral'> = {
 };
 
 export function ReadingPage() {
-  const { state, remove } = useStore();
+  const { state, update, remove } = useStore();
   const [sessionModal, setSessionModal] = useState<{ open: boolean; item?: ReadingSession }>({
     open: false,
   });
@@ -34,6 +34,16 @@ export function ReadingPage() {
   const week = useMemo(
     () => weekSummary(state, startOfWeek(today(), state.settings.weekStartsOn)),
     [state],
+  );
+  // Assigned course reading (HIST 220's reading responses, etc.) — pulled from
+  // the syllabus/classwork, not something logged here. Marking it done just
+  // flips the underlying assignment; full editing still lives on School.
+  const assignedReading = useMemo(
+    () =>
+      state.assignments
+        .filter((a) => a.type === 'reading' && a.status !== 'done')
+        .sort((a, b) => (a.dueDate < b.dueDate ? -1 : 1)),
+    [state.assignments],
   );
   const sessions = useMemo(
     () => [...state.reading].sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 25),
@@ -105,6 +115,60 @@ export function ReadingPage() {
               format={(v) => `${Math.round(v)} min`}
             />
           </div>
+        </Card>
+
+        <Card>
+          <CardHeader
+            title="Reading to do"
+            icon="🎓"
+            subtitle={assignedReading.length ? `${assignedReading.length} assigned` : 'From your class syllabi'}
+          />
+          {assignedReading.length ? (
+            <ul className="divide-y divide-line">
+              {assignedReading.map((a) => {
+                const course = state.courses.find((c) => c.id === a.courseId);
+                const overdue = a.dueDate < today();
+                return (
+                  <li key={a.id} className="group flex items-start gap-3 px-4 py-2.5">
+                    <input
+                      type="checkbox"
+                      checked={false}
+                      onChange={() => update('assignments', a.id, { status: 'done' })}
+                      className="mt-1 h-4 w-4 shrink-0 rounded border-line accent-[rgb(var(--series-1))]"
+                      aria-label={`Mark ${a.title} done`}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm text-ink">{a.title}</p>
+                      <p className="truncate text-[11px] text-ink-muted">
+                        {course ? (
+                          <span className="inline-flex items-center gap-1.5">
+                            <span
+                              className="h-2 w-2 rounded-full"
+                              style={{ background: `rgb(var(--series-${course.colorSlot}))` }}
+                              aria-hidden="true"
+                            />
+                            {course.name}
+                          </span>
+                        ) : null}
+                      </p>
+                    </div>
+                    {overdue ? (
+                      <Badge tone="critical">⚠ {relativeDay(a.dueDate)}</Badge>
+                    ) : (
+                      <span className="shrink-0 text-xs text-ink-secondary">{relativeDay(a.dueDate)}</span>
+                    )}
+                    <span className="shrink-0 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+                      <IconButton onClick={() => remove('assignments', a.id)} label="Delete" tone="danger">
+                        <TrashIcon />
+                      </IconButton>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <EmptyState message="Nothing assigned right now." />
+          )}
         </Card>
 
         <div className="grid gap-4 lg:grid-cols-2">

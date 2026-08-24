@@ -88,42 +88,110 @@ export function SchoolPage() {
 
 // ---------------------------------------------------------------------------
 
+/** Tests/quizzes vs. homework-ish deliverables vs. bare class-day content. */
+const TEST_QUIZ_TYPES: Assignment['type'][] = ['exam', 'quiz'];
+const CLASS_TOPIC_TYPES: Assignment['type'][] = ['other'];
+
 function AssignmentsTab() {
   const { state, update, remove } = useStore();
   const [modal, setModal] = useState<{ open: boolean; item?: Assignment }>({ open: false });
   const [showDone, setShowDone] = useState(false);
 
-  const rows = useMemo(() => {
-    const list = showDone
-      ? [...state.assignments].sort((a, b) => (a.dueDate < b.dueDate ? 1 : -1))
-      : openAssignments(state);
-    return list;
-  }, [state, showDone]);
+  const all = useMemo(
+    () =>
+      showDone
+        ? [...state.assignments].sort((a, b) => (a.dueDate < b.dueDate ? 1 : -1))
+        : openAssignments(state),
+    [state, showDone],
+  );
+
+  const testsQuizzes = all.filter((a) => TEST_QUIZ_TYPES.includes(a.type));
+  const classTopics = all.filter((a) => CLASS_TOPIC_TYPES.includes(a.type));
+  const homework = all.filter(
+    (a) => !TEST_QUIZ_TYPES.includes(a.type) && !CLASS_TOPIC_TYPES.includes(a.type),
+  );
 
   return (
-    <Card>
-      <CardHeader
-        title={showDone ? 'All assignments' : 'Open assignments'}
-        icon="🎓"
-        action={
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              className="btn-quiet !px-2 !py-1 text-xs"
-              onClick={() => setShowDone((v) => !v)}
-            >
-              {showDone ? 'Hide finished' : 'Show finished'}
-            </button>
-            <button
-              type="button"
-              className="btn-primary !py-1 text-xs"
-              onClick={() => setModal({ open: true })}
-            >
-              + Assignment
-            </button>
-          </div>
-        }
+    <div className="space-y-4">
+      <div className="flex items-center justify-end gap-2">
+        <button
+          type="button"
+          className="btn-quiet !px-2 !py-1 text-xs"
+          onClick={() => setShowDone((v) => !v)}
+        >
+          {showDone ? 'Hide finished' : 'Show finished'}
+        </button>
+        <button
+          type="button"
+          className="btn-primary !py-1 text-xs"
+          onClick={() => setModal({ open: true })}
+        >
+          + Assignment
+        </button>
+      </div>
+
+      <AssignmentSection
+        title="Tests & quizzes"
+        icon="📝"
+        rows={testsQuizzes}
+        state={state}
+        update={update}
+        remove={remove}
+        onEdit={(item) => setModal({ open: true, item })}
+        emptyMessage="No exams or quizzes on the books."
       />
+      <AssignmentSection
+        title="Homework"
+        icon="🎓"
+        rows={homework}
+        state={state}
+        update={update}
+        remove={remove}
+        onEdit={(item) => setModal({ open: true, item })}
+        emptyMessage="Nothing due. Add an assignment to start tracking it."
+      />
+      <AssignmentSection
+        title="What's covered in class"
+        icon="🏫"
+        rows={classTopics}
+        state={state}
+        update={update}
+        remove={remove}
+        onEdit={(item) => setModal({ open: true, item })}
+        emptyMessage="No class-day content logged."
+      />
+
+      <AssignmentForm
+        open={modal.open}
+        onClose={() => setModal({ open: false })}
+        initial={modal.item}
+      />
+    </div>
+  );
+}
+
+function AssignmentSection({
+  title,
+  icon,
+  rows,
+  state,
+  update,
+  remove,
+  onEdit,
+  emptyMessage,
+}: {
+  title: string;
+  icon: string;
+  rows: Assignment[];
+  state: ReturnType<typeof useStore>['state'];
+  update: ReturnType<typeof useStore>['update'];
+  remove: ReturnType<typeof useStore>['remove'];
+  onEdit: (item: Assignment) => void;
+  emptyMessage: string;
+}) {
+  return (
+    <Card>
+      <CardHeader title={title} icon={icon} subtitle={rows.length ? `${rows.length}` : undefined} />
       {rows.length ? (
         <div className="scroll-x">
           <table className="w-full min-w-[640px] text-sm">
@@ -200,7 +268,7 @@ function AssignmentsTab() {
                     </td>
                     <td className="px-3 py-2">
                       <span className="flex opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
-                        <IconButton onClick={() => setModal({ open: true, item: a })} label="Edit">
+                        <IconButton onClick={() => onEdit(a)} label="Edit">
                           <PencilIcon />
                         </IconButton>
                         <IconButton
@@ -219,13 +287,8 @@ function AssignmentsTab() {
           </table>
         </div>
       ) : (
-        <EmptyState message="Nothing due. Add an assignment to start tracking it." />
+        <EmptyState message={emptyMessage} />
       )}
-      <AssignmentForm
-        open={modal.open}
-        onClose={() => setModal({ open: false })}
-        initial={modal.item}
-      />
     </Card>
   );
 }
