@@ -1,4 +1,4 @@
-import { fromISODate, fromMinutes, relativeDay, toMinutes } from '@/lib/date';
+import { addDays, fromISODate, fromMinutes, relativeDay, today, toMinutes } from '@/lib/date';
 import { uid } from '@/lib/id';
 import { meetingsOn } from '@/lib/selectors';
 import { routineOn } from '@/lib/routine';
@@ -237,6 +237,29 @@ export function generateSchedule(
 /** Blocks a regenerate must not touch: hand-made, hand-edited, or completed. */
 export function protectedBlocks(blocks: ScheduleBlock[]): ScheduleBlock[] {
   return blocks.filter((b) => b.manual || b.completed);
+}
+
+/** How far ahead the schedule keeps itself built, in days (including today). */
+export const SCHEDULE_LOOKAHEAD_DAYS = 30;
+
+/**
+ * Keeps a rolling window of days regenerated automatically — the client-side
+ * replacement for a manual "Build the day" button. Every day in
+ * `[today, today + days)` gets its non-protected blocks rebuilt from whatever
+ * is currently known (meetings, class times, a timed workout, opted-in
+ * school work/tasks); days outside that window are left exactly as they are.
+ */
+export function ensureScheduleAhead(state: AppState, days = SCHEDULE_LOOKAHEAD_DAYS): ScheduleBlock[] {
+  const start = today();
+  const window = new Set<ISODate>();
+  for (let i = 0; i < days; i += 1) window.add(addDays(start, i));
+
+  const untouched = state.blocks.filter((b) => !window.has(b.date));
+  const rebuilt = [...window].flatMap((date) => {
+    const existing = state.blocks.filter((b) => b.date === date);
+    return generateSchedule(state, date, { keep: protectedBlocks(existing) });
+  });
+  return [...untouched, ...rebuilt];
 }
 
 /** The block happening right now, if any. */

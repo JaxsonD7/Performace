@@ -855,6 +855,8 @@ export interface AppState {
   dismissedFinanceIds: string[];
   dismissedPackageIds: string[];
   dismissedDeadlineIds: string[];
+  /** Deadline-digest items already turned into a task — keeps a deleted task from being recreated on the next scan. */
+  autoScheduledDeadlineIds: string[];
 }
 
 /** Keys of AppState that hold arrays of records with an `id`. */

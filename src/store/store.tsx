@@ -26,6 +26,7 @@ import { fetchPackageDigest } from '@/integrations/packages';
 import { fetchDeadlineDigest } from '@/integrations/deadlines';
 import { fetchCanvasDigest } from '@/integrations/canvas';
 import { computeAttentionFlags, computeHomeAssistantContext } from '@/lib/homeAssistant';
+import { ensureScheduleAhead } from '@/lib/schedule';
 import type {
   AppState,
   Assignment,
@@ -39,6 +40,7 @@ import type {
   RecordOf,
   ScheduleBlock,
   Settings,
+  Task,
   Weekday,
 } from '@/types';
 
@@ -56,6 +58,8 @@ type Action =
   | { type: 'routine'; weekday: Weekday; patch: Partial<DayRoutine> }
   | { type: 'day'; date: ISODate; patch: Partial<DayLog> }
   | { type: 'setBlocks'; date: ISODate; blocks: ScheduleBlock[] }
+  | { type: 'replaceBlocks'; blocks: ScheduleBlock[] }
+  | { type: 'autoScheduleDeadline'; deadlineId: string; task: Task }
   | { type: 'setQuickActions'; actions: QuickAction[] }
   | { type: 'removeHabit'; id: string }
   | { type: 'dismissMail'; id: string }
@@ -133,6 +137,18 @@ function applyAction(state: AppState, action: Action): AppState {
         ...state,
         blocks: [...state.blocks.filter((b) => b.date !== action.date), ...action.blocks],
       };
+
+    case 'replaceBlocks':
+      return { ...state, blocks: action.blocks };
+
+    case 'autoScheduleDeadline':
+      return state.autoScheduledDeadlineIds.includes(action.deadlineId)
+        ? state
+        : {
+            ...state,
+            tasks: [...state.tasks, action.task],
+            autoScheduledDeadlineIds: [...state.autoScheduledDeadlineIds, action.deadlineId],
+          };
 
     case 'setQuickActions':
       return { ...state, quickActions: action.actions };
@@ -666,6 +682,79 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       clearInterval(interval);
     };
   }, [state.settings.haReadToken]);
+
+  // Keeps the schedule built out SCHEDULE_LOOKAHEAD_DAYS ahead automatically —
+  // the replacement for a manual "Build the day" button. Reads the freshest
+  // state via the ref (rather than closing over `state`) but the dependency
+  // list below deliberately excludes `state.blocks`: writing the regenerated
+  // blocks changes that array, and depending on it here would make this
+  // effect retrigger itself forever.
+  useEffect(() => {
+    if (!ready) return;
+    dispatch({ type: 'replaceBlocks', blocks: ensureScheduleAhead(stateRef.current) });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    ready,
+    state.courseMeetings,
+    state.courses,
+    state.assignments,
+    state.meetings,
+    state.tasks,
+    state.workouts,
+    state.settings.routines,
+    state.settings.focusBlockMin,
+    state.settings.breakMin,
+  ]);
+
+  // Pulls new deadline-digest items in as removable tasks — same
+  // generated-outside-the-app pattern as the Home cards, but written into
+  // `state.tasks` (with `schedule: true`) instead of just displayed, so a
+  // real due date actually lands on the schedule rather than sitting in a
+  // dismissible card. Only items with a stated `dueDate` qualify; mail,
+  // finance, and package digests have nothing to put on a calendar. Deleting
+  // the resulting task is how you "remove it if needed" — `autoScheduledDeadlineIds`
+  // remembers it either way, so it never comes back on the next scan.
+  useEffect(() => {
+    if (!ready) return;
+    let cancelled = false;
+    const check = () => {
+      void fetchDeadlineDigest().then((digest) => {
+        if (cancelled || !digest) return;
+        const s = stateRef.current;
+        digest.items
+          .filter(
+            (d): d is typeof d & { dueDate: string } =>
+              !!d.dueDate &&
+              !s.dismissedDeadlineIds.includes(d.id) &&
+              !s.autoScheduledDeadlineIds.includes(d.id),
+          )
+          .forEach((d) => {
+            dispatch({
+              type: 'autoScheduleDeadline',
+              deadlineId: d.id,
+              task: {
+                id: uid('task'),
+                title: d.subject,
+                notes: d.reason,
+                area: 'personal',
+                priority: 'medium',
+                date: d.dueDate,
+                estimateMin: 15,
+                completed: false,
+                schedule: true,
+                createdAt: new Date().toISOString(),
+              },
+            });
+          });
+      });
+    };
+    check();
+    const interval = setInterval(check, 30 * 60 * 1000);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, [ready]);
 
   /** Pushes this device's current copy up, marking it settled on success. */
   const pushLocal = useCallback(async (token: string, gistId: string, toPush: AppState) => {

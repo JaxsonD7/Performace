@@ -24,7 +24,7 @@ import {
   today,
   weekDates,
 } from '@/lib/date';
-import { generateSchedule, nextBlock, protectedBlocks } from '@/lib/schedule';
+import { nextBlock, protectedBlocks, SCHEDULE_LOOKAHEAD_DAYS } from '@/lib/schedule';
 import { selectDay } from '@/lib/selectors';
 import { useStore } from '@/store/store';
 import type { ISODate, ScheduleBlock } from '@/types';
@@ -41,9 +41,6 @@ export function SchedulePage() {
   const day = useMemo(() => selectDay(state, date), [state, date]);
   const week = weekDates(startOfWeek(date, state.settings.weekStartsOn));
   const done = day.blocks.filter((b) => b.completed).length;
-
-  const build = () =>
-    setBlocks(date, generateSchedule(state, date, { keep: protectedBlocks(day.blocks) }));
 
   const clear = () => setBlocks(date, protectedBlocks(day.blocks));
 
@@ -63,9 +60,6 @@ export function SchedulePage() {
               onClick={() => setBlockModal({ open: true })}
             >
               + Block
-            </button>
-            <button type="button" className="btn-primary" onClick={build}>
-              Build the day
             </button>
           </>
         }
@@ -147,8 +141,9 @@ export function SchedulePage() {
               showCurrent={isToday(date)}
               onEdit={(block) => setBlockModal({ open: true, block })}
               emptyMessage={
-                'Nothing planned. "Build the day" pulls in your meetings, class times, and a ' +
-                "planned workout — school work only for what you've opted in to scheduling. Add the rest by hand."
+                'Nothing here yet — the day rebuilds itself automatically from your meetings, ' +
+                "class times, and a planned workout, plus any school work you've opted in to " +
+                'scheduling. Add the rest by hand with "+ Block" or "+ Event".'
               }
             />
           </Card>
@@ -202,11 +197,13 @@ export function SchedulePage() {
                   value={`${state.courseMeetings.length} set`}
                 />
                 <p className="pt-2 text-xs text-ink-muted">
-                  Only known commitments get auto-placed: meetings, class times, and a workout you
-                  gave a start time. Homework only gets placed on an assignment where you've turned
-                  it on. Meals, reading, prayer, and everything else are yours to add by hand — a
-                  rebuild never fills the whole day for you. Blocks you add or edit by hand are
-                  marked manual and survive a rebuild; everything else is regenerated from scratch.
+                  This rebuilds itself automatically, up to {SCHEDULE_LOOKAHEAD_DAYS} days out —
+                  there's no "build" button anymore. Only known commitments get auto-placed:
+                  meetings, class times, a workout you gave a start time, and a real email deadline
+                  (turned into a removable task). Homework only gets placed on an assignment where
+                  you've turned it on. Meals, reading, prayer, and everything else are yours to add
+                  by hand. Blocks you add or edit by hand are marked manual and survive a rebuild;
+                  everything else regenerates from scratch as things change.
                 </p>
               </div>
             </Card>

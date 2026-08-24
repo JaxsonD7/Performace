@@ -22,7 +22,9 @@ export function DeadlineCard() {
 
   const items = digest && digest !== 'loading'
     ? digest.items
-        .filter((i) => !state.dismissedDeadlineIds.includes(i.id))
+        // Anything with a real due date is already living as a removable
+        // task on the schedule — no need to also show it here.
+        .filter((i) => !state.dismissedDeadlineIds.includes(i.id) && !state.autoScheduledDeadlineIds.includes(i.id))
         .sort((a, b) => {
           if (a.dueDate && b.dueDate) return a.dueDate.localeCompare(b.dueDate);
           if (a.dueDate) return -1;
