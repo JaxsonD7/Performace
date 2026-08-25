@@ -1,17 +1,7 @@
 {
-  "generatedAt": "2026-08-24T12:30:00Z",
+  "generatedAt": "2026-08-25T12:19:24Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a0166288e3e5945",
-      "account": "school",
-      "subject": "You're Invited: Finance Program Informational - Sept. 1st",
-      "from": "landriejordan@tamu.edu",
-      "receivedAt": "2026-08-18T19:39:05Z",
-      "snippet": "Mays Business School finance grad-program informational session, Sept. 1st — explore graduate opportunities and connect with industry-focused programs.",
-      "importance": "medium",
-      "reason": "Real school opportunity with a date attached (Sept 1) — needs an RSVP/decision before then."
-    },
     {
       "id": "1a02bd54ba4d8eac",
       "account": "school",
@@ -29,8 +19,18 @@
       "from": "info@updates.12thmanfoundation.com",
       "receivedAt": "2026-08-23T21:03:26Z",
       "snippet": "Aggie Football season-opener vs. Missouri State student ticket pull opens Tuesday — claim your ticket before the window closes.",
-      "importance": "medium",
-      "reason": "Time-sensitive: the season-opener student ticket pull opens tomorrow (Tue Aug 25)."
+      "importance": "high",
+      "reason": "The ticket pull window opens today (Tue Aug 25) — claim it before it closes."
+    },
+    {
+      "id": "1a03500b2a112bda",
+      "account": "personal",
+      "subject": "[GitHub] A personal access token (classic) has been added to your account",
+      "from": "noreply@github.com",
+      "receivedAt": "2026-08-24T18:20:33Z",
+      "snippet": "A personal access token (classic) \"Performance\" was added with very broad scopes (admin:enterprise, admin:org, admin:repo_hook, admin:ssh_signing_key, and more).",
+      "importance": "high",
+      "reason": "Broad admin-scoped token added to your GitHub account — worth a quick check that this was you (e.g. this app's automation) and not someone else."
     }
   ]
 }
