@@ -1,4 +1,21 @@
 {
-  "generatedAt": "2026-08-24T12:30:00Z",
-  "items": []
+  "generatedAt": "2026-08-25T12:19:24Z",
+  "items": [
+    {
+      "id": "1a035c6c2a953a9f",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "Welcome to Finance 341: 26 FALL FINC 341 (201, 202, 501, 502, 599)",
+      "receivedAt": "2026-08-24T21:56:49Z",
+      "reason": "TA introduction for the semester."
+    },
+    {
+      "id": "1a035f64a35cf696",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "Help Desk: 26 FALL FINC 341 (201, 202, 501, 502, 599)",
+      "receivedAt": "2026-08-24T22:48:45Z",
+      "reason": "Finance Help Desk starts 8/26 — useful resource, busiest on quiz/exam days."
+    }
+  ]
 }
