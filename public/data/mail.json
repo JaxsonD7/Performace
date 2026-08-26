@@ -1,7 +1,37 @@
 {
-  "generatedAt": "2026-08-25T12:19:24Z",
+  "generatedAt": "2026-08-26T12:25:32Z",
   "accounts": ["personal", "school"],
   "emails": [
+    {
+      "id": "1a03a49764d33e93",
+      "account": "school",
+      "subject": "RecSport-SportClubs WOL Decision",
+      "from": "sportclubs@rec.tamu.edu",
+      "receivedAt": "2026-08-25T18:58:05Z",
+      "snippet": "Your Waiver of Liability for the 2026-2027 school year has been DENIED. Correct the listed items and resubmit the form.",
+      "importance": "high",
+      "reason": "Denied WOL needs to be corrected and resubmitted to stay eligible for club sports."
+    },
+    {
+      "id": "1a03500b2a112bda",
+      "account": "personal",
+      "subject": "[GitHub] A personal access token (classic) has been added to your account",
+      "from": "noreply@github.com",
+      "receivedAt": "2026-08-24T18:20:33Z",
+      "snippet": "A personal access token (classic) \"Performance\" was added with very broad scopes (admin:enterprise, admin:org, admin:repo_hook, admin:ssh_signing_key, and more).",
+      "importance": "high",
+      "reason": "Broad admin-scoped token added to your GitHub account — worth a quick check that this was you (e.g. this app's automation) and not someone else."
+    },
+    {
+      "id": "1a0397eacd331735",
+      "account": "school",
+      "subject": "RSVP! Finance Program Informational - Sept. 1st",
+      "from": "landriejordan@tamu.edu",
+      "receivedAt": "2026-08-25T15:16:32Z",
+      "snippet": "Mays Business School finance grad-program informational session, Sept. 1st — RSVP to explore graduate opportunities.",
+      "importance": "medium",
+      "reason": "RSVP needed before the Sept 1 session."
+    },
     {
       "id": "1a02bd54ba4d8eac",
       "account": "school",
@@ -13,24 +43,14 @@
       "reason": "Forwarded tryout opportunity — needs a decision on whether to register before the tryout date."
     },
     {
-      "id": "1a030825199659c3",
+      "id": "1a039443f85e866c",
       "account": "school",
-      "subject": "Your Missouri State Ticket Pull Opens Tuesday",
-      "from": "info@updates.12thmanfoundation.com",
-      "receivedAt": "2026-08-23T21:03:26Z",
-      "snippet": "Aggie Football season-opener vs. Missouri State student ticket pull opens Tuesday — claim your ticket before the window closes.",
-      "importance": "high",
-      "reason": "The ticket pull window opens today (Tue Aug 25) — claim it before it closes."
-    },
-    {
-      "id": "1a03500b2a112bda",
-      "account": "personal",
-      "subject": "[GitHub] A personal access token (classic) has been added to your account",
-      "from": "noreply@github.com",
-      "receivedAt": "2026-08-24T18:20:33Z",
-      "snippet": "A personal access token (classic) \"Performance\" was added with very broad scopes (admin:enterprise, admin:org, admin:repo_hook, admin:ssh_signing_key, and more).",
-      "importance": "high",
-      "reason": "Broad admin-scoped token added to your GitHub account — worth a quick check that this was you (e.g. this app's automation) and not someone else."
+      "subject": "Do The Right Thing",
+      "from": "orec@tamu.edu",
+      "receivedAt": "2026-08-25T14:00:00Z",
+      "snippet": "Start-of-semester campus-wide notice from the Offices of the Dean of Student Life — check whether it requires completing a training by a deadline.",
+      "importance": "medium",
+      "reason": "Campus compliance notice — worth a skim in case it requires action by a date."
     }
   ]
 }
