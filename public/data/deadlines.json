@@ -1,4 +1,13 @@
 {
-  "generatedAt": "2026-08-25T12:19:24Z",
-  "items": []
+  "generatedAt": "2026-08-26T12:25:32Z",
+  "items": [
+    {
+      "id": "1a034b97ab20ebbc",
+      "subject": "Ronald Dold invited you to Poll Everywhere 2.0",
+      "from": "no-reply@polleverywhere.com",
+      "receivedAt": "2026-08-24T16:00:00Z",
+      "dueDate": "2026-09-23",
+      "reason": "Class polling-tool invite for Texas A&M University — expires 30 days after it was sent if not set up."
+    }
+  ]
 }
