@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-26T12:25:32Z",
+  "generatedAt": "2026-08-27T12:21:53Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -23,6 +23,16 @@
       "reason": "Broad admin-scoped token added to your GitHub account — worth a quick check that this was you (e.g. this app's automation) and not someone else."
     },
     {
+      "id": "1a03ec1d1831f6ba",
+      "account": "personal",
+      "subject": "Failed production deployment on team 'Athlo'",
+      "from": "notifications@vercel.com",
+      "receivedAt": "2026-08-27T02:14:47Z",
+      "snippet": "There was an error deploying web to the production environment. This has now happened 3 times since yesterday afternoon.",
+      "importance": "medium",
+      "reason": "Production deploys for the 'Athlo' project have failed 3 times in a row — worth a look at the Vercel dashboard for the build error."
+    },
+    {
       "id": "1a0397eacd331735",
       "account": "school",
       "subject": "RSVP! Finance Program Informational - Sept. 1st",
@@ -31,16 +41,6 @@
       "snippet": "Mays Business School finance grad-program informational session, Sept. 1st — RSVP to explore graduate opportunities.",
       "importance": "medium",
       "reason": "RSVP needed before the Sept 1 session."
-    },
-    {
-      "id": "1a02bd54ba4d8eac",
-      "account": "school",
-      "subject": "Fwd: Texas A&M Men's Soccer Tryouts",
-      "from": "arad-texas-2029@tamu.edu",
-      "receivedAt": "2026-08-22T23:36:18Z",
-      "snippet": "Forwarded tryout announcement from Aggie Soccer — check the original posting for tryout dates/registration if interested.",
-      "importance": "medium",
-      "reason": "Forwarded tryout opportunity — needs a decision on whether to register before the tryout date."
     },
     {
       "id": "1a039443f85e866c",
