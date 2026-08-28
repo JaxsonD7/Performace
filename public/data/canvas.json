@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-27T12:21:53Z",
+  "generatedAt": "2026-08-28T12:18:16Z",
   "items": [
     {
       "id": "1a035c6c2a953a9f",
@@ -32,6 +32,14 @@
       "subject": "Accessing Class Materials on Google: 26 FALL 220.501 HISTORY OF CHRISTIANITY I",
       "receivedAt": "2026-08-26T21:13:36Z",
       "reason": "Course materials are on a shared Google Drive — accessible to anyone logged in with TAMU credentials."
+    },
+    {
+      "id": "1a0443a1df60fa81",
+      "courseName": "HIST 220",
+      "kind": "announcement",
+      "subject": "Readings for Friday 28 August: 26 FALL 220.501 HISTORY OF CHRISTIANITY I",
+      "receivedAt": "2026-08-27T17:17:28Z",
+      "reason": "Today's class covers the assigned primary source readings: Matthew 5-7 and Acts of the Apostles."
     }
   ]
 }
