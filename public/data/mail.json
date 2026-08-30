@@ -1,17 +1,7 @@
 {
-  "generatedAt": "2026-08-29T12:11:15Z",
+  "generatedAt": "2026-08-30T12:11:16Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a03a49764d33e93",
-      "account": "school",
-      "subject": "RecSport-SportClubs WOL Decision",
-      "from": "sportclubs@rec.tamu.edu",
-      "receivedAt": "2026-08-25T18:58:05Z",
-      "snippet": "Your Waiver of Liability for the 2026-2027 school year has been DENIED. Correct the listed items and resubmit the form.",
-      "importance": "high",
-      "reason": "Denied WOL needs to be corrected and resubmitted to stay eligible for club sports."
-    },
     {
       "id": "1a03ec1d1831f6ba",
       "account": "personal",
@@ -23,14 +13,14 @@
       "reason": "Production deploys for the 'Athlo' project have failed 3 times in a row — worth a look at the Vercel dashboard for the build error."
     },
     {
-      "id": "1a0397eacd331735",
-      "account": "school",
-      "subject": "RSVP! Finance Program Informational - Sept. 1st",
-      "from": "landriejordan@tamu.edu",
-      "receivedAt": "2026-08-25T15:16:32Z",
-      "snippet": "Mays Business School finance grad-program informational session, Sept. 1st — RSVP to explore graduate opportunities.",
+      "id": "1a051335f5435516",
+      "account": "personal",
+      "subject": "Security alert for steventarance598@gmail.com",
+      "from": "no-reply@accounts.google.com",
+      "receivedAt": "2026-08-30T05:45:14Z",
+      "snippet": "A copy of a security alert for a new sign-in, sent because jaxsondriscollfcd7@gmail.com is set as the recovery email for steventarance598@gmail.com.",
       "importance": "medium",
-      "reason": "RSVP needed before the Sept 1 session, now 3 days out."
+      "reason": "Worth confirming this is your own secondary account and not someone else using your email as a recovery address."
     }
   ]
 }
