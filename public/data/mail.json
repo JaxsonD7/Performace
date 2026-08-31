@@ -1,17 +1,7 @@
 {
-  "generatedAt": "2026-08-30T12:11:16Z",
+  "generatedAt": "2026-08-31T12:19:15Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a03ec1d1831f6ba",
-      "account": "personal",
-      "subject": "Failed production deployment on team 'Athlo'",
-      "from": "notifications@vercel.com",
-      "receivedAt": "2026-08-27T02:14:47Z",
-      "snippet": "There was an error deploying web to the production environment. This has now happened 3 times since yesterday afternoon.",
-      "importance": "medium",
-      "reason": "Production deploys for the 'Athlo' project have failed 3 times in a row — worth a look at the Vercel dashboard for the build error."
-    },
     {
       "id": "1a051335f5435516",
       "account": "personal",
@@ -21,6 +11,16 @@
       "snippet": "A copy of a security alert for a new sign-in, sent because jaxsondriscollfcd7@gmail.com is set as the recovery email for steventarance598@gmail.com.",
       "importance": "medium",
       "reason": "Worth confirming this is your own secondary account and not someone else using your email as a recovery address."
+    },
+    {
+      "id": "1a055423331637f8",
+      "account": "school",
+      "subject": "Your Arizona State Ticket Pull Opens Tuesday",
+      "from": "info@updates.12thmanfoundation.com",
+      "receivedAt": "2026-08-30T23:34:35Z",
+      "snippet": "Student ticket pull for the Red, White and Blue Game vs. Arizona State opens Tuesday (Sept 1).",
+      "importance": "high",
+      "reason": "Ticket pull window opens tomorrow — claim it before it closes."
     }
   ]
 }
