@@ -1,21 +1,21 @@
 {
-  "generatedAt": "2026-08-30T12:11:16Z",
+  "generatedAt": "2026-09-01T12:25:25Z",
   "items": [
     {
-      "id": "1a03febeadb087e2",
-      "courseName": "HIST 220",
+      "id": "1a0581b874656461",
+      "courseName": "FINC 341",
       "kind": "announcement",
-      "subject": "Accessing Class Materials on Google: 26 FALL 220.501 HISTORY OF CHRISTIANITY I",
-      "receivedAt": "2026-08-26T21:13:36Z",
-      "reason": "Course materials are on a shared Google Drive — accessible to anyone logged in with TAMU credentials."
+      "subject": "Content to know for Exam 1: 26 FALL FINC 341 (201, 202, 501, 502, 599)",
+      "receivedAt": "2026-08-31T13:56:28Z",
+      "reason": "Exam 1 covers Chapters 1, 2, 3, 4, 6 (readings + HW) and TVM (calculator and math)."
     },
     {
-      "id": "1a0443a1df60fa81",
+      "id": "1a058011c4aeb781",
       "courseName": "HIST 220",
       "kind": "announcement",
-      "subject": "Readings for Friday 28 August: 26 FALL 220.501 HISTORY OF CHRISTIANITY I",
-      "receivedAt": "2026-08-27T17:17:28Z",
-      "reason": "Assigned primary source readings for that class: Matthew 5-7 and Acts of the Apostles."
+      "subject": "Course Reserves: 26 FALL 220.501 HISTORY OF CHRISTIANITY I",
+      "receivedAt": "2026-08-31T13:27:37Z",
+      "reason": "If course reserves aren't accessible via Evans Library or Canvas, contact the library through the provided link."
     }
   ]
 }
