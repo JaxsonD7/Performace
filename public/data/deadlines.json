@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-27T12:21:53Z",
+  "generatedAt": "2026-09-01T12:25:25Z",
   "items": [
     {
       "id": "1a034b97ab20ebbc",
@@ -10,12 +10,12 @@
       "reason": "Class polling-tool invite for Texas A&M University — expires 30 days after it was sent if not set up."
     },
     {
-      "id": "1a04088b09f50a9e",
-      "subject": "Important: your data is at risk and will be deleted in 15 days.",
+      "id": "1a05a47b220758b0",
+      "subject": "Important: your data is at risk and will be deleted in 10 days.",
       "from": "support@mega.nz",
-      "receivedAt": "2026-08-27T00:04:55Z",
+      "receivedAt": "2026-09-01T00:04:03Z",
       "dueDate": "2026-09-11",
-      "reason": "MEGA account has been over its storage limit and locked for 55+ days — data will be deleted in 15 days unless resolved."
+      "reason": "MEGA account still locked (over storage limit for 60+ days) — data will be deleted in 10 days unless resolved."
     }
   ]
 }
