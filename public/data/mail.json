@@ -1,7 +1,27 @@
 {
-  "generatedAt": "2026-08-31T12:19:15Z",
+  "generatedAt": "2026-09-01T12:25:25Z",
   "accounts": ["personal", "school"],
   "emails": [
+    {
+      "id": "1a058656f74ae361",
+      "account": "school",
+      "subject": "Tomorrow! Finance Program Informational",
+      "from": "landriejordan@tamu.edu",
+      "receivedAt": "2026-08-31T15:17:13Z",
+      "snippet": "Mays Business School finance grad-program informational session — happening today.",
+      "importance": "high",
+      "reason": "The informational session is today."
+    },
+    {
+      "id": "1a055423331637f8",
+      "account": "school",
+      "subject": "Your Arizona State Ticket Pull Opens Tuesday",
+      "from": "info@updates.12thmanfoundation.com",
+      "receivedAt": "2026-08-30T23:34:35Z",
+      "snippet": "Student ticket pull for the Red, White and Blue Game vs. Arizona State opened today.",
+      "importance": "high",
+      "reason": "Ticket pull window is open today — claim it before it closes."
+    },
     {
       "id": "1a051335f5435516",
       "account": "personal",
@@ -11,16 +31,6 @@
       "snippet": "A copy of a security alert for a new sign-in, sent because jaxsondriscollfcd7@gmail.com is set as the recovery email for steventarance598@gmail.com.",
       "importance": "medium",
       "reason": "Worth confirming this is your own secondary account and not someone else using your email as a recovery address."
-    },
-    {
-      "id": "1a055423331637f8",
-      "account": "school",
-      "subject": "Your Arizona State Ticket Pull Opens Tuesday",
-      "from": "info@updates.12thmanfoundation.com",
-      "receivedAt": "2026-08-30T23:34:35Z",
-      "snippet": "Student ticket pull for the Red, White and Blue Game vs. Arizona State opens Tuesday (Sept 1).",
-      "importance": "high",
-      "reason": "Ticket pull window opens tomorrow — claim it before it closes."
     }
   ]
 }
