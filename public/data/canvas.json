@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T12:25:25Z",
+  "generatedAt": "2026-09-02T12:13:42Z",
   "items": [
     {
       "id": "1a0581b874656461",
@@ -16,6 +16,14 @@
       "subject": "Course Reserves: 26 FALL 220.501 HISTORY OF CHRISTIANITY I",
       "receivedAt": "2026-08-31T13:27:37Z",
       "reason": "If course reserves aren't accessible via Evans Library or Canvas, contact the library through the provided link."
+    },
+    {
+      "id": "1a05f8682fa35c53",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "Attendance Quiz: 26 FALL FINC 341 (201, 202, 501, 502, 599)",
+      "receivedAt": "2026-09-02T00:30:41Z",
+      "reason": "Everyone must submit the attendance quiz in Modules — no grade impact, but required."
     }
   ]
 }
