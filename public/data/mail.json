@@ -1,27 +1,7 @@
 {
-  "generatedAt": "2026-09-01T12:25:25Z",
+  "generatedAt": "2026-09-02T12:13:42Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a058656f74ae361",
-      "account": "school",
-      "subject": "Tomorrow! Finance Program Informational",
-      "from": "landriejordan@tamu.edu",
-      "receivedAt": "2026-08-31T15:17:13Z",
-      "snippet": "Mays Business School finance grad-program informational session — happening today.",
-      "importance": "high",
-      "reason": "The informational session is today."
-    },
-    {
-      "id": "1a055423331637f8",
-      "account": "school",
-      "subject": "Your Arizona State Ticket Pull Opens Tuesday",
-      "from": "info@updates.12thmanfoundation.com",
-      "receivedAt": "2026-08-30T23:34:35Z",
-      "snippet": "Student ticket pull for the Red, White and Blue Game vs. Arizona State opened today.",
-      "importance": "high",
-      "reason": "Ticket pull window is open today — claim it before it closes."
-    },
     {
       "id": "1a051335f5435516",
       "account": "personal",
