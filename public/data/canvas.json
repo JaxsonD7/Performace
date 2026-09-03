@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-02T12:13:42Z",
+  "generatedAt": "2026-09-03T12:14:39Z",
   "items": [
     {
       "id": "1a0581b874656461",
@@ -24,6 +24,14 @@
       "subject": "Attendance Quiz: 26 FALL FINC 341 (201, 202, 501, 502, 599)",
       "receivedAt": "2026-09-02T00:30:41Z",
       "reason": "Everyone must submit the attendance quiz in Modules — no grade impact, but required."
+    },
+    {
+      "id": "1a062709dc1ad0e5",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "Roster Numbers Have Been Posted!: 26 FALL FINC 341 (201, 202, 501, 502, 599)",
+      "receivedAt": "2026-09-02T14:05:37Z",
+      "reason": "Roster number is under Student Resources — needed throughout the semester (used for anonymous grading)."
     }
   ]
 }
