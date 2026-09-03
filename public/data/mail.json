@@ -1,16 +1,5 @@
 {
-  "generatedAt": "2026-09-02T12:13:42Z",
+  "generatedAt": "2026-09-03T12:14:39Z",
   "accounts": ["personal", "school"],
-  "emails": [
-    {
-      "id": "1a051335f5435516",
-      "account": "personal",
-      "subject": "Security alert for steventarance598@gmail.com",
-      "from": "no-reply@accounts.google.com",
-      "receivedAt": "2026-08-30T05:45:14Z",
-      "snippet": "A copy of a security alert for a new sign-in, sent because jaxsondriscollfcd7@gmail.com is set as the recovery email for steventarance598@gmail.com.",
-      "importance": "medium",
-      "reason": "Worth confirming this is your own secondary account and not someone else using your email as a recovery address."
-    }
-  ]
+  "emails": []
 }
