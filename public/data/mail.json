@@ -1,5 +1,26 @@
 {
-  "generatedAt": "2026-09-03T12:14:39Z",
+  "generatedAt": "2026-09-04T12:13:46Z",
   "accounts": ["personal", "school"],
-  "emails": []
+  "emails": [
+    {
+      "id": "1a06930c17813e1a",
+      "account": "personal",
+      "subject": "deploy failed for flowdesk-secure",
+      "from": "no-reply@render.com",
+      "receivedAt": "2026-09-03T21:33:17Z",
+      "snippet": "There was an error during the deploy process for flowdesk-secure — the latest commit ('Fix client...') may not be live.",
+      "importance": "medium",
+      "reason": "Another side project's production deploy failed — worth a look at the Render dashboard for the build error."
+    },
+    {
+      "id": "1a06925ace757d60",
+      "account": "school",
+      "subject": "Ryan Park sent you a message in Canvas (MGMT 311)",
+      "from": "notifications@instructure.com",
+      "receivedAt": "2026-09-03T21:21:08Z",
+      "snippet": "A classmate missed today's attendance question and is asking what it was about.",
+      "importance": "medium",
+      "reason": "A classmate is waiting on a reply."
+    }
+  ]
 }
