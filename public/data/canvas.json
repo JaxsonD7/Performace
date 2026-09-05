@@ -1,22 +1,6 @@
 {
-  "generatedAt": "2026-09-03T12:14:39Z",
+  "generatedAt": "2026-09-05T12:08:22Z",
   "items": [
-    {
-      "id": "1a0581b874656461",
-      "courseName": "FINC 341",
-      "kind": "announcement",
-      "subject": "Content to know for Exam 1: 26 FALL FINC 341 (201, 202, 501, 502, 599)",
-      "receivedAt": "2026-08-31T13:56:28Z",
-      "reason": "Exam 1 covers Chapters 1, 2, 3, 4, 6 (readings + HW) and TVM (calculator and math)."
-    },
-    {
-      "id": "1a058011c4aeb781",
-      "courseName": "HIST 220",
-      "kind": "announcement",
-      "subject": "Course Reserves: 26 FALL 220.501 HISTORY OF CHRISTIANITY I",
-      "receivedAt": "2026-08-31T13:27:37Z",
-      "reason": "If course reserves aren't accessible via Evans Library or Canvas, contact the library through the provided link."
-    },
     {
       "id": "1a05f8682fa35c53",
       "courseName": "FINC 341",
@@ -32,6 +16,14 @@
       "subject": "Roster Numbers Have Been Posted!: 26 FALL FINC 341 (201, 202, 501, 502, 599)",
       "receivedAt": "2026-09-02T14:05:37Z",
       "reason": "Roster number is under Student Resources — needed throughout the semester (used for anonymous grading)."
+    },
+    {
+      "id": "1a06e5699ff6400d",
+      "courseName": "HIST 220",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Week 2: Reading Response",
+      "receivedAt": "2026-09-04T21:32:39Z",
+      "reason": "Instructor released grade changes and new comments on the Week 2 Reading Response."
     }
   ]
 }
