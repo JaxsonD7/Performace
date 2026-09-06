@@ -1,14 +1,6 @@
 {
-  "generatedAt": "2026-09-05T12:08:22Z",
+  "generatedAt": "2026-09-06T12:08:11Z",
   "items": [
-    {
-      "id": "1a05f8682fa35c53",
-      "courseName": "FINC 341",
-      "kind": "announcement",
-      "subject": "Attendance Quiz: 26 FALL FINC 341 (201, 202, 501, 502, 599)",
-      "receivedAt": "2026-09-02T00:30:41Z",
-      "reason": "Everyone must submit the attendance quiz in Modules — no grade impact, but required."
-    },
     {
       "id": "1a062709dc1ad0e5",
       "courseName": "FINC 341",
@@ -24,6 +16,14 @@
       "subject": "Submission Posted: Week 2: Reading Response",
       "receivedAt": "2026-09-04T21:32:39Z",
       "reason": "Instructor released grade changes and new comments on the Week 2 Reading Response."
+    },
+    {
+      "id": "1a0720cf150db8f3",
+      "courseName": "HIST 220",
+      "kind": "announcement",
+      "subject": "Assignment Created: Week 2 Quiz",
+      "receivedAt": "2026-09-05T14:50:40Z",
+      "reason": "New Week 2 Quiz was created (from the weekly Canvas notifications digest)."
     }
   ]
 }
