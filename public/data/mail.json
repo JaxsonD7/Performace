@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-04T12:13:46Z",
+  "generatedAt": "2026-09-07T12:14:00Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -21,6 +21,16 @@
       "snippet": "A classmate missed today's attendance question and is asking what it was about.",
       "importance": "medium",
       "reason": "A classmate is waiting on a reply."
+    },
+    {
+      "id": "1a079e9bb85db63d",
+      "account": "school",
+      "subject": "Your Kentucky Ticket Pull Opens Tuesday",
+      "from": "info@updates.12thmanfoundation.com",
+      "receivedAt": "2026-09-07T02:56:48Z",
+      "snippet": "Student ticket pull for the Kentucky game opens Tuesday (Sept 8).",
+      "importance": "high",
+      "reason": "Ticket pull window opens tomorrow — claim it before it closes."
     }
   ]
 }
