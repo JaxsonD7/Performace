@@ -1,26 +1,16 @@
 {
-  "generatedAt": "2026-09-07T12:14:00Z",
+  "generatedAt": "2026-09-08T12:11:41Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
-      "id": "1a06930c17813e1a",
-      "account": "personal",
-      "subject": "deploy failed for flowdesk-secure",
-      "from": "no-reply@render.com",
-      "receivedAt": "2026-09-03T21:33:17Z",
-      "snippet": "There was an error during the deploy process for flowdesk-secure — the latest commit ('Fix client...') may not be live.",
-      "importance": "medium",
-      "reason": "Another side project's production deploy failed — worth a look at the Render dashboard for the build error."
-    },
-    {
-      "id": "1a06925ace757d60",
+      "id": "1a080d514ae726d4",
       "account": "school",
-      "subject": "Ryan Park sent you a message in Canvas (MGMT 311)",
-      "from": "notifications@instructure.com",
-      "receivedAt": "2026-09-03T21:21:08Z",
-      "snippet": "A classmate missed today's attendance question and is asking what it was about.",
-      "importance": "medium",
-      "reason": "A classmate is waiting on a reply."
+      "subject": "Tuition and Fees Balance Notification",
+      "from": "sbs@tamu.edu",
+      "receivedAt": "2026-09-08T11:43:41Z",
+      "snippet": "There is a balance due on your student account — new charges have been added even if a previous balance was settled.",
+      "importance": "high",
+      "reason": "Worth checking your student account for the amount and due date before it's late."
     },
     {
       "id": "1a079e9bb85db63d",
@@ -28,9 +18,9 @@
       "subject": "Your Kentucky Ticket Pull Opens Tuesday",
       "from": "info@updates.12thmanfoundation.com",
       "receivedAt": "2026-09-07T02:56:48Z",
-      "snippet": "Student ticket pull for the Kentucky game opens Tuesday (Sept 8).",
+      "snippet": "Student ticket pull for the Kentucky game opens today (Sept 8).",
       "importance": "high",
-      "reason": "Ticket pull window opens tomorrow — claim it before it closes."
+      "reason": "Ticket pull window is open today — claim it before it closes."
     }
   ]
 }
