@@ -1,26 +1,36 @@
 {
-  "generatedAt": "2026-09-08T12:11:41Z",
+  "generatedAt": "2026-09-09T12:12:45Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
-      "id": "1a080d514ae726d4",
-      "account": "school",
-      "subject": "Tuition and Fees Balance Notification",
-      "from": "sbs@tamu.edu",
-      "receivedAt": "2026-09-08T11:43:41Z",
-      "snippet": "There is a balance due on your student account — new charges have been added even if a previous balance was settled.",
+      "id": "1a0845cf06ffc8e1",
+      "account": "personal",
+      "subject": "Critical security alert",
+      "from": "no-reply@accounts.google.com",
+      "receivedAt": "2026-09-07T09:24:52Z",
+      "snippet": "Some of your saved passwords were found in a data breach from a site or app you use.",
       "importance": "high",
-      "reason": "Worth checking your student account for the amount and due date before it's late."
+      "reason": "Google flagged saved passwords found in a data breach — worth changing them."
     },
     {
-      "id": "1a079e9bb85db63d",
+      "id": "1a081f21ef0353c8",
       "account": "school",
-      "subject": "Your Kentucky Ticket Pull Opens Tuesday",
-      "from": "info@updates.12thmanfoundation.com",
-      "receivedAt": "2026-09-07T02:56:48Z",
-      "snippet": "Student ticket pull for the Kentucky game opens today (Sept 8).",
+      "subject": "CORRECTION: Tuition and Fees Balance Notification",
+      "from": "sbs@tamu.edu",
+      "receivedAt": "2026-09-08T16:53:27Z",
+      "snippet": "The earlier balance notification had an incorrect deadline — disregard that email and check the corrected deadline.",
       "importance": "high",
-      "reason": "Ticket pull window is open today — claim it before it closes."
+      "reason": "Corrected due date for the tuition/fees balance — worth checking your student account directly."
+    },
+    {
+      "id": "1a08158b0f8de0ca",
+      "account": "school",
+      "subject": "Fw: New Submission (Copy Corner)",
+      "from": "msc@copycorner.com",
+      "receivedAt": "2026-09-08T14:07:16Z",
+      "snippet": "Your print file is saved — they recommend coming in to print in person rather than remotely for this job.",
+      "importance": "medium",
+      "reason": "Needs a response on how you want to handle the print job."
     }
   ]
 }
