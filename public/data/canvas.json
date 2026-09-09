@@ -1,14 +1,6 @@
 {
-  "generatedAt": "2026-09-07T12:14:00Z",
+  "generatedAt": "2026-09-09T12:12:45Z",
   "items": [
-    {
-      "id": "1a06e5699ff6400d",
-      "courseName": "HIST 220",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Week 2: Reading Response",
-      "receivedAt": "2026-09-04T21:32:39Z",
-      "reason": "Instructor released grade changes and new comments on the Week 2 Reading Response."
-    },
     {
       "id": "1a0720cf150db8f3",
       "courseName": "HIST 220",
@@ -24,6 +16,30 @@
       "subject": "Assessment 1 Notes and Class Reminders",
       "receivedAt": "2026-09-06T19:04:01Z",
       "reason": "Assessment 1 is Thursday Sept 10, 10am-10pm (extended time), 20 questions — no class meeting that day."
+    },
+    {
+      "id": "1a081e7542b63ef2",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "Self-Check Practice Quiz #2 Correction",
+      "receivedAt": "2026-09-08T16:43:32Z",
+      "reason": "Corrected version published — the answer key for Question 5 was wrong in the previous version."
+    },
+    {
+      "id": "1a082cdc009a9a87",
+      "courseName": "FINC 341",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Attendance Assignment",
+      "receivedAt": "2026-09-08T20:55:13Z",
+      "reason": "Grade changes and new comments released on the attendance assignment."
+    },
+    {
+      "id": "1a0838f0a48a4bef",
+      "courseName": "FINC 341",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Quiz 1",
+      "receivedAt": "2026-09-09T00:26:21Z",
+      "reason": "Grade changes and new comments released on Quiz 1."
     }
   ]
 }
