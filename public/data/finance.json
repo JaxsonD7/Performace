@@ -1,4 +1,14 @@
 {
-  "generatedAt": "2026-08-27T12:21:53Z",
-  "items": []
+  "generatedAt": "2026-09-11T12:09:29Z",
+  "items": [
+    {
+      "id": "1a08f1e35e2f07b2",
+      "subject": "INVOICE_US_141926570001",
+      "from": "Invoices@mheducation.com",
+      "receivedAt": "2026-09-11T06:15:38Z",
+      "kind": "other",
+      "reason": "Invoice attached from McGraw-Hill (course digital materials) — check the attachment for the amount and due date.",
+      "severity": "info"
+    }
+  ]
 }
