@@ -1,14 +1,6 @@
 {
-  "generatedAt": "2026-09-10T12:13:50Z",
+  "generatedAt": "2026-09-11T12:09:29Z",
   "items": [
-    {
-      "id": "1a0781b366d6774e",
-      "courseName": "SCMT 364",
-      "kind": "announcement",
-      "subject": "Assessment 1 Notes and Class Reminders",
-      "receivedAt": "2026-09-06T19:04:01Z",
-      "reason": "Assessment 1 is today (Sept 10), 10am-10pm extended time, 20 questions — no class meeting today."
-    },
     {
       "id": "1a081e7542b63ef2",
       "courseName": "FINC 341",
@@ -32,6 +24,22 @@
       "subject": "Submission Posted: Quiz 1",
       "receivedAt": "2026-09-09T00:26:21Z",
       "reason": "Grade changes and new comments released on Quiz 1."
+    },
+    {
+      "id": "1a08c54a3a78a664",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Assessment 1",
+      "receivedAt": "2026-09-10T17:19:07Z",
+      "reason": "Assessment 1 has been graded."
+    },
+    {
+      "id": "1a08d1def19bd054",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "Process for submitting a Makeup Request with documentation",
+      "receivedAt": "2026-09-10T20:59:00Z",
+      "reason": "Revised syllabus process — upload documentation via the Makeup Request, don't email it directly."
     }
   ]
 }
