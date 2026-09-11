@@ -1,17 +1,7 @@
 {
-  "generatedAt": "2026-09-09T12:12:45Z",
+  "generatedAt": "2026-09-11T12:09:29Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a0845cf06ffc8e1",
-      "account": "personal",
-      "subject": "Critical security alert",
-      "from": "no-reply@accounts.google.com",
-      "receivedAt": "2026-09-07T09:24:52Z",
-      "snippet": "Some of your saved passwords were found in a data breach from a site or app you use.",
-      "importance": "high",
-      "reason": "Google flagged saved passwords found in a data breach — worth changing them."
-    },
     {
       "id": "1a081f21ef0353c8",
       "account": "school",
