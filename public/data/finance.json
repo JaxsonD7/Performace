@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11T12:09:29Z",
+  "generatedAt": "2026-09-12T12:07:55Z",
   "items": [
     {
       "id": "1a08f1e35e2f07b2",
@@ -9,6 +9,17 @@
       "kind": "other",
       "reason": "Invoice attached from McGraw-Hill (course digital materials) — check the attachment for the amount and due date.",
       "severity": "info"
+    },
+    {
+      "id": "1a093d90260ec907",
+      "subject": "Deposit funds to renew Coinbase One",
+      "from": "no-reply@info.coinbase.com",
+      "receivedAt": "2026-09-12T04:21:07Z",
+      "amount": 4.99,
+      "merchant": "Coinbase One",
+      "kind": "low_balance",
+      "reason": "Cash balance is $0.00 — needs at least $4.99 by 09/17/2026 for the Coinbase One subscription to renew.",
+      "severity": "warning"
     }
   ]
 }
