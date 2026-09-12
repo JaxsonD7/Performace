@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11T12:09:29Z",
+  "generatedAt": "2026-09-12T12:07:55Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -21,6 +21,16 @@
       "snippet": "Your print file is saved — they recommend coming in to print in person rather than remotely for this job.",
       "importance": "medium",
       "reason": "Needs a response on how you want to handle the print job."
+    },
+    {
+      "id": "1a092ef73c8f6991",
+      "account": "school",
+      "subject": "OLD ARMY TUTORING & TEST REVIEW: FINC 341, EXAM 1 TEST REVIEW STARTS MONDAY @ 8 PM!!",
+      "from": "howdy@oldarmytutoring.com",
+      "receivedAt": "2026-09-12T00:05:57Z",
+      "snippet": "Student-run test review for FINC 341 Exam 1 starts Monday at 8pm.",
+      "importance": "medium",
+      "reason": "Exam 1 review session Monday — worth deciding whether to attend."
     }
   ]
 }
