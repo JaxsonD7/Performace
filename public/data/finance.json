@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-12T12:07:55Z",
+  "generatedAt": "2026-09-13T12:08:06Z",
   "items": [
     {
       "id": "1a08f1e35e2f07b2",
@@ -20,6 +20,17 @@
       "kind": "low_balance",
       "reason": "Cash balance is $0.00 — needs at least $4.99 by 09/17/2026 for the Coinbase One subscription to renew.",
       "severity": "warning"
+    },
+    {
+      "id": "1a096fb3469393fe",
+      "subject": "Your invoice is available",
+      "from": "noreply@notify.cloudflare.com",
+      "receivedAt": "2026-09-12T18:57:18Z",
+      "amount": 10.46,
+      "merchant": "Cloudflare",
+      "kind": "subscription_charge",
+      "reason": "Invoice IN-79002688 for $10.46 was due September 12 (domain registration for citovent.com).",
+      "severity": "info"
     }
   ]
 }
