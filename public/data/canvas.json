@@ -1,30 +1,6 @@
 {
-  "generatedAt": "2026-09-11T12:09:29Z",
+  "generatedAt": "2026-09-13T12:08:06Z",
   "items": [
-    {
-      "id": "1a081e7542b63ef2",
-      "courseName": "FINC 341",
-      "kind": "announcement",
-      "subject": "Self-Check Practice Quiz #2 Correction",
-      "receivedAt": "2026-09-08T16:43:32Z",
-      "reason": "Corrected version published — the answer key for Question 5 was wrong in the previous version."
-    },
-    {
-      "id": "1a082cdc009a9a87",
-      "courseName": "FINC 341",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Attendance Assignment",
-      "receivedAt": "2026-09-08T20:55:13Z",
-      "reason": "Grade changes and new comments released on the attendance assignment."
-    },
-    {
-      "id": "1a0838f0a48a4bef",
-      "courseName": "FINC 341",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Quiz 1",
-      "receivedAt": "2026-09-09T00:26:21Z",
-      "reason": "Grade changes and new comments released on Quiz 1."
-    },
     {
       "id": "1a08c54a3a78a664",
       "courseName": "SCMT 364",
@@ -40,6 +16,22 @@
       "subject": "Process for submitting a Makeup Request with documentation",
       "receivedAt": "2026-09-10T20:59:00Z",
       "reason": "Revised syllabus process — upload documentation via the Makeup Request, don't email it directly."
+    },
+    {
+      "id": "1a098230c061ef90",
+      "courseName": "HIST 220",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Week 3: Reading Response",
+      "receivedAt": "2026-09-13T00:20:24Z",
+      "reason": "Instructor released grade changes and new comments on the Week 3 Reading Response."
+    },
+    {
+      "id": "1a09617e642709c1",
+      "courseName": "MGMT 311",
+      "kind": "announcement",
+      "subject": "Assignment Created: Cengage MindTap",
+      "receivedAt": "2026-09-12T14:48:59Z",
+      "reason": "New Cengage MindTap assignment created (from the weekly Canvas notifications digest)."
     }
   ]
 }
