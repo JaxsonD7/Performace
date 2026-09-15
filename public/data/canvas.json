@@ -1,22 +1,6 @@
 {
-  "generatedAt": "2026-09-13T12:08:06Z",
+  "generatedAt": "2026-09-15T12:08:04Z",
   "items": [
-    {
-      "id": "1a08c54a3a78a664",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Assessment 1",
-      "receivedAt": "2026-09-10T17:19:07Z",
-      "reason": "Assessment 1 has been graded."
-    },
-    {
-      "id": "1a08d1def19bd054",
-      "courseName": "FINC 341",
-      "kind": "announcement",
-      "subject": "Process for submitting a Makeup Request with documentation",
-      "receivedAt": "2026-09-10T20:59:00Z",
-      "reason": "Revised syllabus process — upload documentation via the Makeup Request, don't email it directly."
-    },
     {
       "id": "1a098230c061ef90",
       "courseName": "HIST 220",
@@ -32,6 +16,14 @@
       "subject": "Assignment Created: Cengage MindTap",
       "receivedAt": "2026-09-12T14:48:59Z",
       "reason": "New Cengage MindTap assignment created (from the weekly Canvas notifications digest)."
+    },
+    {
+      "id": "1a0a12f9bc0a2d30",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "Exam 1 room assignments",
+      "receivedAt": "2026-09-14T18:30:43Z",
+      "reason": "Room assignments for Exam 1 posted — check before Wednesday."
     }
   ]
 }
