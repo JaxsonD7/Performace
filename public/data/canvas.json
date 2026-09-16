@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-15T12:08:04Z",
+  "generatedAt": "2026-09-16T12:10:18Z",
   "items": [
     {
       "id": "1a098230c061ef90",
@@ -18,12 +18,44 @@
       "reason": "New Cengage MindTap assignment created (from the weekly Canvas notifications digest)."
     },
     {
-      "id": "1a0a12f9bc0a2d30",
+      "id": "1a0a6bd96de6a62d",
       "courseName": "FINC 341",
       "kind": "announcement",
-      "subject": "Exam 1 room assignments",
-      "receivedAt": "2026-09-14T18:30:43Z",
-      "reason": "Room assignments for Exam 1 posted — check before Wednesday."
+      "subject": "BUBBLE SHEET to bring to FINC 341 exams",
+      "receivedAt": "2026-09-15T20:23:55Z",
+      "reason": "Print the Gradescope bubble sheet (name/UIN typed in, space bar 3x before typing) and bring it to the exam."
+    },
+    {
+      "id": "1a0a6d465ba21c95",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "Updated Exam Room Assignments",
+      "receivedAt": "2026-09-15T20:48:48Z",
+      "reason": "Room assignments changed — use this updated version to find your room Wednesday, not the earlier one."
+    },
+    {
+      "id": "1a0a79486aa78204",
+      "courseName": "FINC 341",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Quiz 2",
+      "receivedAt": "2026-09-16T00:18:40Z",
+      "reason": "Grade changes and new comments released on Quiz 2."
+    },
+    {
+      "id": "1a0a87e7d8f8c02d",
+      "courseName": "MGMT 363",
+      "kind": "announcement",
+      "subject": "Class Speaker (9/16)",
+      "receivedAt": "2026-09-16T04:34:13Z",
+      "reason": "Guest speaker today — arrive before they begin, attendance is being taken."
+    },
+    {
+      "id": "1a0a87f86e3d7bc6",
+      "courseName": "MGMT 363",
+      "kind": "announcement",
+      "subject": "Exam 1 Details",
+      "receivedAt": "2026-09-16T04:35:21Z",
+      "reason": "Info for the upcoming exam Monday — Support Services students must schedule separately."
     }
   ]
 }
