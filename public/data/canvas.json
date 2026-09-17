@@ -1,22 +1,6 @@
 {
-  "generatedAt": "2026-09-16T12:10:18Z",
+  "generatedAt": "2026-09-17T12:07:43Z",
   "items": [
-    {
-      "id": "1a098230c061ef90",
-      "courseName": "HIST 220",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Week 3: Reading Response",
-      "receivedAt": "2026-09-13T00:20:24Z",
-      "reason": "Instructor released grade changes and new comments on the Week 3 Reading Response."
-    },
-    {
-      "id": "1a09617e642709c1",
-      "courseName": "MGMT 311",
-      "kind": "announcement",
-      "subject": "Assignment Created: Cengage MindTap",
-      "receivedAt": "2026-09-12T14:48:59Z",
-      "reason": "New Cengage MindTap assignment created (from the weekly Canvas notifications digest)."
-    },
     {
       "id": "1a0a6bd96de6a62d",
       "courseName": "FINC 341",
@@ -26,12 +10,20 @@
       "reason": "Print the Gradescope bubble sheet (name/UIN typed in, space bar 3x before typing) and bring it to the exam."
     },
     {
+      "id": "1a0aba2ebb63e094",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "ADDITIONAL Instructions for Bubble Sheet",
+      "receivedAt": "2026-09-16T19:12:51Z",
+      "reason": "Correction: only write the numbers of your UIN in the cell — no dashes."
+    },
+    {
       "id": "1a0a6d465ba21c95",
       "courseName": "FINC 341",
       "kind": "announcement",
       "subject": "Updated Exam Room Assignments",
       "receivedAt": "2026-09-15T20:48:48Z",
-      "reason": "Room assignments changed — use this updated version to find your room Wednesday, not the earlier one."
+      "reason": "Room assignments changed — use this updated version to find your room, not the earlier one."
     },
     {
       "id": "1a0a79486aa78204",
@@ -42,12 +34,12 @@
       "reason": "Grade changes and new comments released on Quiz 2."
     },
     {
-      "id": "1a0a87e7d8f8c02d",
-      "courseName": "MGMT 363",
+      "id": "1a0ab0e3812ab6fe",
+      "courseName": "FINC 341",
       "kind": "announcement",
-      "subject": "Class Speaker (9/16)",
-      "receivedAt": "2026-09-16T04:34:13Z",
-      "reason": "Guest speaker today — arrive before they begin, attendance is being taken."
+      "subject": "Sp22 Exam 1 #12 -- C & D are correct answers",
+      "receivedAt": "2026-09-16T16:30:27Z",
+      "reason": "Practice exam answer key corrected in Modules."
     },
     {
       "id": "1a0a87f86e3d7bc6",
@@ -56,6 +48,22 @@
       "subject": "Exam 1 Details",
       "receivedAt": "2026-09-16T04:35:21Z",
       "reason": "Info for the upcoming exam Monday — Support Services students must schedule separately."
+    },
+    {
+      "id": "1a0aa86a6dedc442",
+      "courseName": "MGMT 363",
+      "kind": "announcement",
+      "subject": "Bubble Sheet",
+      "receivedAt": "2026-09-16T14:02:18Z",
+      "reason": "Bubble sheet (scantron) will be provided with the exam copy — no need to bring your own."
+    },
+    {
+      "id": "1a0ae0315d50533c",
+      "courseName": "MGMT 311",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Cengage MindTap",
+      "receivedAt": "2026-09-17T06:17:08Z",
+      "reason": "The Cengage MindTap assignment has been graded."
     }
   ]
 }
