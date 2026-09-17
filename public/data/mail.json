@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-15T12:08:04Z",
+  "generatedAt": "2026-09-17T12:07:43Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -21,6 +21,16 @@
       "snippet": "Campus crime alert (Clery Act notice) — motor vehicle theft reported.",
       "importance": "medium",
       "reason": "Official campus safety alert — worth a skim."
+    },
+    {
+      "id": "1a0ade3edb99640e",
+      "account": "personal",
+      "subject": "Maroon Fund Equity Analyst Application – Interview Invitation",
+      "from": "marooninvestmentclub@gmail.com",
+      "receivedAt": "2026-09-17T05:43:01Z",
+      "snippet": "You've been invited to the interview round for the Equity Analyst position with the Maroon Fund.",
+      "importance": "high",
+      "reason": "Needs a response to schedule the interview."
     }
   ]
 }
