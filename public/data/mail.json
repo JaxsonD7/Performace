@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-17T12:07:43Z",
+  "generatedAt": "2026-09-18T12:07:47Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -28,9 +28,19 @@
       "subject": "Maroon Fund Equity Analyst Application – Interview Invitation",
       "from": "marooninvestmentclub@gmail.com",
       "receivedAt": "2026-09-17T05:43:01Z",
-      "snippet": "You've been invited to the interview round for the Equity Analyst position with the Maroon Fund.",
+      "snippet": "A follow-up email (Sept 18) confirms acceptance and says to check spam for the original invite with interview details.",
       "importance": "high",
-      "reason": "Needs a response to schedule the interview."
+      "reason": "Still needs a response to schedule the interview — check your spam folder for the details email."
+    },
+    {
+      "id": "1a0b16ea6c283a74",
+      "account": "school",
+      "subject": "Gradescope Password Reset",
+      "from": "no-reply@gradescope.com",
+      "receivedAt": "2026-09-17T22:13:30Z",
+      "snippet": "A password reset was requested for your Gradescope account.",
+      "importance": "medium",
+      "reason": "Worth confirming this reset request was you."
     }
   ]
 }
