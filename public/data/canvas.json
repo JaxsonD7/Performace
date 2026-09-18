@@ -1,30 +1,6 @@
 {
-  "generatedAt": "2026-09-17T12:07:43Z",
+  "generatedAt": "2026-09-18T12:07:47Z",
   "items": [
-    {
-      "id": "1a0a6bd96de6a62d",
-      "courseName": "FINC 341",
-      "kind": "announcement",
-      "subject": "BUBBLE SHEET to bring to FINC 341 exams",
-      "receivedAt": "2026-09-15T20:23:55Z",
-      "reason": "Print the Gradescope bubble sheet (name/UIN typed in, space bar 3x before typing) and bring it to the exam."
-    },
-    {
-      "id": "1a0aba2ebb63e094",
-      "courseName": "FINC 341",
-      "kind": "announcement",
-      "subject": "ADDITIONAL Instructions for Bubble Sheet",
-      "receivedAt": "2026-09-16T19:12:51Z",
-      "reason": "Correction: only write the numbers of your UIN in the cell — no dashes."
-    },
-    {
-      "id": "1a0a6d465ba21c95",
-      "courseName": "FINC 341",
-      "kind": "announcement",
-      "subject": "Updated Exam Room Assignments",
-      "receivedAt": "2026-09-15T20:48:48Z",
-      "reason": "Room assignments changed — use this updated version to find your room, not the earlier one."
-    },
     {
       "id": "1a0a79486aa78204",
       "courseName": "FINC 341",
@@ -32,14 +8,6 @@
       "subject": "Submission Posted: Quiz 2",
       "receivedAt": "2026-09-16T00:18:40Z",
       "reason": "Grade changes and new comments released on Quiz 2."
-    },
-    {
-      "id": "1a0ab0e3812ab6fe",
-      "courseName": "FINC 341",
-      "kind": "announcement",
-      "subject": "Sp22 Exam 1 #12 -- C & D are correct answers",
-      "receivedAt": "2026-09-16T16:30:27Z",
-      "reason": "Practice exam answer key corrected in Modules."
     },
     {
       "id": "1a0a87f86e3d7bc6",
@@ -64,6 +32,22 @@
       "subject": "Assignment Graded: Cengage MindTap",
       "receivedAt": "2026-09-17T06:17:08Z",
       "reason": "The Cengage MindTap assignment has been graded."
+    },
+    {
+      "id": "1a0afb6540eeb99b",
+      "courseName": "HIST 220",
+      "kind": "announcement",
+      "subject": "Issues with Course Reserves",
+      "receivedAt": "2026-09-17T14:12:33Z",
+      "reason": "If the Library Reserves link in Canvas isn't working, use the Evans Library Reserves website directly."
+    },
+    {
+      "id": "1a0b16b4b690314d",
+      "courseName": "FINC 341",
+      "kind": "grade_posted",
+      "subject": "Ex 1 has been graded",
+      "receivedAt": "2026-09-17T22:09:50Z",
+      "reason": "Exam 1 graded on Gradescope — all questions worth 3 points except Free Cash Flow (4 points)."
     }
   ]
 }
