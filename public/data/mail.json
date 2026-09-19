@@ -1,27 +1,7 @@
 {
-  "generatedAt": "2026-09-18T12:07:47Z",
+  "generatedAt": "2026-09-19T12:07:42Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a0a233feef108b7",
-      "account": "school",
-      "subject": "Crime Alert – Stalking",
-      "from": "upd-campus-clery@lists.tamu.edu",
-      "receivedAt": "2026-09-14T23:09:17Z",
-      "snippet": "Campus crime alert (Clery Act notice) — stalking incident reported Sept 14.",
-      "importance": "high",
-      "reason": "Official campus safety alert — worth reading in full."
-    },
-    {
-      "id": "1a0a29224c81908c",
-      "account": "school",
-      "subject": "Crime Alert - Theft of Motor Vehicle",
-      "from": "upd-campus-clery@lists.tamu.edu",
-      "receivedAt": "2026-09-15T00:53:07Z",
-      "snippet": "Campus crime alert (Clery Act notice) — motor vehicle theft reported.",
-      "importance": "medium",
-      "reason": "Official campus safety alert — worth a skim."
-    },
     {
       "id": "1a0ade3edb99640e",
       "account": "personal",
