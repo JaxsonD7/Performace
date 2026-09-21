@@ -1,17 +1,7 @@
 {
-  "generatedAt": "2026-09-19T12:07:42Z",
+  "generatedAt": "2026-09-21T12:20:36Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a0ade3edb99640e",
-      "account": "personal",
-      "subject": "Maroon Fund Equity Analyst Application – Interview Invitation",
-      "from": "marooninvestmentclub@gmail.com",
-      "receivedAt": "2026-09-17T05:43:01Z",
-      "snippet": "A follow-up email (Sept 18) confirms acceptance and says to check spam for the original invite with interview details.",
-      "importance": "high",
-      "reason": "Still needs a response to schedule the interview — check your spam folder for the details email."
-    },
     {
       "id": "1a0b16ea6c283a74",
       "account": "school",
@@ -21,6 +11,16 @@
       "snippet": "A password reset was requested for your Gradescope account.",
       "importance": "medium",
       "reason": "Worth confirming this reset request was you."
+    },
+    {
+      "id": "1a0c0560567ff7fb",
+      "account": "school",
+      "subject": "Your Arkansas Ticket Pull Opens Tuesday",
+      "from": "info@updates.12thmanfoundation.com",
+      "receivedAt": "2026-09-20T19:01:36Z",
+      "snippet": "Student ticket pull for the Arkansas game opens Tuesday (Sept 22).",
+      "importance": "high",
+      "reason": "Ticket pull window opens tomorrow — claim it before it closes."
     }
   ]
 }
