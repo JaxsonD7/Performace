@@ -1,16 +1,4 @@
 {
-  "generatedAt": "2026-09-17T12:07:43Z",
-  "items": [
-    {
-      "id": "1a0ad9b6c8177bab",
-      "subject": "Your payment for Coinbase One was unsuccessful",
-      "from": "info@mail.coinbase.com",
-      "receivedAt": "2026-09-17T04:23:58Z",
-      "amount": 4.99,
-      "merchant": "Coinbase One",
-      "kind": "failed_payment",
-      "reason": "The renewal charge failed as warned — cash balance was too low. Subscription is now at risk of lapsing.",
-      "severity": "warning"
-    }
-  ]
+  "generatedAt": "2026-09-21T12:20:36Z",
+  "items": []
 }
