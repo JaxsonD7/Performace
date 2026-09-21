@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-20T12:18:48Z",
+  "generatedAt": "2026-09-21T12:20:36Z",
   "items": [
     {
       "id": "1a0a87f86e3d7bc6",
@@ -7,7 +7,7 @@
       "kind": "announcement",
       "subject": "Exam 1 Details",
       "receivedAt": "2026-09-16T04:35:21Z",
-      "reason": "Info for the upcoming exam Monday — Support Services students must schedule separately."
+      "reason": "Exam is today — Support Services students must schedule separately."
     },
     {
       "id": "1a0aa86a6dedc442",
@@ -15,15 +15,7 @@
       "kind": "announcement",
       "subject": "Bubble Sheet",
       "receivedAt": "2026-09-16T14:02:18Z",
-      "reason": "Bubble sheet (scantron) will be provided with the exam copy — no need to bring your own."
-    },
-    {
-      "id": "1a0ae0315d50533c",
-      "courseName": "MGMT 311",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Cengage MindTap",
-      "receivedAt": "2026-09-17T06:17:08Z",
-      "reason": "The Cengage MindTap assignment has been graded."
+      "reason": "Bubble sheet (scantron) will be provided with the exam copy today — no need to bring your own."
     },
     {
       "id": "1a0afb6540eeb99b",
@@ -40,6 +32,14 @@
       "subject": "Ex 1 has been graded",
       "receivedAt": "2026-09-17T22:09:50Z",
       "reason": "Exam 1 graded on Gradescope — all questions worth 3 points except Free Cash Flow (4 points)."
+    },
+    {
+      "id": "1a0bfac130599a84",
+      "courseName": "HIST 220",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Week 4: Reading Response",
+      "receivedAt": "2026-09-20T16:35:16Z",
+      "reason": "Instructor released grade changes and new comments on the Week 4 Reading Response."
     }
   ]
 }
