@@ -1,38 +1,6 @@
 {
-  "generatedAt": "2026-09-21T12:20:36Z",
+  "generatedAt": "2026-09-22T12:19:41Z",
   "items": [
-    {
-      "id": "1a0a87f86e3d7bc6",
-      "courseName": "MGMT 363",
-      "kind": "announcement",
-      "subject": "Exam 1 Details",
-      "receivedAt": "2026-09-16T04:35:21Z",
-      "reason": "Exam is today — Support Services students must schedule separately."
-    },
-    {
-      "id": "1a0aa86a6dedc442",
-      "courseName": "MGMT 363",
-      "kind": "announcement",
-      "subject": "Bubble Sheet",
-      "receivedAt": "2026-09-16T14:02:18Z",
-      "reason": "Bubble sheet (scantron) will be provided with the exam copy today — no need to bring your own."
-    },
-    {
-      "id": "1a0afb6540eeb99b",
-      "courseName": "HIST 220",
-      "kind": "announcement",
-      "subject": "Issues with Course Reserves",
-      "receivedAt": "2026-09-17T14:12:33Z",
-      "reason": "If the Library Reserves link in Canvas isn't working, use the Evans Library Reserves website directly."
-    },
-    {
-      "id": "1a0b16b4b690314d",
-      "courseName": "FINC 341",
-      "kind": "grade_posted",
-      "subject": "Ex 1 has been graded",
-      "receivedAt": "2026-09-17T22:09:50Z",
-      "reason": "Exam 1 graded on Gradescope — all questions worth 3 points except Free Cash Flow (4 points)."
-    },
     {
       "id": "1a0bfac130599a84",
       "courseName": "HIST 220",
@@ -40,6 +8,14 @@
       "subject": "Submission Posted: Week 4: Reading Response",
       "receivedAt": "2026-09-20T16:35:16Z",
       "reason": "Instructor released grade changes and new comments on the Week 4 Reading Response."
+    },
+    {
+      "id": "1a0c412a4c5c50c4",
+      "courseName": "FINC 341",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Quiz 3",
+      "receivedAt": "2026-09-21T13:05:44Z",
+      "reason": "Grade changes and new comments released on Quiz 3."
     }
   ]
 }
