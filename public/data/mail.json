@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-09-22T12:19:41Z",
+  "generatedAt": "2026-09-23T12:17:51Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
-      "id": "1a0c0560567ff7fb",
+      "id": "1a0ca7c26bf23ff2",
       "account": "school",
-      "subject": "Your Arkansas Ticket Pull Opens Tuesday",
-      "from": "info@updates.12thmanfoundation.com",
-      "receivedAt": "2026-09-20T19:01:36Z",
-      "snippet": "Student ticket pull for the Arkansas game opened today.",
+      "subject": "Welcome to Maroon Investment Club",
+      "from": "owen_conkey@tamu.edu",
+      "receivedAt": "2026-09-22T18:58:39Z",
+      "snippet": "Congratulations! You've been offered a position in the Maroon Investment Club this semester.",
       "importance": "high",
-      "reason": "Ticket pull window is open today — claim it before it closes."
+      "reason": "You got the offer — check for any onboarding steps or a response needed."
     }
   ]
 }
