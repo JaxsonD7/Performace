@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-12T12:07:55Z",
+  "generatedAt": "2026-09-23T12:17:51Z",
   "items": [
     {
       "id": "1a034b97ab20ebbc",
@@ -7,7 +7,7 @@
       "from": "no-reply@polleverywhere.com",
       "receivedAt": "2026-08-24T16:00:00Z",
       "dueDate": "2026-09-23",
-      "reason": "Class polling-tool invite for Texas A&M University — expires 30 days after it was sent if not set up."
+      "reason": "Class polling-tool invite for Texas A&M University — expires today if not set up."
     }
   ]
 }
