@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-09-23T12:17:51Z",
+  "generatedAt": "2026-09-24T12:17:54Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
-      "id": "1a0ca7c26bf23ff2",
+      "id": "1a0d16e0eddd52ce",
       "account": "school",
-      "subject": "Welcome to Maroon Investment Club",
+      "subject": "Maroon Investment Club — Update on Meeting Location",
       "from": "owen_conkey@tamu.edu",
-      "receivedAt": "2026-09-22T18:58:39Z",
-      "snippet": "Congratulations! You've been offered a position in the Maroon Investment Club this semester.",
+      "receivedAt": "2026-09-24T03:20:34Z",
+      "snippet": "First meeting is 8:00 PM Monday, 9/28 in Wehner 109 (their team link wasn't working).",
       "importance": "high",
-      "reason": "You got the offer — check for any onboarding steps or a response needed."
+      "reason": "First club meeting Monday at 8pm, Wehner 109 — put it on the calendar."
     }
   ]
 }
