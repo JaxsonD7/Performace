@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-26T12:18:48Z",
+  "generatedAt": "2026-09-28T12:20:30Z",
   "items": [
     {
       "id": "1a0cf7437796afef",
@@ -7,7 +7,7 @@
       "kind": "announcement",
       "subject": "Makeup Exam Dates/Times",
       "receivedAt": "2026-09-23T18:08:10Z",
-      "reason": "For those who missed Monday's exam: Thu 11:30-12:45, Fri 12:15-1:30, or Mon 11:30-12:45."
+      "reason": "Last makeup slot is today (Mon 11:30-12:45) for those who missed the original exam."
     },
     {
       "id": "1a0da9b4ce666f8c",
@@ -48,6 +48,14 @@
       "subject": "Grade Changed: Cengage MindTap",
       "receivedAt": "2026-09-25T17:44:05Z",
       "reason": "MindTap assignment re-graded Sep 25 at 12:37pm."
+    },
+    {
+      "id": "1a0e59fdfcfb48de",
+      "courseName": "HIST 220",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Week 5: Reading Response",
+      "receivedAt": "2026-09-28T01:27:31Z",
+      "reason": "Grade changes and new comments released on Week 5 Reading Response."
     }
   ]
 }
