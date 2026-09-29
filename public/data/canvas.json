@@ -1,14 +1,6 @@
 {
-  "generatedAt": "2026-09-28T12:20:30Z",
+  "generatedAt": "2026-09-29T12:20:42Z",
   "items": [
-    {
-      "id": "1a0cf7437796afef",
-      "courseName": "MGMT 363",
-      "kind": "announcement",
-      "subject": "Makeup Exam Dates/Times",
-      "receivedAt": "2026-09-23T18:08:10Z",
-      "reason": "Last makeup slot is today (Mon 11:30-12:45) for those who missed the original exam."
-    },
     {
       "id": "1a0da9b4ce666f8c",
       "courseName": "FINC 341",
@@ -56,6 +48,30 @@
       "subject": "Submission Posted: Week 5: Reading Response",
       "receivedAt": "2026-09-28T01:27:31Z",
       "reason": "Grade changes and new comments released on Week 5 Reading Response."
+    },
+    {
+      "id": "1a0e852616867ae7",
+      "courseName": "HIST 220",
+      "kind": "announcement",
+      "subject": "Exam on 7 October",
+      "receivedAt": "2026-09-28T14:01:23Z",
+      "reason": "First exam announced for Oct 7, in class."
+    },
+    {
+      "id": "1a0e8c4767756e30",
+      "courseName": "MGMT 363",
+      "kind": "grade_posted",
+      "subject": "Exam Results",
+      "receivedAt": "2026-09-28T16:06:20Z",
+      "reason": "Instructor correcting students showing as \"unassigned\" for Exam 1 grade."
+    },
+    {
+      "id": "1a0e8e8cb4f15ec4",
+      "courseName": "MGMT 363",
+      "kind": "announcement",
+      "subject": "Email Exchange/Visits",
+      "receivedAt": "2026-09-28T16:46:00Z",
+      "reason": "Admin note: email the instructor directly (b-welch@tamu.edu), not through Canvas."
     }
   ]
 }
