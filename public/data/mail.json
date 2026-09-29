@@ -1,16 +1,5 @@
 {
-  "generatedAt": "2026-09-24T12:17:54Z",
+  "generatedAt": "2026-09-29T12:20:42Z",
   "accounts": ["personal", "school"],
-  "emails": [
-    {
-      "id": "1a0d16e0eddd52ce",
-      "account": "school",
-      "subject": "Maroon Investment Club — Update on Meeting Location",
-      "from": "owen_conkey@tamu.edu",
-      "receivedAt": "2026-09-24T03:20:34Z",
-      "snippet": "First meeting is 8:00 PM Monday, 9/28 in Wehner 109 (their team link wasn't working).",
-      "importance": "high",
-      "reason": "First club meeting Monday at 8pm, Wehner 109 — put it on the calendar."
-    }
-  ]
+  "emails": []
 }
