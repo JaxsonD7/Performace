@@ -1,5 +1,16 @@
 {
-  "generatedAt": "2026-09-29T12:20:42Z",
+  "generatedAt": "2026-09-30T12:20:31Z",
   "accounts": ["personal", "school"],
-  "emails": []
+  "emails": [
+    {
+      "id": "1a0eede02aa46aa7",
+      "account": "school",
+      "subject": "Crime Alert - Robbery",
+      "from": "upd-campus-clery@lists.tamu.edu",
+      "receivedAt": "2026-09-29T20:21:18Z",
+      "snippet": "On September 28, 2026, at approximately 3:30 pm, a robbery was reported on campus.",
+      "importance": "medium",
+      "reason": "Official Clery Act campus crime alert."
+    }
+  ]
 }
