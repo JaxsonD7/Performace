@@ -1,46 +1,6 @@
 {
-  "generatedAt": "2026-09-29T12:20:42Z",
+  "generatedAt": "2026-09-30T12:20:31Z",
   "items": [
-    {
-      "id": "1a0da9b4ce666f8c",
-      "courseName": "FINC 341",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Ex 1",
-      "receivedAt": "2026-09-25T22:06:41Z",
-      "reason": "Grade changes and new comments released on Ex 1."
-    },
-    {
-      "id": "1a0da880345233c5",
-      "courseName": "FINC 341",
-      "kind": "grade_posted",
-      "subject": "Your Ex 1 has been graded",
-      "receivedAt": "2026-09-25T21:45:38Z",
-      "reason": "Gradescope correction to the above: True/False recounted on #26 (Versions A & C) and #32 (Versions B & D)."
-    },
-    {
-      "id": "1a0d9d50641b9418",
-      "courseName": "MGMT 311",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: EXAM 1",
-      "receivedAt": "2026-09-25T18:30:02Z",
-      "reason": "Exam 1 graded."
-    },
-    {
-      "id": "1a0d9caecd1a018b",
-      "courseName": "MGMT 311",
-      "kind": "announcement",
-      "subject": "EXAM 1 GRADES AND TEST REVIEW",
-      "receivedAt": "2026-09-25T18:19:05Z",
-      "reason": "Grades posted; professor won't discuss grades by email — must go to office hours in person with questions."
-    },
-    {
-      "id": "1a0d9aae280e781e",
-      "courseName": "MGMT 311",
-      "kind": "grade_posted",
-      "subject": "Grade Changed: Cengage MindTap",
-      "receivedAt": "2026-09-25T17:44:05Z",
-      "reason": "MindTap assignment re-graded Sep 25 at 12:37pm."
-    },
     {
       "id": "1a0e59fdfcfb48de",
       "courseName": "HIST 220",
@@ -72,6 +32,30 @@
       "subject": "Email Exchange/Visits",
       "receivedAt": "2026-09-28T16:46:00Z",
       "reason": "Admin note: email the instructor directly (b-welch@tamu.edu), not through Canvas."
+    },
+    {
+      "id": "1a0eea2b9a8e0926",
+      "courseName": "HIST 220",
+      "kind": "announcement",
+      "subject": "Extreme Pilgrim Video",
+      "receivedAt": "2026-09-29T19:27:13Z",
+      "reason": "Watch the Extreme Pilgrim video before today's class — will be discussed."
+    },
+    {
+      "id": "1a0eec9b98e0913f",
+      "courseName": "HIST 220",
+      "kind": "announcement",
+      "subject": "First Exam Prep Sheet",
+      "receivedAt": "2026-09-29T20:09:48Z",
+      "reason": "Prep sheet posted for the Oct 7 first exam."
+    },
+    {
+      "id": "1a0efee4e5c6ef04",
+      "courseName": "MGMT 311",
+      "kind": "grade_posted",
+      "subject": "Grade Changed: EXAM 1",
+      "receivedAt": "2026-09-30T01:29:23Z",
+      "reason": "Exam 1 re-graded again Sep 29 at 8:20pm."
     }
   ]
 }
