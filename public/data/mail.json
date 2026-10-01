@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-30T12:20:31Z",
+  "generatedAt": "2026-10-01T12:20:13Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -11,6 +11,46 @@
       "snippet": "On September 28, 2026, at approximately 3:30 pm, a robbery was reported on campus.",
       "importance": "medium",
       "reason": "Official Clery Act campus crime alert."
+    },
+    {
+      "id": "1a0f412b73f5e3bd",
+      "account": "school",
+      "subject": "Spring 2027 Class Schedules Available and Registration Times Assigned",
+      "from": "registration-admin@tamu.edu",
+      "receivedAt": "2026-09-30T20:47:37Z",
+      "snippet": "Spring 2027 class schedules are available and your registration time has been assigned.",
+      "importance": "high",
+      "reason": "Need to check assigned registration time and plan spring schedule."
+    },
+    {
+      "id": "1a0f4734ee854a3d",
+      "account": "personal",
+      "subject": "Verify your candidate account",
+      "from": "pnc@otp.workday.com",
+      "receivedAt": "2026-09-30T22:33:12Z",
+      "snippet": "Click this link to confirm your email address and complete setup for your candidate account.",
+      "importance": "medium",
+      "reason": "Needed to finish setting up PNC Workday candidate account."
+    },
+    {
+      "id": "1a0f4abf649f4618",
+      "account": "personal",
+      "subject": "Continue to apply for the job Summer Analyst, Commercial Real Estate",
+      "from": "exvv.fa.sender@workflow.mail.us2.cloud.oracle.com",
+      "receivedAt": "2026-09-30T23:35:04Z",
+      "snippet": "A draft job application was saved — invites you to complete and submit it.",
+      "importance": "medium",
+      "reason": "Unfinished job application draft needs to be submitted."
+    },
+    {
+      "id": "1a0f549a68ac761f",
+      "account": "personal",
+      "subject": "[GitHub] Claude is requesting updated permissions",
+      "from": "noreply@github.com",
+      "receivedAt": "2026-10-01T02:27:19Z",
+      "snippet": "The GitHub App Claude is requesting additional access to your account.",
+      "importance": "medium",
+      "reason": "GitHub App permissions change needs review/approval."
     }
   ]
 }
