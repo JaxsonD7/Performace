@@ -1,17 +1,7 @@
 {
-  "generatedAt": "2026-10-01T12:20:13Z",
+  "generatedAt": "2026-10-02T12:19:42Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a0eede02aa46aa7",
-      "account": "school",
-      "subject": "Crime Alert - Robbery",
-      "from": "upd-campus-clery@lists.tamu.edu",
-      "receivedAt": "2026-09-29T20:21:18Z",
-      "snippet": "On September 28, 2026, at approximately 3:30 pm, a robbery was reported on campus.",
-      "importance": "medium",
-      "reason": "Official Clery Act campus crime alert."
-    },
     {
       "id": "1a0f412b73f5e3bd",
       "account": "school",
@@ -51,6 +41,16 @@
       "snippet": "The GitHub App Claude is requesting additional access to your account.",
       "importance": "medium",
       "reason": "GitHub App permissions change needs review/approval."
+    },
+    {
+      "id": "1a0fb0d67479acf4",
+      "account": "personal",
+      "subject": "New device login detected",
+      "from": "noreply@account.tiktok.com",
+      "receivedAt": "2026-10-02T05:10:29Z",
+      "snippet": "Login from an iPad Pro 11-inch (M4) near Oklahoma at 10/02 01:10 EDT.",
+      "importance": "medium",
+      "reason": "Unfamiliar device/location — worth confirming this was you."
     }
   ]
 }
