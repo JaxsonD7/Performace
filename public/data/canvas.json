@@ -1,14 +1,6 @@
 {
-  "generatedAt": "2026-10-01T12:20:13Z",
+  "generatedAt": "2026-10-02T12:19:42Z",
   "items": [
-    {
-      "id": "1a0e59fdfcfb48de",
-      "courseName": "HIST 220",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Week 5: Reading Response",
-      "receivedAt": "2026-09-28T01:27:31Z",
-      "reason": "Grade changes and new comments released on Week 5 Reading Response."
-    },
     {
       "id": "1a0e852616867ae7",
       "courseName": "HIST 220",
@@ -64,6 +56,38 @@
       "subject": "Exam 1 Reminders",
       "receivedAt": "2026-09-30T20:02:50Z",
       "reason": "PepsiCo brief talk at start of today's class; exam 1 reminders."
+    },
+    {
+      "id": "1a0f848b7aa4fb3d",
+      "courseName": "HIST 220",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Week 4 Quiz",
+      "receivedAt": "2026-10-01T16:25:02Z",
+      "reason": "Week 4 Quiz graded."
+    },
+    {
+      "id": "1a0f9b8a51b5eb9e",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Chapter 1 Learn Smart (Extra Credit)",
+      "receivedAt": "2026-10-01T23:06:57Z",
+      "reason": "Extra credit assignment graded."
+    },
+    {
+      "id": "1a0fa146df67e013",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Chapter 2 Learn Smart (Extra Credit)",
+      "receivedAt": "2026-10-02T00:47:14Z",
+      "reason": "Extra credit assignment graded."
+    },
+    {
+      "id": "1a0fa979a738b0d4",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Chapter 3 Learn Smart (Extra Credit)",
+      "receivedAt": "2026-10-02T03:10:27Z",
+      "reason": "Extra credit assignment graded."
     }
   ]
 }
