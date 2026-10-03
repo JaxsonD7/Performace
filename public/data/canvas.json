@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-02T12:19:42Z",
+  "generatedAt": "2026-10-03T12:19:14Z",
   "items": [
     {
       "id": "1a0e852616867ae7",
@@ -8,22 +8,6 @@
       "subject": "Exam on 7 October",
       "receivedAt": "2026-09-28T14:01:23Z",
       "reason": "First exam announced for Oct 7, in class."
-    },
-    {
-      "id": "1a0e8c4767756e30",
-      "courseName": "MGMT 363",
-      "kind": "grade_posted",
-      "subject": "Exam Results",
-      "receivedAt": "2026-09-28T16:06:20Z",
-      "reason": "Instructor correcting students showing as \"unassigned\" for Exam 1 grade."
-    },
-    {
-      "id": "1a0e8e8cb4f15ec4",
-      "courseName": "MGMT 363",
-      "kind": "announcement",
-      "subject": "Email Exchange/Visits",
-      "receivedAt": "2026-09-28T16:46:00Z",
-      "reason": "Admin note: email the instructor directly (b-welch@tamu.edu), not through Canvas."
     },
     {
       "id": "1a0eec9b98e0913f",
@@ -88,6 +72,14 @@
       "subject": "Assignment Graded: Chapter 3 Learn Smart (Extra Credit)",
       "receivedAt": "2026-10-02T03:10:27Z",
       "reason": "Extra credit assignment graded."
+    },
+    {
+      "id": "1a0fe9e741d323ff",
+      "courseName": "HIST 220",
+      "kind": "announcement",
+      "subject": "Additional Information for the First Exam",
+      "receivedAt": "2026-10-02T21:56:27Z",
+      "reason": "LockDown browser practice exam and other logistics for the Oct 7 exam."
     }
   ]
 }
