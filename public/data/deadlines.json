@@ -1,4 +1,13 @@
 {
-  "generatedAt": "2026-09-27T12:19:16Z",
-  "items": []
+  "generatedAt": "2026-10-03T12:19:14Z",
+  "items": [
+    {
+      "id": "1a101011e42f4f3f",
+      "subject": "Your NetID password is about to expire",
+      "from": "alc-monitor@tamu.edu",
+      "receivedAt": "2026-10-03T09:03:27Z",
+      "dueDate": "2026-10-16",
+      "reason": "TAMU NetID password expires 10/16 — change it before then or lose access to campus systems."
+    }
+  ]
 }
