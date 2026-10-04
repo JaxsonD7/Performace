@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-03T12:19:14Z",
+  "generatedAt": "2026-10-04T12:19:12Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -21,6 +21,26 @@
       "snippet": "Login from an iPad Pro 11-inch (M4) near Oklahoma at 10/02 01:10 EDT.",
       "importance": "medium",
       "reason": "Unfamiliar device/location — worth confirming this was you."
+    },
+    {
+      "id": "1a104f2955d2a692",
+      "account": "personal",
+      "subject": "Critical security alert",
+      "from": "no-reply@accounts.google.com",
+      "receivedAt": "2026-10-03T02:13:19Z",
+      "snippet": "Some of your saved passwords were found in a data breach from a site or app you use.",
+      "importance": "high",
+      "reason": "Google flagged saved passwords exposed in a data breach — worth changing them."
+    },
+    {
+      "id": "1a10423a22f21320",
+      "account": "personal",
+      "subject": "Continue to apply for the job Summer Analyst, Commercial Real Estate",
+      "from": "exvv.fa.sender@workflow.mail.us2.cloud.oracle.com",
+      "receivedAt": "2026-10-03T23:40:05Z",
+      "snippet": "Reminder about your draft job application — invites you to complete and submit it.",
+      "importance": "medium",
+      "reason": "Unfinished job application draft needs to be submitted."
     }
   ]
 }
