@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-03T12:19:14Z",
+  "generatedAt": "2026-10-04T12:19:12Z",
   "items": [
     {
       "id": "1a0e852616867ae7",
@@ -16,14 +16,6 @@
       "subject": "First Exam Prep Sheet",
       "receivedAt": "2026-09-29T20:09:48Z",
       "reason": "Prep sheet posted for the Oct 7 first exam."
-    },
-    {
-      "id": "1a0efee4e5c6ef04",
-      "courseName": "MGMT 311",
-      "kind": "grade_posted",
-      "subject": "Grade Changed: EXAM 1",
-      "receivedAt": "2026-09-30T01:29:23Z",
-      "reason": "Exam 1 re-graded again Sep 29 at 8:20pm."
     },
     {
       "id": "1a0f3dae3ca6e767",
@@ -80,6 +72,30 @@
       "subject": "Additional Information for the First Exam",
       "receivedAt": "2026-10-02T21:56:27Z",
       "reason": "LockDown browser practice exam and other logistics for the Oct 7 exam."
+    },
+    {
+      "id": "1a10457bae792cdc",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Chapter 4 Learn Smart (Extra Credit)",
+      "receivedAt": "2026-10-04T00:36:56Z",
+      "reason": "Extra credit assignment graded."
+    },
+    {
+      "id": "1a104731c0b8a592",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Chapter 5 Learn Smart (Extra Credit)",
+      "receivedAt": "2026-10-04T01:06:52Z",
+      "reason": "Extra credit assignment graded."
+    },
+    {
+      "id": "1a1048cc96004fe3",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Chapter 6 Learn Smart (Extra Credit)",
+      "receivedAt": "2026-10-04T01:34:54Z",
+      "reason": "Extra credit assignment graded."
     }
   ]
 }
