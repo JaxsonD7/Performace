@@ -1,17 +1,7 @@
 {
-  "generatedAt": "2026-10-04T12:19:12Z",
+  "generatedAt": "2026-10-05T12:19:58Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a0f549a68ac761f",
-      "account": "personal",
-      "subject": "[GitHub] Claude is requesting updated permissions",
-      "from": "noreply@github.com",
-      "receivedAt": "2026-10-01T02:27:19Z",
-      "snippet": "The GitHub App Claude is requesting additional access to your account.",
-      "importance": "medium",
-      "reason": "GitHub App permissions change needs review/approval."
-    },
     {
       "id": "1a0fb0d67479acf4",
       "account": "personal",
