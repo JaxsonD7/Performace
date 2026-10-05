@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-04T12:19:12Z",
+  "generatedAt": "2026-10-05T12:19:58Z",
   "items": [
     {
       "id": "1a0e852616867ae7",
@@ -16,22 +16,6 @@
       "subject": "First Exam Prep Sheet",
       "receivedAt": "2026-09-29T20:09:48Z",
       "reason": "Prep sheet posted for the Oct 7 first exam."
-    },
-    {
-      "id": "1a0f3dae3ca6e767",
-      "courseName": "MGMT 363",
-      "kind": "announcement",
-      "subject": "Missing Exam Grades",
-      "receivedAt": "2026-09-30T19:46:39Z",
-      "reason": "Still grading remaining Exam 1s; a missing grade doesn't mean a lost exam."
-    },
-    {
-      "id": "1a0f3ee9965c6558",
-      "courseName": "SCMT 364",
-      "kind": "announcement",
-      "subject": "Exam 1 Reminders",
-      "receivedAt": "2026-09-30T20:02:50Z",
-      "reason": "PepsiCo brief talk at start of today's class; exam 1 reminders."
     },
     {
       "id": "1a0f848b7aa4fb3d",
@@ -96,6 +80,14 @@
       "subject": "Assignment Graded: Chapter 6 Learn Smart (Extra Credit)",
       "receivedAt": "2026-10-04T01:34:54Z",
       "reason": "Extra credit assignment graded."
+    },
+    {
+      "id": "1a10840ad1552250",
+      "courseName": "HIST 220",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Week 6: Reading Response",
+      "receivedAt": "2026-10-04T18:50:14Z",
+      "reason": "Grade changes and new comments released on Week 6 Reading Response."
     }
   ]
 }
