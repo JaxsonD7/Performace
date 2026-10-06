@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T12:19:58Z",
+  "generatedAt": "2026-10-06T12:20:01Z",
   "items": [
     {
       "id": "1a0e852616867ae7",
@@ -16,38 +16,6 @@
       "subject": "First Exam Prep Sheet",
       "receivedAt": "2026-09-29T20:09:48Z",
       "reason": "Prep sheet posted for the Oct 7 first exam."
-    },
-    {
-      "id": "1a0f848b7aa4fb3d",
-      "courseName": "HIST 220",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Week 4 Quiz",
-      "receivedAt": "2026-10-01T16:25:02Z",
-      "reason": "Week 4 Quiz graded."
-    },
-    {
-      "id": "1a0f9b8a51b5eb9e",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Chapter 1 Learn Smart (Extra Credit)",
-      "receivedAt": "2026-10-01T23:06:57Z",
-      "reason": "Extra credit assignment graded."
-    },
-    {
-      "id": "1a0fa146df67e013",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Chapter 2 Learn Smart (Extra Credit)",
-      "receivedAt": "2026-10-02T00:47:14Z",
-      "reason": "Extra credit assignment graded."
-    },
-    {
-      "id": "1a0fa979a738b0d4",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Chapter 3 Learn Smart (Extra Credit)",
-      "receivedAt": "2026-10-02T03:10:27Z",
-      "reason": "Extra credit assignment graded."
     },
     {
       "id": "1a0fe9e741d323ff",
@@ -88,6 +56,30 @@
       "subject": "Submission Posted: Week 6: Reading Response",
       "receivedAt": "2026-10-04T18:50:14Z",
       "reason": "Grade changes and new comments released on Week 6 Reading Response."
+    },
+    {
+      "id": "1a10d9c3639f2acd",
+      "courseName": "MGMT 363",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Exam 1",
+      "receivedAt": "2026-10-05T19:48:19Z",
+      "reason": "Grade changes and new comments released on Exam 1."
+    },
+    {
+      "id": "1a10df38e24d9ede",
+      "courseName": "FINC 341",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Quiz 4",
+      "receivedAt": "2026-10-05T21:23:43Z",
+      "reason": "Grade changes and new comments released on Quiz 4."
+    },
+    {
+      "id": "1a10eac7986cf81f",
+      "courseName": "MGMT 363",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Exam 1",
+      "receivedAt": "2026-10-06T00:45:41Z",
+      "reason": "Exam 1 graded."
     }
   ]
 }
