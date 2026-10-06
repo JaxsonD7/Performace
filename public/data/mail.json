@@ -1,17 +1,7 @@
 {
-  "generatedAt": "2026-10-05T12:19:58Z",
+  "generatedAt": "2026-10-06T12:20:01Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a0fb0d67479acf4",
-      "account": "personal",
-      "subject": "New device login detected",
-      "from": "noreply@account.tiktok.com",
-      "receivedAt": "2026-10-02T05:10:29Z",
-      "snippet": "Login from an iPad Pro 11-inch (M4) near Oklahoma at 10/02 01:10 EDT.",
-      "importance": "medium",
-      "reason": "Unfamiliar device/location — worth confirming this was you."
-    },
     {
       "id": "1a104f2955d2a692",
       "account": "personal",
@@ -31,6 +21,16 @@
       "snippet": "Reminder about your draft job application — invites you to complete and submit it.",
       "importance": "medium",
       "reason": "Unfinished job application draft needs to be submitted."
+    },
+    {
+      "id": "1a10878d6f4201cc",
+      "account": "school",
+      "subject": "Your Ticket Pull for The Citadel Game Opens Tuesday",
+      "from": "info@updates.12thmanfoundation.com",
+      "receivedAt": "2026-10-04T19:01:13Z",
+      "snippet": "Ticket pull window for The Citadel game opens today.",
+      "importance": "high",
+      "reason": "Ticket pull window opens today — grab your spot."
     }
   ]
 }
