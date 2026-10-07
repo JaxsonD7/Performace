@@ -1,17 +1,7 @@
 {
-  "generatedAt": "2026-10-06T12:20:01Z",
+  "generatedAt": "2026-10-07T12:20:00Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a104f2955d2a692",
-      "account": "personal",
-      "subject": "Critical security alert",
-      "from": "no-reply@accounts.google.com",
-      "receivedAt": "2026-10-03T02:13:19Z",
-      "snippet": "Some of your saved passwords were found in a data breach from a site or app you use.",
-      "importance": "high",
-      "reason": "Google flagged saved passwords exposed in a data breach — worth changing them."
-    },
     {
       "id": "1a10423a22f21320",
       "account": "personal",
@@ -21,16 +11,6 @@
       "snippet": "Reminder about your draft job application — invites you to complete and submit it.",
       "importance": "medium",
       "reason": "Unfinished job application draft needs to be submitted."
-    },
-    {
-      "id": "1a10878d6f4201cc",
-      "account": "school",
-      "subject": "Your Ticket Pull for The Citadel Game Opens Tuesday",
-      "from": "info@updates.12thmanfoundation.com",
-      "receivedAt": "2026-10-04T19:01:13Z",
-      "snippet": "Ticket pull window for The Citadel game opens today.",
-      "importance": "high",
-      "reason": "Ticket pull window opens today — grab your spot."
     }
   ]
 }
