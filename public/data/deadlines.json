@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-03T12:19:14Z",
+  "generatedAt": "2026-10-07T12:20:00Z",
   "items": [
     {
       "id": "1a101011e42f4f3f",
@@ -8,6 +8,14 @@
       "receivedAt": "2026-10-03T09:03:27Z",
       "dueDate": "2026-10-16",
       "reason": "TAMU NetID password expires 10/16 — change it before then or lose access to campus systems."
+    },
+    {
+      "id": "1a11628ed8260197",
+      "subject": "ACTION REQUIRED: Student Account Payment Needed",
+      "from": "sbs@tamu.edu",
+      "receivedAt": "2026-10-07T11:39:00Z",
+      "dueDate": "2026-10-16",
+      "reason": "New charges on student account — pay by 5pm Fri Oct 16 to avoid late fees (no amount stated)."
     }
   ]
 }
