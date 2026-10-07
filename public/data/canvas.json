@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T12:20:01Z",
+  "generatedAt": "2026-10-07T12:20:00Z",
   "items": [
     {
       "id": "1a0e852616867ae7",
@@ -7,7 +7,7 @@
       "kind": "announcement",
       "subject": "Exam on 7 October",
       "receivedAt": "2026-09-28T14:01:23Z",
-      "reason": "First exam announced for Oct 7, in class."
+      "reason": "Exam is today, in class."
     },
     {
       "id": "1a0eec9b98e0913f",
@@ -15,7 +15,7 @@
       "kind": "announcement",
       "subject": "First Exam Prep Sheet",
       "receivedAt": "2026-09-29T20:09:48Z",
-      "reason": "Prep sheet posted for the Oct 7 first exam."
+      "reason": "Prep sheet for today's exam."
     },
     {
       "id": "1a0fe9e741d323ff",
@@ -23,7 +23,7 @@
       "kind": "announcement",
       "subject": "Additional Information for the First Exam",
       "receivedAt": "2026-10-02T21:56:27Z",
-      "reason": "LockDown browser practice exam and other logistics for the Oct 7 exam."
+      "reason": "LockDown browser practice exam and other logistics for today's exam."
     },
     {
       "id": "1a10457bae792cdc",
@@ -80,6 +80,14 @@
       "subject": "Assignment Graded: Exam 1",
       "receivedAt": "2026-10-06T00:45:41Z",
       "reason": "Exam 1 graded."
+    },
+    {
+      "id": "1a111f2969e5ddd9",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "Exam Review 10/12 Monday 7:30-9:30 Wehner 113",
+      "receivedAt": "2026-10-06T16:01:04Z",
+      "reason": "Exam review session Monday 10/12, 7:30-9:30pm, Wehner 113."
     }
   ]
 }
