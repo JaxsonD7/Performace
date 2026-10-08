@@ -1,16 +1,26 @@
 {
-  "generatedAt": "2026-10-07T12:20:00Z",
+  "generatedAt": "2026-10-08T12:20:21Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
-      "id": "1a10423a22f21320",
+      "id": "1a11959aa08f3438",
       "account": "personal",
-      "subject": "Continue to apply for the job Summer Analyst, Commercial Real Estate",
-      "from": "exvv.fa.sender@workflow.mail.us2.cloud.oracle.com",
-      "receivedAt": "2026-10-03T23:40:05Z",
-      "snippet": "Reminder about your draft job application — invites you to complete and submit it.",
+      "subject": "Security alert for steventarance598@gmail.com",
+      "from": "no-reply@accounts.google.com",
+      "receivedAt": "2026-10-08T02:31:08Z",
+      "snippet": "Your email is listed as the recovery address for an account you may not recognize (steventarance598@gmail.com) — a new sign-in was flagged on it.",
+      "importance": "high",
+      "reason": "Worth confirming whether you recognize this account, since your email is its recovery address."
+    },
+    {
+      "id": "1a119632b7c887ee",
+      "account": "personal",
+      "subject": "Stuck on the Sonnet screener? We can help",
+      "from": "handshake@g.joinhandshake.com",
+      "receivedAt": "2026-10-08T02:40:02Z",
+      "snippet": "You signed the contract for Project Sonnet but haven't taken the screener yet.",
       "importance": "medium",
-      "reason": "Unfinished job application draft needs to be submitted."
+      "reason": "Signed contract still needs the screener completed."
     }
   ]
 }
