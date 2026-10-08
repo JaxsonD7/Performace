@@ -1,54 +1,6 @@
 {
-  "generatedAt": "2026-10-07T12:20:00Z",
+  "generatedAt": "2026-10-08T12:20:21Z",
   "items": [
-    {
-      "id": "1a0e852616867ae7",
-      "courseName": "HIST 220",
-      "kind": "announcement",
-      "subject": "Exam on 7 October",
-      "receivedAt": "2026-09-28T14:01:23Z",
-      "reason": "Exam is today, in class."
-    },
-    {
-      "id": "1a0eec9b98e0913f",
-      "courseName": "HIST 220",
-      "kind": "announcement",
-      "subject": "First Exam Prep Sheet",
-      "receivedAt": "2026-09-29T20:09:48Z",
-      "reason": "Prep sheet for today's exam."
-    },
-    {
-      "id": "1a0fe9e741d323ff",
-      "courseName": "HIST 220",
-      "kind": "announcement",
-      "subject": "Additional Information for the First Exam",
-      "receivedAt": "2026-10-02T21:56:27Z",
-      "reason": "LockDown browser practice exam and other logistics for today's exam."
-    },
-    {
-      "id": "1a10457bae792cdc",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Chapter 4 Learn Smart (Extra Credit)",
-      "receivedAt": "2026-10-04T00:36:56Z",
-      "reason": "Extra credit assignment graded."
-    },
-    {
-      "id": "1a104731c0b8a592",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Chapter 5 Learn Smart (Extra Credit)",
-      "receivedAt": "2026-10-04T01:06:52Z",
-      "reason": "Extra credit assignment graded."
-    },
-    {
-      "id": "1a1048cc96004fe3",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Chapter 6 Learn Smart (Extra Credit)",
-      "receivedAt": "2026-10-04T01:34:54Z",
-      "reason": "Extra credit assignment graded."
-    },
     {
       "id": "1a10840ad1552250",
       "courseName": "HIST 220",
@@ -88,6 +40,54 @@
       "subject": "Exam Review 10/12 Monday 7:30-9:30 Wehner 113",
       "receivedAt": "2026-10-06T16:01:04Z",
       "reason": "Exam review session Monday 10/12, 7:30-9:30pm, Wehner 113."
+    },
+    {
+      "id": "1a1165a6f26ebb62",
+      "courseName": "SCMT 364",
+      "kind": "announcement",
+      "subject": "Last Exam 1 Reminders",
+      "receivedAt": "2026-10-07T12:33:03Z",
+      "reason": "Exam is today — print Gradescope scantron, handwrite only where noted."
+    },
+    {
+      "id": "1a1192c20224a174",
+      "courseName": "MGMT 363",
+      "kind": "announcement",
+      "subject": "VIOLATION OF AGGIE CORE VALUES",
+      "receivedAt": "2026-10-08T01:41:20Z",
+      "reason": "Professor upset about classroom behavior toward guest speakers; notes Exam 2 will draw heavily from guest speaker content."
+    },
+    {
+      "id": "1a1183883c15225a",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Chapter 7 Learn Smart (Extra Credit)",
+      "receivedAt": "2026-10-07T21:15:13Z",
+      "reason": "Extra credit assignment graded."
+    },
+    {
+      "id": "1a11a435c61d2b72",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Chapter 9 Learn Smart (Extra Credit)",
+      "receivedAt": "2026-10-08T06:46:15Z",
+      "reason": "Extra credit assignment graded."
+    },
+    {
+      "id": "1a11a57600bcec9e",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Chapter 11 Learn Smart (Extra Credit)",
+      "receivedAt": "2026-10-08T07:08:12Z",
+      "reason": "Extra credit assignment graded."
+    },
+    {
+      "id": "1a11a81a3f1f903e",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Chapter 12 Learn Smart (Extra Credit)",
+      "receivedAt": "2026-10-08T07:54:21Z",
+      "reason": "Extra credit assignment graded."
     }
   ]
 }
