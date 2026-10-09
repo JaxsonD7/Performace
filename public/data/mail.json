@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-08T12:20:21Z",
+  "generatedAt": "2026-10-09T12:20:07Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -15,12 +15,22 @@
     {
       "id": "1a119632b7c887ee",
       "account": "personal",
-      "subject": "Stuck on the Sonnet screener? We can help",
+      "subject": "Next up on Project Sonnet: record your sample video",
       "from": "handshake@g.joinhandshake.com",
-      "receivedAt": "2026-10-08T02:40:02Z",
-      "snippet": "You signed the contract for Project Sonnet but haven't taken the screener yet.",
+      "receivedAt": "2026-10-08T14:00:04Z",
+      "snippet": "Contract signed — next step is recording a short sample video to start earning $11/hr.",
       "importance": "medium",
-      "reason": "Signed contract still needs the screener completed."
+      "reason": "Signed contract still needs the sample video recorded."
+    },
+    {
+      "id": "1a11bde8437bb3f9",
+      "account": "personal",
+      "subject": "Dmitri Ivanov from TBD Investors sent you a message",
+      "from": "handshake@notifications.joinhandshake.com",
+      "receivedAt": "2026-10-08T14:16:27Z",
+      "snippet": "Messages about two internship roles: Consulting & Strategy Intern ($30/hr) and AI & Data Analytics Intern ($20/hr).",
+      "importance": "medium",
+      "reason": "Recruiter reached out directly — worth a reply."
     }
   ]
 }
