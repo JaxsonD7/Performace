@@ -1,14 +1,6 @@
 {
-  "generatedAt": "2026-10-08T12:20:21Z",
+  "generatedAt": "2026-10-09T12:20:07Z",
   "items": [
-    {
-      "id": "1a10840ad1552250",
-      "courseName": "HIST 220",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Week 6: Reading Response",
-      "receivedAt": "2026-10-04T18:50:14Z",
-      "reason": "Grade changes and new comments released on Week 6 Reading Response."
-    },
     {
       "id": "1a10d9c3639f2acd",
       "courseName": "MGMT 363",
@@ -40,14 +32,6 @@
       "subject": "Exam Review 10/12 Monday 7:30-9:30 Wehner 113",
       "receivedAt": "2026-10-06T16:01:04Z",
       "reason": "Exam review session Monday 10/12, 7:30-9:30pm, Wehner 113."
-    },
-    {
-      "id": "1a1165a6f26ebb62",
-      "courseName": "SCMT 364",
-      "kind": "announcement",
-      "subject": "Last Exam 1 Reminders",
-      "receivedAt": "2026-10-07T12:33:03Z",
-      "reason": "Exam is today — print Gradescope scantron, handwrite only where noted."
     },
     {
       "id": "1a1192c20224a174",
@@ -87,6 +71,22 @@
       "kind": "grade_posted",
       "subject": "Assignment Graded: Chapter 12 Learn Smart (Extra Credit)",
       "receivedAt": "2026-10-08T07:54:21Z",
+      "reason": "Extra credit assignment graded."
+    },
+    {
+      "id": "1a11bd1bf7c620cd",
+      "courseName": "HIST 220",
+      "kind": "announcement",
+      "subject": "Class tomorrow, Friday 9 Oct -- Attendance Required!",
+      "receivedAt": "2026-10-08T14:01:26Z",
+      "reason": "In-class group mapping project today — attendance required."
+    },
+    {
+      "id": "1a11dc223b82242b",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Chapter 13 Learn Smart (Extra Credit)",
+      "receivedAt": "2026-10-08T23:03:40Z",
       "reason": "Extra credit assignment graded."
     }
   ]
