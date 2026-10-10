@@ -1,30 +1,6 @@
 {
-  "generatedAt": "2026-10-09T12:20:07Z",
+  "generatedAt": "2026-10-10T12:19:44Z",
   "items": [
-    {
-      "id": "1a10d9c3639f2acd",
-      "courseName": "MGMT 363",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Exam 1",
-      "receivedAt": "2026-10-05T19:48:19Z",
-      "reason": "Grade changes and new comments released on Exam 1."
-    },
-    {
-      "id": "1a10df38e24d9ede",
-      "courseName": "FINC 341",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Quiz 4",
-      "receivedAt": "2026-10-05T21:23:43Z",
-      "reason": "Grade changes and new comments released on Quiz 4."
-    },
-    {
-      "id": "1a10eac7986cf81f",
-      "courseName": "MGMT 363",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Exam 1",
-      "receivedAt": "2026-10-06T00:45:41Z",
-      "reason": "Exam 1 graded."
-    },
     {
       "id": "1a111f2969e5ddd9",
       "courseName": "FINC 341",
@@ -74,20 +50,20 @@
       "reason": "Extra credit assignment graded."
     },
     {
-      "id": "1a11bd1bf7c620cd",
-      "courseName": "HIST 220",
-      "kind": "announcement",
-      "subject": "Class tomorrow, Friday 9 Oct -- Attendance Required!",
-      "receivedAt": "2026-10-08T14:01:26Z",
-      "reason": "In-class group mapping project today — attendance required."
-    },
-    {
       "id": "1a11dc223b82242b",
       "courseName": "SCMT 364",
       "kind": "grade_posted",
       "subject": "Assignment Graded: Chapter 13 Learn Smart (Extra Credit)",
       "receivedAt": "2026-10-08T23:03:40Z",
       "reason": "Extra credit assignment graded."
+    },
+    {
+      "id": "1a121f06e2069e74",
+      "courseName": "SCMT 364",
+      "kind": "announcement",
+      "subject": "No Class Tuesday, October 13 *** Make up Exam Tuesday October 13",
+      "receivedAt": "2026-10-09T18:32:43Z",
+      "reason": "No regular class Oct 13 (fall break for this section), but it's also the makeup exam day for those who missed it."
     }
   ]
 }
