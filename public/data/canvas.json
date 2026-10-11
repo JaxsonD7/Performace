@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-10T12:19:44Z",
+  "generatedAt": "2026-10-11T12:19:09Z",
   "items": [
     {
       "id": "1a111f2969e5ddd9",
@@ -7,7 +7,7 @@
       "kind": "announcement",
       "subject": "Exam Review 10/12 Monday 7:30-9:30 Wehner 113",
       "receivedAt": "2026-10-06T16:01:04Z",
-      "reason": "Exam review session Monday 10/12, 7:30-9:30pm, Wehner 113."
+      "reason": "Exam review session tomorrow, Monday 10/12, 7:30-9:30pm, Wehner 113."
     },
     {
       "id": "1a1192c20224a174",
@@ -16,38 +16,6 @@
       "subject": "VIOLATION OF AGGIE CORE VALUES",
       "receivedAt": "2026-10-08T01:41:20Z",
       "reason": "Professor upset about classroom behavior toward guest speakers; notes Exam 2 will draw heavily from guest speaker content."
-    },
-    {
-      "id": "1a1183883c15225a",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Chapter 7 Learn Smart (Extra Credit)",
-      "receivedAt": "2026-10-07T21:15:13Z",
-      "reason": "Extra credit assignment graded."
-    },
-    {
-      "id": "1a11a435c61d2b72",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Chapter 9 Learn Smart (Extra Credit)",
-      "receivedAt": "2026-10-08T06:46:15Z",
-      "reason": "Extra credit assignment graded."
-    },
-    {
-      "id": "1a11a57600bcec9e",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Chapter 11 Learn Smart (Extra Credit)",
-      "receivedAt": "2026-10-08T07:08:12Z",
-      "reason": "Extra credit assignment graded."
-    },
-    {
-      "id": "1a11a81a3f1f903e",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Chapter 12 Learn Smart (Extra Credit)",
-      "receivedAt": "2026-10-08T07:54:21Z",
-      "reason": "Extra credit assignment graded."
     },
     {
       "id": "1a11dc223b82242b",
