@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-08T12:20:21Z",
+  "generatedAt": "2026-10-11T12:19:09Z",
   "items": [
     {
       "id": "1a101011e42f4f3f",
@@ -8,6 +8,14 @@
       "receivedAt": "2026-10-03T09:03:27Z",
       "dueDate": "2026-10-16",
       "reason": "TAMU NetID password expires 10/16 — change it before then or lose access to campus systems."
+    },
+    {
+      "id": "1a12946e938a5c07",
+      "subject": "Your paused Supabase project is being permanently frozen soon",
+      "from": "noreply@supabase.com",
+      "receivedAt": "2026-10-11T04:44:35Z",
+      "dueDate": "2026-10-16",
+      "reason": "Paused Supabase project (Athlo App) will be permanently frozen in 5 days — restore from dashboard before then or lose the ability to restore it."
     }
   ]
 }
