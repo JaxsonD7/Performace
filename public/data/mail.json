@@ -1,17 +1,7 @@
 {
-  "generatedAt": "2026-10-09T12:20:07Z",
+  "generatedAt": "2026-10-12T12:19:58Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a11959aa08f3438",
-      "account": "personal",
-      "subject": "Security alert for steventarance598@gmail.com",
-      "from": "no-reply@accounts.google.com",
-      "receivedAt": "2026-10-08T02:31:08Z",
-      "snippet": "Your email is listed as the recovery address for an account you may not recognize (steventarance598@gmail.com) — a new sign-in was flagged on it.",
-      "importance": "high",
-      "reason": "Worth confirming whether you recognize this account, since your email is its recovery address."
-    },
     {
       "id": "1a119632b7c887ee",
       "account": "personal",
