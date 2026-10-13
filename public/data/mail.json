@@ -1,26 +1,16 @@
 {
-  "generatedAt": "2026-10-12T12:19:58Z",
+  "generatedAt": "2026-10-13T12:19:57Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
-      "id": "1a119632b7c887ee",
+      "id": "1a13490cdb9cfe38",
       "account": "personal",
-      "subject": "Next up on Project Sonnet: record your sample video",
-      "from": "handshake@g.joinhandshake.com",
-      "receivedAt": "2026-10-08T14:00:04Z",
-      "snippet": "Contract signed — next step is recording a short sample video to start earning $11/hr.",
+      "subject": "Your PayPal Account will be closed",
+      "from": "service@updates.paypal.com",
+      "receivedAt": "2026-10-13T09:21:06Z",
+      "snippet": "PayPal says the account will close in 90 days due to 3+ years of inactivity.",
       "importance": "medium",
-      "reason": "Signed contract still needs the sample video recorded."
-    },
-    {
-      "id": "1a11bde8437bb3f9",
-      "account": "personal",
-      "subject": "Dmitri Ivanov from TBD Investors sent you a message",
-      "from": "handshake@notifications.joinhandshake.com",
-      "receivedAt": "2026-10-08T14:16:27Z",
-      "snippet": "Messages about two internship roles: Consulting & Strategy Intern ($30/hr) and AI & Data Analytics Intern ($20/hr).",
-      "importance": "medium",
-      "reason": "Recruiter reached out directly — worth a reply."
+      "reason": "Verify this is legitimate (not phishing) before acting — if real, log in or respond to keep the account open."
     }
   ]
 }
