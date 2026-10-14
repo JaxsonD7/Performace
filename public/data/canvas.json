@@ -1,14 +1,6 @@
 {
-  "generatedAt": "2026-10-13T12:19:57Z",
+  "generatedAt": "2026-10-14T12:19:58Z",
   "items": [
-    {
-      "id": "1a121f06e2069e74",
-      "courseName": "SCMT 364",
-      "kind": "announcement",
-      "subject": "No Class Tuesday, October 13 *** Make up Exam Tuesday October 13",
-      "receivedAt": "2026-10-09T18:32:43Z",
-      "reason": "Today is the makeup exam day for those who missed Exam 1 — no regular class."
-    },
     {
       "id": "1a1336ba2e5625c3",
       "courseName": "FINC 341",
@@ -24,6 +16,46 @@
       "subject": "Week 8 Readings",
       "receivedAt": "2026-10-12T20:46:24Z",
       "reason": "Start reading in the Path book (Short Reader section) per instructor's follow-up on class questions."
+    },
+    {
+      "id": "1a135fd7ea799ece",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "BUBBLE SHEET to bring to FINC 341 exams",
+      "receivedAt": "2026-10-13T15:59:22Z",
+      "reason": "Print and bring the Gradescope bubble sheet (name/UIN, no dashes) to Exam 2 tonight."
+    },
+    {
+      "id": "1a1363675fb131f8",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "Exam 2 will consist of 20 multiple choice questions (5 pts each)",
+      "receivedAt": "2026-10-13T16:58:30Z",
+      "reason": "Exam 2 format: ~4 theory questions + 16 problems, 1hr15min time limit, tonight."
+    },
+    {
+      "id": "1a1361a4cf09b212",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "Exam 2 Room Assignments",
+      "receivedAt": "2026-10-13T16:30:50Z",
+      "reason": "Room assignments posted for tonight's Exam 2 — bring bubble sheet, arrive on time."
+    },
+    {
+      "id": "1a136b5f8d139878",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "Dr. McFarland's students -- ROOM CHANGE to Wehner 104 starting at 7:40 PM",
+      "receivedAt": "2026-10-13T19:18:42Z",
+      "reason": "Correction to the room assignment: Dr. McFarland's students move to Wehner 104, be seated by 7:40pm tonight."
+    },
+    {
+      "id": "1a1384af470aac73",
+      "courseName": "FINC 341",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Quiz 6",
+      "receivedAt": "2026-10-14T02:43:15Z",
+      "reason": "Grade changes and new comments released on Quiz 6."
     }
   ]
 }
