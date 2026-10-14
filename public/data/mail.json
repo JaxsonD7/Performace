@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-13T12:19:57Z",
+  "generatedAt": "2026-10-14T12:19:58Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -11,6 +11,26 @@
       "snippet": "PayPal says the account will close in 90 days due to 3+ years of inactivity.",
       "importance": "medium",
       "reason": "Verify this is legitimate (not phishing) before acting — if real, log in or respond to keep the account open."
+    },
+    {
+      "id": "1a136396ddc6d32f",
+      "account": "school",
+      "subject": "Crime Alert - Theft of Motor Vehicle",
+      "from": "upd-campus-clery@lists.tamu.edu",
+      "receivedAt": "2026-10-13T17:00:34Z",
+      "snippet": "Official Clery Act campus crime alert for a motor vehicle theft reported Oct 13, 2026.",
+      "importance": "medium",
+      "reason": "Official campus crime alert."
+    },
+    {
+      "id": "1a1134e52e69d282",
+      "account": "personal",
+      "subject": "Re: Abercrombie is Interested in You!",
+      "from": "handshake@notifications.joinhandshake.com",
+      "receivedAt": "2026-10-13T14:26:25Z",
+      "snippet": "Debra followed up again about the Brand Representative position at Abercrombie.",
+      "importance": "medium",
+      "reason": "Recruiter followed up a second time — worth a reply either way."
     }
   ]
 }
