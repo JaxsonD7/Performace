@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T12:19:58Z",
+  "generatedAt": "2026-10-15T12:19:59Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -31,6 +31,36 @@
       "snippet": "Debra followed up again about the Brand Representative position at Abercrombie.",
       "importance": "medium",
       "reason": "Recruiter followed up a second time — worth a reply either way."
+    },
+    {
+      "id": "1a13c852222bb0b6",
+      "account": "personal",
+      "subject": "Instagram account activity for an account that isn't yours",
+      "from": "security@mail.instagram.com",
+      "receivedAt": "2026-10-14T22:25:13Z",
+      "snippet": "Four Instagram security emails (new iPad login from Bryan, TX + recovery codes) addressed to \"ethan_and_emma_grapevinefaith_\", not your account — your email is apparently tied to it as a recovery/contact address.",
+      "importance": "high",
+      "reason": "Unfamiliar Instagram account using your email saw a login + requested recovery codes — worth checking into."
+    },
+    {
+      "id": "1a13cb6eef7aacee",
+      "account": "school",
+      "subject": "Public Safety Advisory- TAMU PD Phone Number Spoofing Scam",
+      "from": "tamu-police-psa@lists.tamu.edu",
+      "receivedAt": "2026-10-14T23:10:51Z",
+      "snippet": "TAMU PD warns of scammers spoofing their phone number again in calls to the university community.",
+      "importance": "medium",
+      "reason": "Official safety advisory — be wary of calls that appear to come from TAMU PD."
+    },
+    {
+      "id": "1a13c97336392846",
+      "account": "personal",
+      "subject": "Submit your Project Sonnet sample video",
+      "from": "handshake@g.joinhandshake.com",
+      "receivedAt": "2026-10-14T22:45:03Z",
+      "snippet": "Passed the Project Sonnet screener — next step is recording the sample video to start earning up to $100/week.",
+      "importance": "medium",
+      "reason": "Screener passed; sample video still needs to be recorded to start earning."
     }
   ]
 }
