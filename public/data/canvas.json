@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-15T12:19:59Z",
+  "generatedAt": "2026-10-16T12:23:58Z",
   "items": [
     {
       "id": "1a1336ba2e5625c3",
@@ -24,6 +24,14 @@
       "subject": "Submission Posted: Quiz 6",
       "receivedAt": "2026-10-14T02:43:15Z",
       "reason": "Grade changes and new comments released on Quiz 6."
+    },
+    {
+      "id": "1a14083b13480f26",
+      "courseName": "MGMT 311",
+      "kind": "announcement",
+      "subject": "BONUS POINT PROGRAM",
+      "receivedAt": "2026-10-15T17:02:04Z",
+      "reason": "New bonus point program launched: 1 point per completed exercise."
     }
   ]
 }
