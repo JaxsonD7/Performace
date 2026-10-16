@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-15T12:19:59Z",
+  "generatedAt": "2026-10-16T12:23:58Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -11,26 +11,6 @@
       "snippet": "PayPal says the account will close in 90 days due to 3+ years of inactivity.",
       "importance": "medium",
       "reason": "Verify this is legitimate (not phishing) before acting — if real, log in or respond to keep the account open."
-    },
-    {
-      "id": "1a136396ddc6d32f",
-      "account": "school",
-      "subject": "Crime Alert - Theft of Motor Vehicle",
-      "from": "upd-campus-clery@lists.tamu.edu",
-      "receivedAt": "2026-10-13T17:00:34Z",
-      "snippet": "Official Clery Act campus crime alert for a motor vehicle theft reported Oct 13, 2026.",
-      "importance": "medium",
-      "reason": "Official campus crime alert."
-    },
-    {
-      "id": "1a1134e52e69d282",
-      "account": "personal",
-      "subject": "Re: Abercrombie is Interested in You!",
-      "from": "handshake@notifications.joinhandshake.com",
-      "receivedAt": "2026-10-13T14:26:25Z",
-      "snippet": "Debra followed up again about the Brand Representative position at Abercrombie.",
-      "importance": "medium",
-      "reason": "Recruiter followed up a second time — worth a reply either way."
     },
     {
       "id": "1a13c852222bb0b6",
@@ -61,6 +41,26 @@
       "snippet": "Passed the Project Sonnet screener — next step is recording the sample video to start earning up to $100/week.",
       "importance": "medium",
       "reason": "Screener passed; sample video still needs to be recorded to start earning."
+    },
+    {
+      "id": "1a14198fde1d996f",
+      "account": "school",
+      "subject": "Crime Alert – Theft of Motor Vehicle – Electric Scooter and Electric Bicycle List",
+      "from": "upd-campus-clery@lists.tamu.edu",
+      "receivedAt": "2026-10-15T21:54:05Z",
+      "snippet": "Official Clery Act campus crime alert covering a list of stolen electric scooters/bicycles.",
+      "importance": "medium",
+      "reason": "Official campus crime alert."
+    },
+    {
+      "id": "1a14086abed2e188",
+      "account": "school",
+      "subject": "Q-Drop Request for Jaxson Driscoll",
+      "from": "recordsadmin@tamu.edu",
+      "receivedAt": "2026-10-15T17:05:24Z",
+      "snippet": "Q-Drop request ID 94530 for CRN 45165, MGMT 311 501 has been received; awaiting advisor/department review.",
+      "importance": "high",
+      "reason": "Your Q-Drop for MGMT 311 is submitted and pending — watch for the follow-up confirming it's processed."
     }
   ]
 }
