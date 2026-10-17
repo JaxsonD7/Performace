@@ -1,16 +1,26 @@
 {
-  "generatedAt": "2026-10-16T12:23:58Z",
+  "generatedAt": "2026-10-17T12:19:01Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
-      "id": "1a13490cdb9cfe38",
-      "account": "personal",
-      "subject": "Your PayPal Account will be closed",
-      "from": "service@updates.paypal.com",
-      "receivedAt": "2026-10-13T09:21:06Z",
-      "snippet": "PayPal says the account will close in 90 days due to 3+ years of inactivity.",
+      "id": "1a1491925e5c0ecb",
+      "account": "school",
+      "subject": "Your NetID password is about to expire",
+      "from": "alc-monitor@tamu.edu",
+      "receivedAt": "2026-10-17T09:02:21Z",
+      "snippet": "As of 10/17/2026, the NetID password has actually expired — set a new one immediately to avoid losing access to campus systems.",
+      "importance": "high",
+      "reason": "Password has now expired (not just expiring) — reset it ASAP to keep access to TAMU systems."
+    },
+    {
+      "id": "1a144ddac6160a30",
+      "account": "school",
+      "subject": "Verify Form 1098-T Student Personal Information",
+      "from": "form1098t@tamu.edu",
+      "receivedAt": "2026-10-16T13:18:55Z",
+      "snippet": "TAMU asks students to review/verify personal info ahead of 2026 tax reporting season.",
       "importance": "medium",
-      "reason": "Verify this is legitimate (not phishing) before acting — if real, log in or respond to keep the account open."
+      "reason": "Worth verifying info on file before tax season for an accurate 1098-T."
     },
     {
       "id": "1a13c852222bb0b6",
