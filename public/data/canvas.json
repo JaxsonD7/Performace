@@ -1,22 +1,6 @@
 {
-  "generatedAt": "2026-10-16T12:23:58Z",
+  "generatedAt": "2026-10-17T12:19:01Z",
   "items": [
-    {
-      "id": "1a1336ba2e5625c3",
-      "courseName": "FINC 341",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Quiz 5",
-      "receivedAt": "2026-10-13T04:00:49Z",
-      "reason": "Grade changes and new comments released on Quiz 5."
-    },
-    {
-      "id": "1a131ddeabaf68d5",
-      "courseName": "HIST 220",
-      "kind": "announcement",
-      "subject": "Week 8 Readings",
-      "receivedAt": "2026-10-12T20:46:24Z",
-      "reason": "Start reading in the Path book (Short Reader section) per instructor's follow-up on class questions."
-    },
     {
       "id": "1a1384af470aac73",
       "courseName": "FINC 341",
@@ -32,6 +16,14 @@
       "subject": "BONUS POINT PROGRAM",
       "receivedAt": "2026-10-15T17:02:04Z",
       "reason": "New bonus point program launched: 1 point per completed exercise."
+    },
+    {
+      "id": "1a14805324482f0b",
+      "courseName": "FINC 341",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Exam 2",
+      "receivedAt": "2026-10-17T04:00:57Z",
+      "reason": "Grade changes and new comments released on Exam 2."
     }
   ]
 }
