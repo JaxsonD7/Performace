@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-17T12:19:01Z",
+  "generatedAt": "2026-10-18T12:04:23Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -27,10 +27,10 @@
       "account": "personal",
       "subject": "Instagram account activity for an account that isn't yours",
       "from": "security@mail.instagram.com",
-      "receivedAt": "2026-10-14T22:25:13Z",
-      "snippet": "Four Instagram security emails (new iPad login from Bryan, TX + recovery codes) addressed to \"ethan_and_emma_grapevinefaith_\", not your account — your email is apparently tied to it as a recovery/contact address.",
+      "receivedAt": "2026-10-18T02:15:59Z",
+      "snippet": "Still ongoing: more Instagram notifications addressed to \"ethan_and_emma_grapevinefaith_\", not your account — your email keeps getting used as its contact/recovery address.",
       "importance": "high",
-      "reason": "Unfamiliar Instagram account using your email saw a login + requested recovery codes — worth checking into."
+      "reason": "Recurring unfamiliar-account activity tied to your email — worth checking into."
     },
     {
       "id": "1a13cb6eef7aacee",
@@ -43,14 +43,14 @@
       "reason": "Official safety advisory — be wary of calls that appear to come from TAMU PD."
     },
     {
-      "id": "1a13c97336392846",
+      "id": "1a149ebbd4c7196d",
       "account": "personal",
-      "subject": "Submit your Project Sonnet sample video",
+      "subject": "Project Sonnet's pay is now up to $15/hr",
       "from": "handshake@g.joinhandshake.com",
-      "receivedAt": "2026-10-14T22:45:03Z",
-      "snippet": "Passed the Project Sonnet screener — next step is recording the sample video to start earning up to $100/week.",
+      "receivedAt": "2026-10-17T12:50:46Z",
+      "snippet": "Pay rate increased to up to $15/hr as of Oct 16; sample video still needs to be recorded to start earning.",
       "importance": "medium",
-      "reason": "Screener passed; sample video still needs to be recorded to start earning."
+      "reason": "Pay bump confirmed; sample video still the one open step to start earning."
     },
     {
       "id": "1a14198fde1d996f",
