@@ -1,14 +1,6 @@
 {
-  "generatedAt": "2026-10-17T12:19:01Z",
+  "generatedAt": "2026-10-18T12:04:23Z",
   "items": [
-    {
-      "id": "1a1384af470aac73",
-      "courseName": "FINC 341",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Quiz 6",
-      "receivedAt": "2026-10-14T02:43:15Z",
-      "reason": "Grade changes and new comments released on Quiz 6."
-    },
     {
       "id": "1a14083b13480f26",
       "courseName": "MGMT 311",
@@ -24,6 +16,14 @@
       "subject": "Submission Posted: Exam 2",
       "receivedAt": "2026-10-17T04:00:57Z",
       "reason": "Grade changes and new comments released on Exam 2."
+    },
+    {
+      "id": "1a14aac368a94d79",
+      "courseName": "HIST 220",
+      "kind": "announcement",
+      "subject": "Class Monday, 19 Oct -- Attendance Required",
+      "receivedAt": "2026-10-17T16:22:38Z",
+      "reason": "Another in-class group project session Monday — coordinate with your group beforehand."
     }
   ]
 }
