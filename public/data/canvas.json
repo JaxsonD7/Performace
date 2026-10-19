@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-18T12:04:23Z",
+  "generatedAt": "2026-10-19T12:04:46Z",
   "items": [
     {
       "id": "1a14083b13480f26",
@@ -23,7 +23,31 @@
       "kind": "announcement",
       "subject": "Class Monday, 19 Oct -- Attendance Required",
       "receivedAt": "2026-10-17T16:22:38Z",
-      "reason": "Another in-class group project session Monday — coordinate with your group beforehand."
+      "reason": "In-class group project session today — attendance required."
+    },
+    {
+      "id": "1a150e1b04987ee9",
+      "courseName": "HIST 220",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Week 8: Reading Response",
+      "receivedAt": "2026-10-18T21:18:46Z",
+      "reason": "Grade changes and new comments released on Week 8 Reading Response."
+    },
+    {
+      "id": "1a150ff899247d8c",
+      "courseName": "SCMT 364",
+      "kind": "announcement",
+      "subject": "Exam 1 Average of ~82%",
+      "receivedAt": "2026-10-18T21:51:22Z",
+      "reason": "Sizeable curve applied (many above 100%); extra credit points still added on top of the curved grade."
+    },
+    {
+      "id": "1a15139552858584",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Exam 1 Gradescope",
+      "receivedAt": "2026-10-18T22:54:29Z",
+      "reason": "Exam 1 Gradescope grade posted."
     }
   ]
 }
