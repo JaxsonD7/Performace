@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-18T12:04:23Z",
+  "generatedAt": "2026-10-19T12:04:46Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -11,6 +11,16 @@
       "snippet": "As of 10/17/2026, the NetID password has actually expired — set a new one immediately to avoid losing access to campus systems.",
       "importance": "high",
       "reason": "Password has now expired (not just expiring) — reset it ASAP to keep access to TAMU systems."
+    },
+    {
+      "id": "1a1522a294d74709",
+      "account": "personal",
+      "subject": "A new security key or passkey was added to your account",
+      "from": "noreply@tm.openai.com",
+      "receivedAt": "2026-10-19T03:17:36Z",
+      "snippet": "OpenAI confirms a new security key or passkey was added to your account.",
+      "importance": "high",
+      "reason": "Worth confirming you added this yourself — a passkey grants persistent account access."
     },
     {
       "id": "1a144ddac6160a30",
@@ -27,30 +37,20 @@
       "account": "personal",
       "subject": "Instagram account activity for an account that isn't yours",
       "from": "security@mail.instagram.com",
-      "receivedAt": "2026-10-18T02:15:59Z",
-      "snippet": "Still ongoing: more Instagram notifications addressed to \"ethan_and_emma_grapevinefaith_\", not your account — your email keeps getting used as its contact/recovery address.",
+      "receivedAt": "2026-10-18T15:27:46Z",
+      "snippet": "Still ongoing (4+ days now): more Instagram notifications addressed to \"ethan_and_emma_grapevinefaith_\", not your account.",
       "importance": "high",
-      "reason": "Recurring unfamiliar-account activity tied to your email — worth checking into."
-    },
-    {
-      "id": "1a13cb6eef7aacee",
-      "account": "school",
-      "subject": "Public Safety Advisory- TAMU PD Phone Number Spoofing Scam",
-      "from": "tamu-police-psa@lists.tamu.edu",
-      "receivedAt": "2026-10-14T23:10:51Z",
-      "snippet": "TAMU PD warns of scammers spoofing their phone number again in calls to the university community.",
-      "importance": "medium",
-      "reason": "Official safety advisory — be wary of calls that appear to come from TAMU PD."
+      "reason": "Recurring unfamiliar-account activity tied to your email, now multiple days running — worth checking into."
     },
     {
       "id": "1a149ebbd4c7196d",
       "account": "personal",
       "subject": "Project Sonnet's pay is now up to $15/hr",
       "from": "handshake@g.joinhandshake.com",
-      "receivedAt": "2026-10-17T12:50:46Z",
-      "snippet": "Pay rate increased to up to $15/hr as of Oct 16; sample video still needs to be recorded to start earning.",
+      "receivedAt": "2026-10-18T14:00:00Z",
+      "snippet": "Reminder: sample video still not submitted — now up to $140/week once started.",
       "importance": "medium",
-      "reason": "Pay bump confirmed; sample video still the one open step to start earning."
+      "reason": "Still the one open step to start earning; reminder #2 now sent."
     },
     {
       "id": "1a14198fde1d996f",
