@@ -1,14 +1,6 @@
 {
-  "generatedAt": "2026-10-19T12:04:46Z",
+  "generatedAt": "2026-10-20T12:10:00Z",
   "items": [
-    {
-      "id": "1a14083b13480f26",
-      "courseName": "MGMT 311",
-      "kind": "announcement",
-      "subject": "BONUS POINT PROGRAM",
-      "receivedAt": "2026-10-15T17:02:04Z",
-      "reason": "New bonus point program launched: 1 point per completed exercise."
-    },
     {
       "id": "1a14805324482f0b",
       "courseName": "FINC 341",
@@ -16,14 +8,6 @@
       "subject": "Submission Posted: Exam 2",
       "receivedAt": "2026-10-17T04:00:57Z",
       "reason": "Grade changes and new comments released on Exam 2."
-    },
-    {
-      "id": "1a14aac368a94d79",
-      "courseName": "HIST 220",
-      "kind": "announcement",
-      "subject": "Class Monday, 19 Oct -- Attendance Required",
-      "receivedAt": "2026-10-17T16:22:38Z",
-      "reason": "In-class group project session today — attendance required."
     },
     {
       "id": "1a150e1b04987ee9",
@@ -48,6 +32,22 @@
       "subject": "Assignment Graded: Exam 1 Gradescope",
       "receivedAt": "2026-10-18T22:54:29Z",
       "reason": "Exam 1 Gradescope grade posted."
+    },
+    {
+      "id": "1a1558ad367c1052",
+      "courseName": "MGMT 311",
+      "kind": "grade_posted",
+      "subject": "EXAM 2 GRADES AND TEST REVIEW",
+      "receivedAt": "2026-10-19T19:01:59Z",
+      "reason": "Exam 2 grades now posted; instructor will not discuss grades over email."
+    },
+    {
+      "id": "1a154b175b92d054",
+      "courseName": "MGMT 311",
+      "kind": "announcement",
+      "subject": "UPDATE TO BONUS POINT PROGRAM",
+      "receivedAt": "2026-10-19T15:04:32Z",
+      "reason": "Correction to the Oct 15 Bonus Point Program announcement — instructor found an error that would have unfairly reduced opportunities; this update supersedes the original terms."
     }
   ]
 }
