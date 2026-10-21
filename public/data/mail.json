@@ -1,17 +1,7 @@
 {
-  "generatedAt": "2026-10-20T12:10:00Z",
+  "generatedAt": "2026-10-21T12:15:00Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a1491925e5c0ecb",
-      "account": "school",
-      "subject": "Your NetID password is about to expire",
-      "from": "alc-monitor@tamu.edu",
-      "receivedAt": "2026-10-17T09:02:21Z",
-      "snippet": "As of 10/17/2026, the NetID password has actually expired — set a new one immediately to avoid losing access to campus systems.",
-      "importance": "high",
-      "reason": "Password has now expired (not just expiring) — reset it ASAP to keep access to TAMU systems."
-    },
     {
       "id": "1a1522a294d74709",
       "account": "personal",
@@ -33,14 +23,14 @@
       "reason": "You were personally selected/bcc'd for this — worth a response if you want to take the role."
     },
     {
-      "id": "1a13c852222bb0b6",
+      "id": "1a159f1f2b790796",
       "account": "personal",
       "subject": "Instagram account activity for an account that isn't yours",
-      "from": "security@mail.instagram.com",
-      "receivedAt": "2026-10-20T02:34:18Z",
-      "snippet": "Still ongoing (5+ days now): more Instagram activity addressed to \"ethan_and_emma_grapevinefaith_\", not your account — latest a \"friends shared\" notification.",
+      "from": "follow-suggestions@mail.instagram.com",
+      "receivedAt": "2026-10-20T15:33:04Z",
+      "snippet": "Still ongoing (6+ days now): more Instagram notifications tied to \"ethan_and_emma_grapevinefaith_\", not your account.",
       "importance": "high",
-      "reason": "Recurring unfamiliar-account activity tied to your email, now spanning nearly a week — worth checking into."
+      "reason": "Recurring unfamiliar-account activity tied to your email, now nearly a week running — worth checking into."
     },
     {
       "id": "1a149ebbd4c7196d",
@@ -51,16 +41,6 @@
       "snippet": "Reminder: sample video still not submitted — now up to $140/week once started.",
       "importance": "medium",
       "reason": "Still the one open step to start earning; reminder #2 now sent."
-    },
-    {
-      "id": "1a14086abed2e188",
-      "account": "school",
-      "subject": "Q-Drop Request for Jaxson Driscoll",
-      "from": "recordsadmin@tamu.edu",
-      "receivedAt": "2026-10-15T17:05:24Z",
-      "snippet": "Q-Drop request ID 94530 for CRN 45165, MGMT 311 501 has been received; awaiting advisor/department review.",
-      "importance": "high",
-      "reason": "Your Q-Drop for MGMT 311 is submitted and pending — watch for the follow-up confirming it's processed."
     }
   ]
 }
