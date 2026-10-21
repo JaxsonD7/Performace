@@ -1,14 +1,6 @@
 {
-  "generatedAt": "2026-10-20T12:10:00Z",
+  "generatedAt": "2026-10-21T12:15:00Z",
   "items": [
-    {
-      "id": "1a14805324482f0b",
-      "courseName": "FINC 341",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Exam 2",
-      "receivedAt": "2026-10-17T04:00:57Z",
-      "reason": "Grade changes and new comments released on Exam 2."
-    },
     {
       "id": "1a150e1b04987ee9",
       "courseName": "HIST 220",
@@ -48,6 +40,14 @@
       "subject": "UPDATE TO BONUS POINT PROGRAM",
       "receivedAt": "2026-10-19T15:04:32Z",
       "reason": "Correction to the Oct 15 Bonus Point Program announcement — instructor found an error that would have unfairly reduced opportunities; this update supersedes the original terms."
+    },
+    {
+      "id": "1a15c28e02bd9556",
+      "courseName": "FINC 341",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Quiz 7",
+      "receivedAt": "2026-10-21T01:52:21Z",
+      "reason": "Grade changes and new comments released on Quiz 7."
     }
   ]
 }
