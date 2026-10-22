@@ -1,30 +1,6 @@
 {
-  "generatedAt": "2026-10-21T12:15:00Z",
+  "generatedAt": "2026-10-22T12:15:00Z",
   "items": [
-    {
-      "id": "1a150e1b04987ee9",
-      "courseName": "HIST 220",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Week 8: Reading Response",
-      "receivedAt": "2026-10-18T21:18:46Z",
-      "reason": "Grade changes and new comments released on Week 8 Reading Response."
-    },
-    {
-      "id": "1a150ff899247d8c",
-      "courseName": "SCMT 364",
-      "kind": "announcement",
-      "subject": "Exam 1 Average of ~82%",
-      "receivedAt": "2026-10-18T21:51:22Z",
-      "reason": "Sizeable curve applied (many above 100%); extra credit points still added on top of the curved grade."
-    },
-    {
-      "id": "1a15139552858584",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Exam 1 Gradescope",
-      "receivedAt": "2026-10-18T22:54:29Z",
-      "reason": "Exam 1 Gradescope grade posted."
-    },
     {
       "id": "1a1558ad367c1052",
       "courseName": "MGMT 311",
@@ -40,6 +16,22 @@
       "subject": "UPDATE TO BONUS POINT PROGRAM",
       "receivedAt": "2026-10-19T15:04:32Z",
       "reason": "Correction to the Oct 15 Bonus Point Program announcement — instructor found an error that would have unfairly reduced opportunities; this update supersedes the original terms."
+    },
+    {
+      "id": "1a15ec11bea3eebf",
+      "courseName": "MGMT 363",
+      "kind": "announcement",
+      "subject": "Exam #2 Study Tips",
+      "receivedAt": "2026-10-21T13:57:52Z",
+      "reason": "Study tips ahead of Monday's Exam 2 (10/26) — 25 questions, 4 points each."
+    },
+    {
+      "id": "1a15ec040101e4c3",
+      "courseName": "MGMT 363",
+      "kind": "announcement",
+      "subject": "Exam #2 -- Monday, October 26th (Important Reminders)",
+      "receivedAt": "2026-10-21T13:56:54Z",
+      "reason": "Exam 2 is Monday 10/26 — must be taken during your own class section; extra credit summary included."
     },
     {
       "id": "1a15c28e02bd9556",
