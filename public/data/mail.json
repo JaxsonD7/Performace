@@ -1,7 +1,17 @@
 {
-  "generatedAt": "2026-10-21T12:15:00Z",
+  "generatedAt": "2026-10-22T12:15:00Z",
   "accounts": ["personal", "school"],
   "emails": [
+    {
+      "id": "1a161678cb788856",
+      "account": "personal",
+      "subject": "Google Verification Code",
+      "from": "noreply@google.com",
+      "receivedAt": "2026-10-22T02:18:57Z",
+      "snippet": "A request to access your Google Account through your email address generated a verification code — worth confirming this was you.",
+      "importance": "high",
+      "reason": "An account-access request via email you may not have initiated — verify it was you before ignoring it."
+    },
     {
       "id": "1a1522a294d74709",
       "account": "personal",
@@ -23,24 +33,24 @@
       "reason": "You were personally selected/bcc'd for this — worth a response if you want to take the role."
     },
     {
-      "id": "1a159f1f2b790796",
+      "id": "1a1618cc9340b18a",
       "account": "personal",
       "subject": "Instagram account activity for an account that isn't yours",
-      "from": "follow-suggestions@mail.instagram.com",
-      "receivedAt": "2026-10-20T15:33:04Z",
-      "snippet": "Still ongoing (6+ days now): more Instagram notifications tied to \"ethan_and_emma_grapevinefaith_\", not your account.",
+      "from": "notification@priority.instagram.com",
+      "receivedAt": "2026-10-22T02:59:34Z",
+      "snippet": "Still ongoing (7+ days now): more Instagram notifications tied to \"ethan_and_emma_grapevinefaith_\", not your account.",
       "importance": "high",
-      "reason": "Recurring unfamiliar-account activity tied to your email, now nearly a week running — worth checking into."
+      "reason": "Recurring unfamiliar-account activity tied to your email, now over a week running — worth checking into."
     },
     {
-      "id": "1a149ebbd4c7196d",
+      "id": "1a15ec3015220904",
       "account": "personal",
       "subject": "Project Sonnet's pay is now up to $15/hr",
       "from": "handshake@g.joinhandshake.com",
-      "receivedAt": "2026-10-18T14:00:00Z",
-      "snippet": "Reminder: sample video still not submitted — now up to $140/week once started.",
+      "receivedAt": "2026-10-21T14:00:00Z",
+      "snippet": "Last reminder (#3) to submit your sample video — still the one open step to start earning up to $140/week.",
       "importance": "medium",
-      "reason": "Still the one open step to start earning; reminder #2 now sent."
+      "reason": "Third reminder now sent — still the one open step to start earning."
     }
   ]
 }
