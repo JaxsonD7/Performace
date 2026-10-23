@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-22T12:15:00Z",
+  "generatedAt": "2026-10-23T12:10:00Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -13,16 +13,6 @@
       "reason": "An account-access request via email you may not have initiated — verify it was you before ignoring it."
     },
     {
-      "id": "1a1522a294d74709",
-      "account": "personal",
-      "subject": "A new security key or passkey was added to your account",
-      "from": "noreply@tm.openai.com",
-      "receivedAt": "2026-10-19T03:17:36Z",
-      "snippet": "OpenAI confirms a new security key or passkey was added to your account.",
-      "importance": "high",
-      "reason": "Worth confirming you added this yourself — a passkey grants persistent account access."
-    },
-    {
       "id": "1a1565e08317ecf7",
       "account": "personal",
       "subject": "FAITHS BIGS PROGRAM",
@@ -33,12 +23,12 @@
       "reason": "You were personally selected/bcc'd for this — worth a response if you want to take the role."
     },
     {
-      "id": "1a1618cc9340b18a",
+      "id": "1a164d67fd71ebdd",
       "account": "personal",
       "subject": "Instagram account activity for an account that isn't yours",
-      "from": "notification@priority.instagram.com",
-      "receivedAt": "2026-10-22T02:59:34Z",
-      "snippet": "Still ongoing (7+ days now): more Instagram notifications tied to \"ethan_and_emma_grapevinefaith_\", not your account.",
+      "from": "follow-suggestions@mail.instagram.com",
+      "receivedAt": "2026-10-22T18:18:56Z",
+      "snippet": "Still ongoing (8+ days now): more Instagram notifications tied to \"ethan_and_emma_grapevinefaith_\", not your account.",
       "importance": "high",
       "reason": "Recurring unfamiliar-account activity tied to your email, now over a week running — worth checking into."
     },
