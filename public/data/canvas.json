@@ -1,22 +1,6 @@
 {
-  "generatedAt": "2026-10-23T12:10:00Z",
+  "generatedAt": "2026-10-24T12:10:00Z",
   "items": [
-    {
-      "id": "1a1558ad367c1052",
-      "courseName": "MGMT 311",
-      "kind": "grade_posted",
-      "subject": "EXAM 2 GRADES AND TEST REVIEW",
-      "receivedAt": "2026-10-19T19:01:59Z",
-      "reason": "Exam 2 grades now posted; instructor will not discuss grades over email."
-    },
-    {
-      "id": "1a154b175b92d054",
-      "courseName": "MGMT 311",
-      "kind": "announcement",
-      "subject": "UPDATE TO BONUS POINT PROGRAM",
-      "receivedAt": "2026-10-19T15:04:32Z",
-      "reason": "Correction to the Oct 15 Bonus Point Program announcement — instructor found an error that would have unfairly reduced opportunities; this update supersedes the original terms."
-    },
     {
       "id": "1a15ec11bea3eebf",
       "courseName": "MGMT 363",
