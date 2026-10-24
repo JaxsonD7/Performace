@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-23T12:10:00Z",
+  "generatedAt": "2026-10-24T12:10:00Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -11,16 +11,6 @@
       "snippet": "A request to access your Google Account through your email address generated a verification code — worth confirming this was you.",
       "importance": "high",
       "reason": "An account-access request via email you may not have initiated — verify it was you before ignoring it."
-    },
-    {
-      "id": "1a1565e08317ecf7",
-      "account": "personal",
-      "subject": "FAITHS BIGS PROGRAM",
-      "from": "tamu.faiths.execs@gmail.com",
-      "receivedAt": "2026-10-19T22:52:06Z",
-      "snippet": "Congratulations! You have been selected to be a Big for FAITHS — you'll disciple a freshman this year.",
-      "importance": "high",
-      "reason": "You were personally selected/bcc'd for this — worth a response if you want to take the role."
     },
     {
       "id": "1a164d67fd71ebdd",
