@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-24T12:10:00Z",
+  "generatedAt": "2026-10-25T12:10:00Z",
   "items": [
     {
       "id": "1a15ec11bea3eebf",
@@ -16,14 +16,6 @@
       "subject": "Exam #2 -- Monday, October 26th (Important Reminders)",
       "receivedAt": "2026-10-21T13:56:54Z",
       "reason": "Exam 2 is Monday 10/26 — must be taken during your own class section; extra credit summary included."
-    },
-    {
-      "id": "1a15c28e02bd9556",
-      "courseName": "FINC 341",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Quiz 7",
-      "receivedAt": "2026-10-21T01:52:21Z",
-      "reason": "Grade changes and new comments released on Quiz 7."
     },
     {
       "id": "1a1644ecb1b5188c",
