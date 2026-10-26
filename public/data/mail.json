@@ -1,17 +1,7 @@
 {
-  "generatedAt": "2026-10-25T12:10:00Z",
+  "generatedAt": "2026-10-26T12:30:00Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a161678cb788856",
-      "account": "personal",
-      "subject": "Google Verification Code",
-      "from": "noreply@google.com",
-      "receivedAt": "2026-10-22T02:18:57Z",
-      "snippet": "A request to access your Google Account through your email address generated a verification code — worth confirming this was you.",
-      "importance": "high",
-      "reason": "An account-access request via email you may not have initiated — verify it was you before ignoring it."
-    },
     {
       "id": "1a1711fef290a6e3",
       "account": "personal",
@@ -31,16 +21,6 @@
       "snippet": "Still ongoing (9+ days now): more Instagram notifications tied to \"ethan_and_emma_grapevinefaith_\", not your account.",
       "importance": "high",
       "reason": "Recurring unfamiliar-account activity tied to your email, now over a week running — worth checking into."
-    },
-    {
-      "id": "1a15ec3015220904",
-      "account": "personal",
-      "subject": "Project Sonnet's pay is now up to $15/hr",
-      "from": "handshake@g.joinhandshake.com",
-      "receivedAt": "2026-10-21T14:00:00Z",
-      "snippet": "Last reminder (#3) to submit your sample video — still the one open step to start earning up to $140/week.",
-      "importance": "medium",
-      "reason": "Third reminder now sent — still the one open step to start earning."
     }
   ]
 }
