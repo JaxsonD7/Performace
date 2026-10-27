@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-26T12:30:00Z",
+  "generatedAt": "2026-10-27T12:15:00Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -13,14 +13,14 @@
       "reason": "Unrecognized sign-in alert — worth confirming this was you."
     },
     {
-      "id": "1a16ffe5801aa640",
+      "id": "1a17a566921a8a90",
       "account": "personal",
       "subject": "Instagram account activity for an account that isn't yours",
       "from": "follow-suggestions@mail.instagram.com",
-      "receivedAt": "2026-10-24T22:18:12Z",
-      "snippet": "Still ongoing (9+ days now): more Instagram notifications tied to \"ethan_and_emma_grapevinefaith_\", not your account.",
+      "receivedAt": "2026-10-26T22:30:42Z",
+      "snippet": "Still ongoing (10+ days now): more Instagram notifications tied to \"ethan_and_emma_grapevinefaith_\", not your account.",
       "importance": "high",
-      "reason": "Recurring unfamiliar-account activity tied to your email, now over a week running — worth checking into."
+      "reason": "Recurring unfamiliar-account activity tied to your email, now over a week and a half running — worth checking into."
     }
   ]
 }
