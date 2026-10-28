@@ -1,7 +1,27 @@
 {
-  "generatedAt": "2026-10-27T12:15:00Z",
+  "generatedAt": "2026-10-28T12:15:00Z",
   "accounts": ["personal", "school"],
   "emails": [
+    {
+      "id": "1a17f80b9ac62374",
+      "account": "school",
+      "subject": "Q-Drop Request for Jaxson Driscoll",
+      "from": "recordsadmin@tamu.edu",
+      "receivedAt": "2026-10-27T22:35:01Z",
+      "snippet": "Your Q-Drop request for MGMT 311 501 has been reviewed and approved — it now appears on your record.",
+      "importance": "high",
+      "reason": "Q-Drop is finalized. Advisor comment: must retake the course in a future term — it's a prereq for MGMT 466."
+    },
+    {
+      "id": "1a17eca07622890b",
+      "account": "school",
+      "subject": "Overdue Item",
+      "from": "alerts@mail.libcal.com",
+      "receivedAt": "2026-10-27T19:15:26Z",
+      "snippet": "Casio SL-300SV calculator is overdue at the TAMU Libraries — please return it as soon as possible.",
+      "importance": "high",
+      "reason": "Overdue library item — returning it avoids fines or a hold on your account."
+    },
     {
       "id": "1a1711fef290a6e3",
       "account": "personal",
