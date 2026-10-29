@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-27T12:15:00Z",
+  "generatedAt": "2026-10-29T12:20:00Z",
   "items": [
     {
       "id": "1a1654f54f1ad7a0",
@@ -16,6 +16,30 @@
       "subject": "Submission Posted: Week 9: Reading Response",
       "receivedAt": "2026-10-25T17:36:47Z",
       "reason": "Grade changes and new comments released on Week 9 Reading Response."
+    },
+    {
+      "id": "1a182e239b2a9ba3",
+      "courseName": "FINC 341",
+      "kind": "announcement",
+      "subject": "No 341 classes today - watch videos for rest of Chapter 11",
+      "receivedAt": "2026-10-28T14:20:21Z",
+      "reason": "Instructor injured, class cancelled — watch Chapter 11 videos before Monday; quiz over Ch. 11 next Wednesday as planned."
+    },
+    {
+      "id": "1a1839cb2ae582be",
+      "courseName": "MGMT 363",
+      "kind": "announcement",
+      "subject": "Extra Credit Opportunity #2",
+      "receivedAt": "2026-10-28T17:44:02Z",
+      "reason": "Research study for extra credit starts Nov 3 (sign up via tinyurl link) — or complete an alternative article-summary assignment due Nov 20."
+    },
+    {
+      "id": "1a18340797142d32",
+      "courseName": "SCMT 364",
+      "kind": "announcement",
+      "subject": "Assessment 2 Reminders",
+      "receivedAt": "2026-10-28T16:03:14Z",
+      "reason": "Assessment 2 is open today (10/29) from 10am–10pm, 60 minutes allowed, covers Chapters 18 and 20 — no class meeting today."
     }
   ]
 }
