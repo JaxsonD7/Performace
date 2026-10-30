@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-29T12:20:00Z",
+  "generatedAt": "2026-10-30T12:10:00Z",
   "items": [
     {
       "id": "1a1654f54f1ad7a0",
@@ -8,14 +8,6 @@
       "subject": "Extra Credit",
       "receivedAt": "2026-10-22T20:30:54Z",
       "reason": "Instructor cannot arrange an alternative for students with a Nov 4 conflict with the Extra Credit opportunity — no makeup option."
-    },
-    {
-      "id": "1a17422fc0a8c293",
-      "courseName": "HIST 220",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Week 9: Reading Response",
-      "receivedAt": "2026-10-25T17:36:47Z",
-      "reason": "Grade changes and new comments released on Week 9 Reading Response."
     },
     {
       "id": "1a182e239b2a9ba3",
@@ -34,12 +26,12 @@
       "reason": "Research study for extra credit starts Nov 3 (sign up via tinyurl link) — or complete an alternative article-summary assignment due Nov 20."
     },
     {
-      "id": "1a18340797142d32",
+      "id": "1a189d3a90820296",
       "courseName": "SCMT 364",
-      "kind": "announcement",
-      "subject": "Assessment 2 Reminders",
-      "receivedAt": "2026-10-28T16:03:14Z",
-      "reason": "Assessment 2 is open today (10/29) from 10am–10pm, 60 minutes allowed, covers Chapters 18 and 20 — no class meeting today."
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Assessment 2",
+      "receivedAt": "2026-10-30T11:00:00Z",
+      "reason": "Assessment 2 grade posted."
     }
   ]
 }
