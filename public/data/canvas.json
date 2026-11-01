@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-31T12:10:00Z",
+  "generatedAt": "2026-11-01T12:10:00Z",
   "items": [
     {
       "id": "1a1654f54f1ad7a0",
@@ -8,14 +8,6 @@
       "subject": "Extra Credit",
       "receivedAt": "2026-10-22T20:30:54Z",
       "reason": "Instructor cannot arrange an alternative for students with a Nov 4 conflict with the Extra Credit opportunity — no makeup option."
-    },
-    {
-      "id": "1a182e239b2a9ba3",
-      "courseName": "FINC 341",
-      "kind": "announcement",
-      "subject": "No 341 classes today - watch videos for rest of Chapter 11",
-      "receivedAt": "2026-10-28T14:20:21Z",
-      "reason": "Instructor injured, class cancelled — watch Chapter 11 videos before Monday; quiz over Ch. 11 next Wednesday as planned."
     },
     {
       "id": "1a1839cb2ae582be",
