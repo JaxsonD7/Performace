@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-03T12:15:00Z",
+  "generatedAt": "2026-11-04T12:20:00Z",
   "items": [
     {
       "id": "1a1654f54f1ad7a0",
@@ -15,7 +15,7 @@
       "kind": "announcement",
       "subject": "Extra Credit Opportunity #2",
       "receivedAt": "2026-10-28T17:44:02Z",
-      "reason": "Research study for extra credit starts today (Nov 3, sign up via tinyurl link) — or complete an alternative article-summary assignment due Nov 20."
+      "reason": "Research study for extra credit started Nov 3 (sign up via tinyurl link) — or complete an alternative article-summary assignment due Nov 20."
     },
     {
       "id": "1a19f96af7b2f9c7",
@@ -32,6 +32,22 @@
       "subject": "Mutual Fund Quiz (take-home)",
       "receivedAt": "2026-11-03T02:30:07Z",
       "reason": "Print the Mutual Fund Quiz from Canvas and complete it — due Monday, Nov 9 at the beginning of class."
+    },
+    {
+      "id": "1a1a257c85f8805a",
+      "courseName": "MGMT 363",
+      "kind": "announcement",
+      "subject": "Extra Credit--Wednesday, November 4th from 11:00-3:00",
+      "receivedAt": "2026-11-03T16:57:00Z",
+      "reason": "Founders Forum extra credit opportunity today 11am-3pm, Norcom Special Events Center (Room 211), Wayne Roberts Building — bring UIN to sign in/out."
+    },
+    {
+      "id": "1a1a2603260eeaa0",
+      "courseName": "MGMT 363",
+      "kind": "announcement",
+      "subject": "Exam Update/Office Hours (important update for 11/4)",
+      "receivedAt": "2026-11-03T17:05:59Z",
+      "reason": "501 section exam average was an A; 502 exams being graded today. Instructor's office hours today are 8:00-10:00am, though she'll be in PLEP feedback sessions 8:00-8:45am."
     }
   ]
 }
