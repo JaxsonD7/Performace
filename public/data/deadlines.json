@@ -1,4 +1,13 @@
 {
-  "generatedAt": "2026-11-02T12:15:00Z",
-  "items": []
+  "generatedAt": "2026-11-04T12:20:00Z",
+  "items": [
+    {
+      "id": "1a1a340157c8891d",
+      "subject": "Preregistration Advising + Important Reminders",
+      "from": "wcastro@mays.tamu.edu",
+      "receivedAt": "2026-11-03T21:10:24Z",
+      "dueDate": "2026-11-20",
+      "reason": "Spring course registration window is Nov 5-20 — see advising availability before registering."
+    }
+  ]
 }
