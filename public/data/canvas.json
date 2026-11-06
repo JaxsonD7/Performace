@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-05T12:10:00Z",
+  "generatedAt": "2026-11-06T12:10:00Z",
   "items": [
     {
       "id": "1a1839cb2ae582be",
@@ -8,14 +8,6 @@
       "subject": "Extra Credit Opportunity #2",
       "receivedAt": "2026-10-28T17:44:02Z",
       "reason": "Research study for extra credit started Nov 3 (sign up via tinyurl link) — or complete an alternative article-summary assignment due Nov 20."
-    },
-    {
-      "id": "1a19f96af7b2f9c7",
-      "courseName": "FINC 341",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Quiz 8",
-      "receivedAt": "2026-11-03T04:06:51Z",
-      "reason": "Grade changes and new comments released on Quiz 8."
     },
     {
       "id": "1a19f3e21db0b9b8",
@@ -32,6 +24,30 @@
       "subject": "Assignment Graded: Exam 2",
       "receivedAt": "2026-11-04T18:46:00Z",
       "reason": "Exam 2 grade and comments posted (502 section)."
+    },
+    {
+      "id": "1a1ad855c46d3651",
+      "courseName": "MGMT 363",
+      "kind": "announcement",
+      "subject": "Buc-cee's Discussion on 11/4",
+      "receivedAt": "2026-11-05T21:02:36Z",
+      "reason": "Recap of the Buc-cee's guest speaker talk (hiring, employee loyalty, accountability) for those who missed it — exam questions are drawn from this."
+    },
+    {
+      "id": "1a1ad8d1a971cc83",
+      "courseName": "MGMT 363",
+      "kind": "announcement",
+      "subject": "Contacting Dr. Welch/Looking at Exams",
+      "receivedAt": "2026-11-05T21:11:04Z",
+      "reason": "Dr. Welch doesn't keep exams in her office — see the TAs during their posted office hours to review your exam. Email her directly (not Canvas) at b-welch@tamu.edu."
+    },
+    {
+      "id": "1a1ad6d5396a4888",
+      "courseName": "MGMT 363",
+      "kind": "announcement",
+      "subject": "Office Hours",
+      "receivedAt": "2026-11-05T20:36:18Z",
+      "reason": "Instructor won't hold office hours today (Fri 11/6) 8-10am — she's speaking at a leadership conference."
     }
   ]
 }
