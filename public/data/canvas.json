@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-06T12:10:00Z",
+  "generatedAt": "2026-11-07T12:10:00Z",
   "items": [
     {
       "id": "1a1839cb2ae582be",
@@ -42,12 +42,12 @@
       "reason": "Dr. Welch doesn't keep exams in her office — see the TAs during their posted office hours to review your exam. Email her directly (not Canvas) at b-welch@tamu.edu."
     },
     {
-      "id": "1a1ad6d5396a4888",
+      "id": "1a1b11cd8922214c",
       "courseName": "MGMT 363",
       "kind": "announcement",
-      "subject": "Office Hours",
-      "receivedAt": "2026-11-05T20:36:18Z",
-      "reason": "Instructor won't hold office hours today (Fri 11/6) 8-10am — she's speaking at a leadership conference."
+      "subject": "CRITICAL -- Grade Calculation Including Extra Credit",
+      "receivedAt": "2026-11-06T13:46:55Z",
+      "reason": "Grading breakdown: 4 exams worth 400 pts total (360+=A), plus up to 30 extra-credit points (sign-ins, Founders Forum, doctoral research/alternative paper, Aggie Leadership Conference — 8 pts, file attached)."
     }
   ]
 }
