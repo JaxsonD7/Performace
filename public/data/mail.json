@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-07T12:10:00Z",
+  "generatedAt": "2026-11-08T12:10:00Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -11,16 +11,6 @@
       "snippet": "The GitHub App \"Claude\" installed on your account is requesting additional access — review and accept or ignore.",
       "importance": "high",
       "reason": "A permissions change request on an installed GitHub App — worth reviewing before accepting."
-    },
-    {
-      "id": "1a1a84b4aefb2d8f",
-      "account": "personal",
-      "subject": "Sellside Group - Junior M&A Analyst",
-      "from": "jross@sellsidegroup.com",
-      "receivedAt": "2026-11-04T20:41:07Z",
-      "snippet": "You're invited to a virtual Group Information session (Zoom) about the Junior M&A Analyst position — sign up via the link in the email.",
-      "importance": "high",
-      "reason": "Next step in a real job application — register for the info session if you want to move forward."
     },
     {
       "id": "1a1a868ec20d0956",
