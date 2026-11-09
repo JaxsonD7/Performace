@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-07T12:10:00Z",
+  "generatedAt": "2026-11-09T12:12:00Z",
   "items": [
     {
       "id": "1a1839cb2ae582be",
@@ -15,15 +15,7 @@
       "kind": "announcement",
       "subject": "Mutual Fund Quiz (take-home)",
       "receivedAt": "2026-11-03T02:30:07Z",
-      "reason": "Print the Mutual Fund Quiz from Canvas and complete it — due Monday, Nov 9 at the beginning of class."
-    },
-    {
-      "id": "1a1a963083f47add",
-      "courseName": "MGMT 363",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Exam 2",
-      "receivedAt": "2026-11-04T18:46:00Z",
-      "reason": "Exam 2 grade and comments posted (502 section)."
+      "reason": "Due today (Mon Nov 9) at the beginning of class — print from Canvas and complete."
     },
     {
       "id": "1a1ad855c46d3651",
@@ -48,6 +40,14 @@
       "subject": "CRITICAL -- Grade Calculation Including Extra Credit",
       "receivedAt": "2026-11-06T13:46:55Z",
       "reason": "Grading breakdown: 4 exams worth 400 pts total (360+=A), plus up to 30 extra-credit points (sign-ins, Founders Forum, doctoral research/alternative paper, Aggie Leadership Conference — 8 pts, file attached)."
+    },
+    {
+      "id": "1a1be045a3d4f537",
+      "courseName": "HIST 220",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Week 11: Reading Response",
+      "receivedAt": "2026-11-09T01:55:15Z",
+      "reason": "Grade changes and new comments released on Week 11 Reading Response."
     }
   ]
 }
