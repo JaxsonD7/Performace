@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-09T12:12:00Z",
+  "generatedAt": "2026-11-10T12:12:00Z",
   "items": [
     {
       "id": "1a1839cb2ae582be",
@@ -8,30 +8,6 @@
       "subject": "Extra Credit Opportunity #2",
       "receivedAt": "2026-10-28T17:44:02Z",
       "reason": "Research study for extra credit started Nov 3 (sign up via tinyurl link) — or complete an alternative article-summary assignment due Nov 20."
-    },
-    {
-      "id": "1a19f3e21db0b9b8",
-      "courseName": "FINC 341",
-      "kind": "announcement",
-      "subject": "Mutual Fund Quiz (take-home)",
-      "receivedAt": "2026-11-03T02:30:07Z",
-      "reason": "Due today (Mon Nov 9) at the beginning of class — print from Canvas and complete."
-    },
-    {
-      "id": "1a1ad855c46d3651",
-      "courseName": "MGMT 363",
-      "kind": "announcement",
-      "subject": "Buc-cee's Discussion on 11/4",
-      "receivedAt": "2026-11-05T21:02:36Z",
-      "reason": "Recap of the Buc-cee's guest speaker talk (hiring, employee loyalty, accountability) for those who missed it — exam questions are drawn from this."
-    },
-    {
-      "id": "1a1ad8d1a971cc83",
-      "courseName": "MGMT 363",
-      "kind": "announcement",
-      "subject": "Contacting Dr. Welch/Looking at Exams",
-      "receivedAt": "2026-11-05T21:11:04Z",
-      "reason": "Dr. Welch doesn't keep exams in her office — see the TAs during their posted office hours to review your exam. Email her directly (not Canvas) at b-welch@tamu.edu."
     },
     {
       "id": "1a1b11cd8922214c",
@@ -48,6 +24,14 @@
       "subject": "Submission Posted: Week 11: Reading Response",
       "receivedAt": "2026-11-09T01:55:15Z",
       "reason": "Grade changes and new comments released on Week 11 Reading Response."
+    },
+    {
+      "id": "1a1c10d82eb50211",
+      "courseName": "SCMT 364",
+      "kind": "announcement",
+      "subject": "Exam 2 Reminders",
+      "receivedAt": "2026-11-09T16:04:05Z",
+      "reason": "Exam 2 is Thursday, Nov 12 during normal class — one-sided handwritten cheat sheet allowed, bring Gradescope Scantron, #2 pencil, calculator."
     }
   ]
 }
