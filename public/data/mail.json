@@ -1,26 +1,16 @@
 {
-  "generatedAt": "2026-11-09T12:12:00Z",
+  "generatedAt": "2026-11-10T12:12:00Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a1b0226afbc18d2",
-      "account": "personal",
-      "subject": "[GitHub] Claude is requesting updated permissions",
-      "from": "noreply@github.com",
-      "receivedAt": "2026-11-06T09:13:27Z",
-      "snippet": "The GitHub App \"Claude\" installed on your account is requesting additional access — review and accept or ignore.",
-      "importance": "high",
-      "reason": "A permissions change request on an installed GitHub App — worth reviewing before accepting."
-    },
     {
       "id": "1a1a868ec20d0956",
       "account": "personal",
       "subject": "[GitHub] Your fine-grained personal access token is about to expire",
       "from": "noreply@github.com",
       "receivedAt": "2026-11-04T21:13:30Z",
-      "snippet": "The \"Performace HA Push\" token — used to push these daily digest commits — expires in 7 days.",
+      "snippet": "The \"Performace HA Push\" token — used to push these daily digest commits — expires around Nov 11 (tomorrow).",
       "importance": "high",
-      "reason": "This is the token powering the Performace repo's automated pushes — regenerate it before it expires (around Nov 11) or the daily digest commits will start failing."
+      "reason": "This is the token powering the Performace repo's automated pushes — regenerate it now, it expires around tomorrow, or the daily digest commits will start failing."
     },
     {
       "id": "1a1bd9b850f61c7b",
