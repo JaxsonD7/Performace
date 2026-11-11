@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10T12:12:00Z",
+  "generatedAt": "2026-11-11T12:10:00Z",
   "items": [
     {
       "id": "1a1839cb2ae582be",
@@ -8,14 +8,6 @@
       "subject": "Extra Credit Opportunity #2",
       "receivedAt": "2026-10-28T17:44:02Z",
       "reason": "Research study for extra credit started Nov 3 (sign up via tinyurl link) — or complete an alternative article-summary assignment due Nov 20."
-    },
-    {
-      "id": "1a1b11cd8922214c",
-      "courseName": "MGMT 363",
-      "kind": "announcement",
-      "subject": "CRITICAL -- Grade Calculation Including Extra Credit",
-      "receivedAt": "2026-11-06T13:46:55Z",
-      "reason": "Grading breakdown: 4 exams worth 400 pts total (360+=A), plus up to 30 extra-credit points (sign-ins, Founders Forum, doctoral research/alternative paper, Aggie Leadership Conference — 8 pts, file attached)."
     },
     {
       "id": "1a1be045a3d4f537",
@@ -32,6 +24,22 @@
       "subject": "Exam 2 Reminders",
       "receivedAt": "2026-11-09T16:04:05Z",
       "reason": "Exam 2 is Thursday, Nov 12 during normal class — one-sided handwritten cheat sheet allowed, bring Gradescope Scantron, #2 pencil, calculator."
+    },
+    {
+      "id": "1a1c64de37e1ea5f",
+      "courseName": "FINC 341",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Quiz 9",
+      "receivedAt": "2026-11-10T16:32:31Z",
+      "reason": "Grade changes and new comments released on Quiz 9."
+    },
+    {
+      "id": "1a1c64dce4afdefc",
+      "courseName": "SCMT 364",
+      "kind": "announcement",
+      "subject": "Simulation Reminders and Hints",
+      "receivedAt": "2026-11-10T16:32:26Z",
+      "reason": "Simulation due December 3 by 5pm, no extensions — don't wait until the last minute."
     }
   ]
 }
