@@ -1,24 +1,24 @@
 {
-  "generatedAt": "2026-11-10T12:12:00Z",
+  "generatedAt": "2026-11-11T12:10:00Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
-      "id": "1a1a868ec20d0956",
+      "id": "1a1c897c080fd6ac",
       "account": "personal",
       "subject": "[GitHub] Your fine-grained personal access token is about to expire",
       "from": "noreply@github.com",
-      "receivedAt": "2026-11-04T21:13:30Z",
-      "snippet": "The \"Performace HA Push\" token — used to push these daily digest commits — expires around Nov 11 (tomorrow).",
+      "receivedAt": "2026-11-11T04:12:37Z",
+      "snippet": "The \"Performace HA Push\" token — used to push these daily digest commits — now expires in 1 day.",
       "importance": "high",
-      "reason": "This is the token powering the Performace repo's automated pushes — regenerate it now, it expires around tomorrow, or the daily digest commits will start failing."
+      "reason": "Last call — this token powers the Performace repo's automated pushes and expires tomorrow. Regenerate it now or the daily digest commits will start failing."
     },
     {
-      "id": "1a1bd9b850f61c7b",
+      "id": "1a1c7e990c4c6c53",
       "account": "personal",
       "subject": "Instagram account activity for an account that isn't yours",
       "from": "follow-suggestions@mail.instagram.com",
-      "receivedAt": "2026-11-09T00:00:42Z",
-      "snippet": "Still ongoing (20+ days now): more Instagram notifications tied to \"ethan_and_emma_grapevinefaith_\", not your account.",
+      "receivedAt": "2026-11-11T00:02:11Z",
+      "snippet": "Still ongoing (21+ days now): more Instagram notifications tied to \"ethan_and_emma_grapevinefaith_\", not your account.",
       "importance": "high",
       "reason": "Recurring unfamiliar-account activity tied to your email, now three weeks running — worth checking into."
     }
