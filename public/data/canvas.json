@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-11T12:10:00Z",
+  "generatedAt": "2026-11-12T12:10:00Z",
   "items": [
     {
       "id": "1a1839cb2ae582be",
@@ -23,7 +23,7 @@
       "kind": "announcement",
       "subject": "Exam 2 Reminders",
       "receivedAt": "2026-11-09T16:04:05Z",
-      "reason": "Exam 2 is Thursday, Nov 12 during normal class — one-sided handwritten cheat sheet allowed, bring Gradescope Scantron, #2 pencil, calculator."
+      "reason": "Exam 2 is today during normal class — one-sided handwritten cheat sheet allowed, bring Gradescope Scantron, #2 pencil, calculator."
     },
     {
       "id": "1a1c64de37e1ea5f",
@@ -40,6 +40,22 @@
       "subject": "Simulation Reminders and Hints",
       "receivedAt": "2026-11-10T16:32:26Z",
       "reason": "Simulation due December 3 by 5pm, no extensions — don't wait until the last minute."
+    },
+    {
+      "id": "1a1cd4e21003778f",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Chapter 15 Learn Smart (Extra Credit)",
+      "receivedAt": "2026-11-12T01:10:07Z",
+      "reason": "Optional extra-credit Learn Smart assignment for Chapter 15 graded."
+    },
+    {
+      "id": "1a1cdfa994c1d53d",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Chapter 18 Learn Smart (Extra Credit)",
+      "receivedAt": "2026-11-12T04:18:31Z",
+      "reason": "Optional extra-credit Learn Smart assignment for Chapter 18 graded."
     }
   ]
 }
