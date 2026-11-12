@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-11-11T12:10:00Z",
+  "generatedAt": "2026-11-12T12:10:00Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
-      "id": "1a1c897c080fd6ac",
+      "id": "1a1cdbd2dd239208",
       "account": "personal",
-      "subject": "[GitHub] Your fine-grained personal access token is about to expire",
+      "subject": "[GitHub] Your fine-grained personal access token has expired",
       "from": "noreply@github.com",
-      "receivedAt": "2026-11-11T04:12:37Z",
-      "snippet": "The \"Performace HA Push\" token — used to push these daily digest commits — now expires in 1 day.",
+      "receivedAt": "2026-11-12T03:11:29Z",
+      "snippet": "GitHub confirms the \"Performace HA Push\" token has expired — today's digest commits still went through, but regenerate it soon.",
       "importance": "high",
-      "reason": "Last call — this token powers the Performace repo's automated pushes and expires tomorrow. Regenerate it now or the daily digest commits will start failing."
+      "reason": "GitHub says this token already expired. Pushes are still succeeding right now, but regenerate it to avoid a future failure."
     },
     {
       "id": "1a1c7e990c4c6c53",
