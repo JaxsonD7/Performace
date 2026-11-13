@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-12T12:10:00Z",
+  "generatedAt": "2026-11-13T12:10:00Z",
   "items": [
     {
       "id": "1a1839cb2ae582be",
@@ -8,22 +8,6 @@
       "subject": "Extra Credit Opportunity #2",
       "receivedAt": "2026-10-28T17:44:02Z",
       "reason": "Research study for extra credit started Nov 3 (sign up via tinyurl link) — or complete an alternative article-summary assignment due Nov 20."
-    },
-    {
-      "id": "1a1be045a3d4f537",
-      "courseName": "HIST 220",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Week 11: Reading Response",
-      "receivedAt": "2026-11-09T01:55:15Z",
-      "reason": "Grade changes and new comments released on Week 11 Reading Response."
-    },
-    {
-      "id": "1a1c10d82eb50211",
-      "courseName": "SCMT 364",
-      "kind": "announcement",
-      "subject": "Exam 2 Reminders",
-      "receivedAt": "2026-11-09T16:04:05Z",
-      "reason": "Exam 2 is today during normal class — one-sided handwritten cheat sheet allowed, bring Gradescope Scantron, #2 pencil, calculator."
     },
     {
       "id": "1a1c64de37e1ea5f",
@@ -56,6 +40,14 @@
       "subject": "Assignment Graded: Chapter 18 Learn Smart (Extra Credit)",
       "receivedAt": "2026-11-12T04:18:31Z",
       "reason": "Optional extra-credit Learn Smart assignment for Chapter 18 graded."
+    },
+    {
+      "id": "1a1d25f548955340",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Chapter 20 Learn Smart (Extra Credit)",
+      "receivedAt": "2026-11-13T00:01:48Z",
+      "reason": "Optional extra-credit Learn Smart assignment for Chapter 20 graded."
     }
   ]
 }
