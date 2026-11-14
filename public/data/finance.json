@@ -1,14 +1,4 @@
 {
-  "generatedAt": "2026-11-10T12:12:00Z",
-  "items": [
-    {
-      "id": "1a1c53167ab0dc0b",
-      "subject": "Citation Notice",
-      "from": "parking@tamu.edu",
-      "receivedAt": "2026-11-10T11:19:00Z",
-      "kind": "other",
-      "reason": "Another TAMU Parking Services citation with a balance due — amount is in the attached PDF, not stated in the email body.",
-      "severity": "warning"
-    }
-  ]
+  "generatedAt": "2026-11-14T12:10:00Z",
+  "items": []
 }
