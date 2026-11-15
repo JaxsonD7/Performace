@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-14T12:10:00Z",
+  "generatedAt": "2026-11-15T12:10:00Z",
   "items": [
     {
       "id": "1a1839cb2ae582be",
@@ -8,14 +8,6 @@
       "subject": "Extra Credit Opportunity #2",
       "receivedAt": "2026-10-28T17:44:02Z",
       "reason": "Research study for extra credit started Nov 3 (sign up via tinyurl link) — or complete an alternative article-summary assignment due Nov 20."
-    },
-    {
-      "id": "1a1c64de37e1ea5f",
-      "courseName": "FINC 341",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Quiz 9",
-      "receivedAt": "2026-11-10T16:32:31Z",
-      "reason": "Grade changes and new comments released on Quiz 9."
     },
     {
       "id": "1a1c64dce4afdefc",
@@ -88,6 +80,14 @@
       "subject": "Grade Changed: Practice with the Full Simulation (up to 25 extra credit points)",
       "receivedAt": "2026-11-13T21:40:44Z",
       "reason": "Full-Simulation practice run graded, then re-graded same day — up to 25 extra-credit points toward the course Simulation."
+    },
+    {
+      "id": "1a1dac228909ccc9",
+      "courseName": "HIST 220",
+      "kind": "other",
+      "subject": "Week 12 Quiz assigned",
+      "receivedAt": "2026-11-14T15:51:55Z",
+      "reason": "Weekly Canvas report flags a new Week 12 Quiz — due today, Nov 15 at 11:59pm."
     }
   ]
 }
