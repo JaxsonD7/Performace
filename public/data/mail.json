@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-13T12:10:00Z",
+  "generatedAt": "2026-11-16T12:10:00Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -11,16 +11,6 @@
       "snippet": "The GitHub App \"Claude\" installed on your account is requesting additional access again — review and accept or ignore.",
       "importance": "high",
       "reason": "A repeat permissions-change request on an installed GitHub App — worth reviewing before accepting."
-    },
-    {
-      "id": "1a1cdbd2dd239208",
-      "account": "personal",
-      "subject": "[GitHub] Your fine-grained personal access token has expired",
-      "from": "noreply@github.com",
-      "receivedAt": "2026-11-12T03:11:29Z",
-      "snippet": "GitHub confirms the \"Performace HA Push\" token has expired — digest commits are still going through, but regenerate it soon.",
-      "importance": "high",
-      "reason": "GitHub says this token already expired. Pushes are still succeeding right now, but regenerate it to avoid a future failure."
     },
     {
       "id": "1a1d31f008116730",
