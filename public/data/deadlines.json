@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-04T12:20:00Z",
+  "generatedAt": "2026-11-17T12:10:00Z",
   "items": [
     {
       "id": "1a1a340157c8891d",
@@ -8,6 +8,22 @@
       "receivedAt": "2026-11-03T21:10:24Z",
       "dueDate": "2026-11-20",
       "reason": "Spring course registration window is Nov 5-20 — see advising availability before registering."
+    },
+    {
+      "id": "1a1e6c2d6998f239",
+      "subject": "One week left to submit for this month's challenge",
+      "from": "handshake@notifications.joinhandshake.com",
+      "receivedAt": "2026-11-16T23:48:10Z",
+      "dueDate": "2026-11-23",
+      "reason": "Handshake monthly project challenge submissions close Nov 23."
+    },
+    {
+      "id": "1a1e8a433bffad62",
+      "subject": "Your Google Play Order Receipt from Nov 16, 2026",
+      "from": "googleplay-noreply@google.com",
+      "receivedAt": "2026-11-17T08:33:57Z",
+      "dueDate": "2027-11-16",
+      "reason": "Google AI Pro (5TB) free trial signed up Nov 16 — auto-charges $19.99/month when the trial ends unless canceled first."
     }
   ]
 }
