@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-17T12:10:00Z",
+  "generatedAt": "2026-11-18T12:10:00Z",
   "items": [
     {
       "id": "1a1839cb2ae582be",
@@ -16,46 +16,6 @@
       "subject": "Simulation Reminders and Hints",
       "receivedAt": "2026-11-10T16:32:26Z",
       "reason": "Simulation due December 3 by 5pm, no extensions — don't wait until the last minute."
-    },
-    {
-      "id": "1a1d5ba329ac452b",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Practicing Production (Unlimited Practice)",
-      "receivedAt": "2026-11-13T16:25:08Z",
-      "reason": "Simulation practice assignment graded — unlimited-attempt practice toward the course Simulation."
-    },
-    {
-      "id": "1a1d5dc46bbdeb9f",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Managing Suppliers (Unlimited Practice)",
-      "receivedAt": "2026-11-13T17:02:19Z",
-      "reason": "Simulation practice assignment graded — unlimited-attempt practice toward the course Simulation."
-    },
-    {
-      "id": "1a1d5f531159307e",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Forecasting and Contracts (Unlimited Practice)",
-      "receivedAt": "2026-11-13T17:29:33Z",
-      "reason": "Simulation practice assignment graded — unlimited-attempt practice toward the course Simulation."
-    },
-    {
-      "id": "1a1d6083cf856c33",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Human Resources and Capacity Planning (Unlimited Practice)",
-      "receivedAt": "2026-11-13T17:50:22Z",
-      "reason": "Simulation practice assignment graded — unlimited-attempt practice toward the course Simulation."
-    },
-    {
-      "id": "1a1d6db22bdef935",
-      "courseName": "SCMT 364",
-      "kind": "grade_posted",
-      "subject": "Grade Changed: Practice with the Full Simulation (up to 25 extra credit points)",
-      "receivedAt": "2026-11-13T21:40:44Z",
-      "reason": "Full-Simulation practice run graded, then re-graded same day — up to 25 extra-credit points toward the course Simulation."
     },
     {
       "id": "1a1e58a6d97658c7",
@@ -80,6 +40,14 @@
       "subject": "Submission Posted: Quiz 12 (501/502 Only)",
       "receivedAt": "2026-11-17T04:12:51Z",
       "reason": "Grade changes and new comments released on Quiz 12."
+    },
+    {
+      "id": "1a1ea678a79d0170",
+      "courseName": "MGMT 363",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Exam 3",
+      "receivedAt": "2026-11-17T16:46:50Z",
+      "reason": "Exam 3 graded."
     }
   ]
 }
