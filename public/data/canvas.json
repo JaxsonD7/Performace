@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-18T12:10:00Z",
+  "generatedAt": "2026-11-20T12:10:00Z",
   "items": [
     {
       "id": "1a1839cb2ae582be",
@@ -26,28 +26,44 @@
       "reason": "Second exam will use lockdown browser like the first; prep sheet posted and in-class review session Friday."
     },
     {
-      "id": "1a1e746c98e653a4",
-      "courseName": "HIST 220",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Week 12 Reading Response",
-      "receivedAt": "2026-11-17T02:12:14Z",
-      "reason": "Grade changes and new comments released on the Week 12 Reading Response."
-    },
-    {
-      "id": "1a1e7b53730c3909",
-      "courseName": "FINC 341",
-      "kind": "grade_posted",
-      "subject": "Submission Posted: Quiz 12 (501/502 Only)",
-      "receivedAt": "2026-11-17T04:12:51Z",
-      "reason": "Grade changes and new comments released on Quiz 12."
-    },
-    {
       "id": "1a1ea678a79d0170",
       "courseName": "MGMT 363",
       "kind": "grade_posted",
       "subject": "Assignment Graded: Exam 3",
       "receivedAt": "2026-11-17T16:46:50Z",
       "reason": "Exam 3 graded."
+    },
+    {
+      "id": "1a1f57fc3f807547",
+      "courseName": "HIST 220",
+      "kind": "announcement",
+      "subject": "Reminders for the Exam",
+      "receivedAt": "2026-11-19T20:29:09Z",
+      "reason": "Optional ungraded LockDown Browser practice exam available to confirm setup before the real one."
+    },
+    {
+      "id": "1a1f68d07c8b6095",
+      "courseName": "SCMT 364",
+      "kind": "grade_posted",
+      "subject": "Assignment Graded: Exam 2",
+      "receivedAt": "2026-11-20T01:23:16Z",
+      "reason": "Exam 2 graded."
+    },
+    {
+      "id": "1a1f6a619d29a561",
+      "courseName": "SCMT 364",
+      "kind": "announcement",
+      "subject": "Exam 2 Results: 82%+ average",
+      "receivedAt": "2026-11-20T01:50:39Z",
+      "reason": "Curved average was 82%+; now move on to the Simulation to finish the course."
+    },
+    {
+      "id": "1a1f6b017d9bdc45",
+      "courseName": "FINC 341",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Exam 3",
+      "receivedAt": "2026-11-20T02:01:34Z",
+      "reason": "Grade changes and new comments released on Exam 3."
     }
   ]
 }
