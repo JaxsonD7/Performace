@@ -1,14 +1,6 @@
 {
-  "generatedAt": "2026-11-20T12:10:00Z",
+  "generatedAt": "2026-11-21T12:10:00Z",
   "items": [
-    {
-      "id": "1a1839cb2ae582be",
-      "courseName": "MGMT 363",
-      "kind": "announcement",
-      "subject": "Extra Credit Opportunity #2",
-      "receivedAt": "2026-10-28T17:44:02Z",
-      "reason": "Research study for extra credit started Nov 3 (sign up via tinyurl link) — or complete an alternative article-summary assignment due Nov 20."
-    },
     {
       "id": "1a1c64dce4afdefc",
       "courseName": "SCMT 364",
@@ -16,22 +8,6 @@
       "subject": "Simulation Reminders and Hints",
       "receivedAt": "2026-11-10T16:32:26Z",
       "reason": "Simulation due December 3 by 5pm, no extensions — don't wait until the last minute."
-    },
-    {
-      "id": "1a1e58a6d97658c7",
-      "courseName": "HIST 220",
-      "kind": "announcement",
-      "subject": "Second Exam",
-      "receivedAt": "2026-11-16T18:06:53Z",
-      "reason": "Second exam will use lockdown browser like the first; prep sheet posted and in-class review session Friday."
-    },
-    {
-      "id": "1a1ea678a79d0170",
-      "courseName": "MGMT 363",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Exam 3",
-      "receivedAt": "2026-11-17T16:46:50Z",
-      "reason": "Exam 3 graded."
     },
     {
       "id": "1a1f57fc3f807547",
