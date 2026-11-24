@@ -1,14 +1,6 @@
 {
-  "generatedAt": "2026-11-21T12:10:00Z",
+  "generatedAt": "2026-11-24T12:10:00Z",
   "items": [
-    {
-      "id": "1a1e6c2d6998f239",
-      "subject": "One week left to submit for this month's challenge",
-      "from": "handshake@notifications.joinhandshake.com",
-      "receivedAt": "2026-11-16T23:48:10Z",
-      "dueDate": "2026-11-23",
-      "reason": "Handshake monthly project challenge submissions close Nov 23."
-    },
     {
       "id": "1a1e8a433bffad62",
       "subject": "Your Google Play Order Receipt from Nov 16, 2026",
