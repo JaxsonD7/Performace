@@ -1,5 +1,16 @@
 {
-  "generatedAt": "2026-11-17T12:10:00Z",
+  "generatedAt": "2026-11-24T12:10:00Z",
   "accounts": ["personal", "school"],
-  "emails": []
+  "emails": [
+    {
+      "id": "1a20c6d254bf8d56",
+      "account": "personal",
+      "subject": "Security alert for steventarance598@gmail.com",
+      "from": "no-reply@accounts.google.com",
+      "receivedAt": "2026-11-24T07:20:07Z",
+      "snippet": "Your email is listed as the recovery address on a Google account that isn't yours (steventarance598@gmail.com) — new sign-in on a Mac OS device.",
+      "importance": "high",
+      "reason": "Unfamiliar Google account lists your address as its recovery email — worth checking whether this is legitimate or something to disavow."
+    }
+  ]
 }
