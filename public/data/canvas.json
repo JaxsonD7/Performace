@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-24T12:10:00Z",
+  "generatedAt": "2026-11-25T12:10:00Z",
   "items": [
     {
       "id": "1a1c64dce4afdefc",
@@ -40,6 +40,22 @@
       "subject": "Assignment Graded: Week 13 Reading Response",
       "receivedAt": "2026-11-23T18:32:32Z",
       "reason": "Week 13 Reading Response graded."
+    },
+    {
+      "id": "1a2112a4e126484d",
+      "courseName": "FINC 341",
+      "kind": "grade_posted",
+      "subject": "Submission Posted: Quiz 10",
+      "receivedAt": "2026-11-25T01:00:00Z",
+      "reason": "Grade changes and new comments released on Quiz 10."
+    },
+    {
+      "id": "1a20f4745f605d1b",
+      "courseName": "HIST 220",
+      "kind": "announcement",
+      "subject": "Updates for Next Week",
+      "receivedAt": "2026-11-24T20:37:34Z",
+      "reason": "Group presentations scheduled Nov 30–Dec 2 (one slide/minute per person) — check which day your group presents."
     }
   ]
 }
