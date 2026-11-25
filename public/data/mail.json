@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-24T12:10:00Z",
+  "generatedAt": "2026-11-25T12:10:00Z",
   "accounts": ["personal", "school"],
   "emails": [
     {
@@ -11,6 +11,16 @@
       "snippet": "Your email is listed as the recovery address on a Google account that isn't yours (steventarance598@gmail.com) — new sign-in on a Mac OS device.",
       "importance": "high",
       "reason": "Unfamiliar Google account lists your address as its recovery email — worth checking whether this is legitimate or something to disavow."
+    },
+    {
+      "id": "1a2108ec470a4b99",
+      "account": "personal",
+      "subject": "Security notice for services using Ghostscript or ImageMagick",
+      "from": "no-reply@render.com",
+      "receivedAt": "2026-11-25T02:35:19Z",
+      "snippet": "A remote-code-execution vulnerability (Upload2Shell, CVE-2026-125396) affects Render services using Ghostscript, ImageMagick, or Pillow — redeploy or update if any of yours do.",
+      "importance": "high",
+      "reason": "Real RCE vulnerability affecting your Render-hosted services if any use Ghostscript/ImageMagick/Pillow — worth checking which of your deployments are exposed."
     }
   ]
 }
