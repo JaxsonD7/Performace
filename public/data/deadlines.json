@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-25T12:10:00Z",
+  "generatedAt": "2026-11-27T12:10:00Z",
   "items": [
     {
       "id": "1a1e8a433bffad62",
@@ -8,14 +8,6 @@
       "receivedAt": "2026-11-17T08:33:57Z",
       "dueDate": "2027-11-16",
       "reason": "Google AI Pro (5TB) free trial signed up Nov 16 — auto-charges $19.99/month when the trial ends unless canceled first."
-    },
-    {
-      "id": "1a20e48673007067",
-      "subject": "FW: Congratulations - You are going skydiving!",
-      "from": "keith@tcplp.com",
-      "receivedAt": "2026-11-24T15:59:13Z",
-      "dueDate": "2026-11-26",
-      "reason": "Skydiving reservation (iSkydive Dallas Fort Worth) for Nov 26 at 8:00am — waiver must be signed online before the jump or the booking isn't confirmed."
     }
   ]
 }
