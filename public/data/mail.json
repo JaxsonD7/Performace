@@ -1,17 +1,7 @@
 {
-  "generatedAt": "2026-11-25T12:10:00Z",
+  "generatedAt": "2026-11-28T12:10:00Z",
   "accounts": ["personal", "school"],
   "emails": [
-    {
-      "id": "1a20c6d254bf8d56",
-      "account": "personal",
-      "subject": "Security alert for steventarance598@gmail.com",
-      "from": "no-reply@accounts.google.com",
-      "receivedAt": "2026-11-24T07:20:07Z",
-      "snippet": "Your email is listed as the recovery address on a Google account that isn't yours (steventarance598@gmail.com) — new sign-in on a Mac OS device.",
-      "importance": "high",
-      "reason": "Unfamiliar Google account lists your address as its recovery email — worth checking whether this is legitimate or something to disavow."
-    },
     {
       "id": "1a2108ec470a4b99",
       "account": "personal",
@@ -21,6 +11,16 @@
       "snippet": "A remote-code-execution vulnerability (Upload2Shell, CVE-2026-125396) affects Render services using Ghostscript, ImageMagick, or Pillow — redeploy or update if any of yours do.",
       "importance": "high",
       "reason": "Real RCE vulnerability affecting your Render-hosted services if any use Ghostscript/ImageMagick/Pillow — worth checking which of your deployments are exposed."
+    },
+    {
+      "id": "1a21e46e0cfa09ec",
+      "account": "personal",
+      "subject": "Critical security alert",
+      "from": "no-reply@accounts.google.com",
+      "receivedAt": "2026-11-27T04:51:18Z",
+      "snippet": "Some of your saved passwords were found in a data breach from a site or app you use. Your Google Account itself isn't affected, but Password Manager recommends changing those passwords now.",
+      "importance": "high",
+      "reason": "Google flagged saved passwords exposed in a third-party data breach — worth changing those passwords soon."
     }
   ]
 }
