@@ -1,16 +1,4 @@
 {
-  "generatedAt": "2026-11-24T12:10:00Z",
-  "items": [
-    {
-      "id": "1a20c7192debb9f1",
-      "subject": "Your receipt from Venice.ai #2512-6889",
-      "from": "invoice+statements@venice.ai",
-      "receivedAt": "2026-11-24T07:24:58Z",
-      "amount": "$18.00",
-      "merchant": "Venice.ai",
-      "kind": "subscription_charge",
-      "reason": "Venice.ai Pro subscription charged for the Nov 24–Dec 24 period, paid successfully on card ending 4835.",
-      "severity": "info"
-    }
-  ]
+  "generatedAt": "2026-11-28T12:10:00Z",
+  "items": []
 }
