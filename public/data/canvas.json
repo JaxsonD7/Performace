@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-25T12:10:00Z",
+  "generatedAt": "2026-11-28T12:10:00Z",
   "items": [
     {
       "id": "1a1c64dce4afdefc",
@@ -16,30 +16,6 @@
       "subject": "Final Short Written Assignment",
       "receivedAt": "2026-11-21T15:52:29Z",
       "reason": "Weekly Canvas report: Final Short Written Assignment due Dec 8 at 11:59pm."
-    },
-    {
-      "id": "1a20898ab26673d5",
-      "courseName": "MGMT 363",
-      "kind": "announcement",
-      "subject": "Announcements (no class reminder)",
-      "receivedAt": "2026-11-23T13:28:58Z",
-      "reason": "Nov 30: three guest speakers, test questions will come from their talks. Dec 2: last chapters before the final."
-    },
-    {
-      "id": "1a2095c72ee0441f",
-      "courseName": "FINC 341",
-      "kind": "announcement",
-      "subject": "Exam 3 – If You Took the Exam but Received a 0 in Canvas",
-      "receivedAt": "2026-11-23T17:02:58Z",
-      "reason": "A computer issue may have zeroed some Exam 3 grades — contact the course Help Desk if yours shows 0 and you did take it."
-    },
-    {
-      "id": "1a209ae7031bf536",
-      "courseName": "HIST 220",
-      "kind": "grade_posted",
-      "subject": "Assignment Graded: Week 13 Reading Response",
-      "receivedAt": "2026-11-23T18:32:32Z",
-      "reason": "Week 13 Reading Response graded."
     },
     {
       "id": "1a2112a4e126484d",
